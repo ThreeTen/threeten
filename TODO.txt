@@ -111,7 +111,6 @@ Periods
 - Between factories
 - rename classes?
 - Formatting/parsing (defer?)
-- PeriodFields.of(3.25, Hours) -> [3 Hours, 15 Minutes]
 - Period.toString is not output of state
 
 Matchers/Adjusters
@@ -184,6 +183,9 @@ Document
 -- Date holding chronology is complex
 -- Exposed long millis
 - Parsing with wrong pattern letter case (month vs minute, doy vs dom) is caught
+
+Periods
+- PeriodFields.of(3.25, Hours) -> [3 Hours, 15 Minutes]
 
 Not doing
 - Use nanoOfDay rule in LocalTime factory - NO, as doesn't work
