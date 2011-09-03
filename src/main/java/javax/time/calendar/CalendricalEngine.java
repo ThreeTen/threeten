@@ -176,14 +176,14 @@ public final class CalendricalEngine {
      * @param date  the date to derive from, may be null
      * @param time  the time to derive from, may be null
      * @param offset  the zone offset to derive from, may be null
-     * @param zoneId  the zone ID to derive from, may be null
+     * @param zone  the zone ID to derive from, may be null
      * @param chrono  the chronology to derive from, may be null
      * @param fields  the fields to derive from, may be null
      * @return the derived value for the rule, null if unable to derive
      */
     @SuppressWarnings("unchecked")
     public static <R> R derive(CalendricalRule<R> ruleToDerive, CalendricalRule<?> ruleOfData,
-            LocalDate date, LocalTime time, ZoneOffset offset, ZoneId zoneId, Chronology chrono, DateTimeFields fields) {
+            LocalDate date, LocalTime time, ZoneOffset offset, ZoneId zone, Chronology chrono, DateTimeFields fields) {
         ISOChronology.checkNotNull(ruleToDerive, "CalendricalRule must not be null");
         if (fields == null) {
             // optimize simple cases
@@ -192,7 +192,7 @@ public final class CalendricalEngine {
                     case ISOCalendricalRule.LOCAL_DATE_ORDINAL: return (R) date;
                     case ISOCalendricalRule.LOCAL_TIME_ORDINAL: return (R) time;
                     case ISOCalendricalRule.ZONE_OFFSET_ORDINAL: return (R) offset;
-                    case ISOCalendricalRule.ZONE_ID_ORDINAL: return (R) zoneId;
+                    case ISOCalendricalRule.ZONE_ID_ORDINAL: return (R) zone;
                     case ISOCalendricalRule.CHRONOLOGY_ORDINAL: return (R) chrono;
                     // other cases are not so simple, so drop through
                 }
@@ -200,7 +200,7 @@ public final class CalendricalEngine {
                 return (R) ((ISODateTimeRule) ruleToDerive).deriveFrom(date, time, offset);
             }
         }
-        CalendricalEngine engine = new CalendricalEngine(ruleOfData, date, time, offset, zoneId, chrono, fields);
+        CalendricalEngine engine = new CalendricalEngine(ruleOfData, date, time, offset, zone, chrono, fields);
         engine.normalize();
         return engine.derive(ruleToDerive);
     }
@@ -268,19 +268,19 @@ public final class CalendricalEngine {
      * @param date  the date, may be null
      * @param time  the time, may be null
      * @param offset  the zone offset, may be null
-     * @param zoneId  the zone ID, may be null
+     * @param zone  the zone ID, may be null
      * @param chrono  the chronology, may be null
      * @param fields  the fields, may be null
      */
     private CalendricalEngine(
             CalendricalRule<?> ruleOfData, LocalDate date, LocalTime time, ZoneOffset offset,
-            ZoneId zone, Chronology chronology, Iterable<DateTimeField> fields) {
+            ZoneId zone, Chronology chrono, Iterable<DateTimeField> fields) {
         this.rule = ruleOfData;
         this.date = date;
         this.time = time;
         this.offset = offset;
         this.zone = zone;
-        this.chronology = chronology;
+        this.chronology = chrono;
         if (fields != null) {
             for (DateTimeField field : fields) {
                 setField(field, false);  // can use false here as DateTimeFields ensure no rule clashes
@@ -537,11 +537,11 @@ public final class CalendricalEngine {
      * clashes with the stored object, storing an error if it does.
      * If the flag is false, then the current value is overwritten without further checks.
      * 
-     * @param chronology  the chronology to store, may be null
+     * @param chrono  the chronology to store, may be null
      * @param storeErrorIfClash  true to store an error if the chronology clashes with the stored value
      */
-    public void setChronology(Chronology chronology, boolean storeErrorIfClash) {
-        this.chronology = set(this.chronology, chronology, storeErrorIfClash);
+    public void setChronology(Chronology chrono, boolean storeErrorIfClash) {
+        this.chronology = set(this.chronology, chrono, storeErrorIfClash);
     }
 
     /**
