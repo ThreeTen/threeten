@@ -161,7 +161,7 @@ final class FixedZoneRules extends ZoneRules implements Serializable {
      * <p>
      * The entire state of the object is compared.
      *
-     * @param other  the other object to compare to, null returns false
+     * @param otherRules  the other object to compare to, null returns false
      * @return true if equal
      */
     @Override
