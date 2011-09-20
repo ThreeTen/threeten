@@ -180,7 +180,7 @@ public final class JulianChronology extends Chronology implements Serializable {
      * The period unit defines the concept of a period of a year in the Julian calendar system.
      * This has an estimated duration equal to 365.25 days.
      * <p>
-     * See {@link #yearRule()} for the main date-time field.
+     * See {@link HistoricChronology#yearRule()} for the main date-time field.
      *
      * @return the period unit for years, not null
      */
@@ -194,7 +194,7 @@ public final class JulianChronology extends Chronology implements Serializable {
      * The period unit defines the concept of a period of a month in the Julian calendar system.
      * This has an estimated duration equal to one-twelfth of 365.25 days.
      * <p>
-     * See {@link #monthOfYearRule()} for the main date-time field.
+     * See {@link HistoricChronology#monthOfYearRule()} for the main date-time field.
      *
      * @return the period unit for months, not null
      */
@@ -220,7 +220,7 @@ public final class JulianChronology extends Chronology implements Serializable {
      * The period unit defines the concept of a period of a day.
      * This is equivalent to the ISO days period unit.
      * <p>
-     * See {@link #dayOfMonthRule()} for the main date-time field.
+     * See {@link HistoricChronology#dayOfMonthRule()} for the main date-time field.
      *
      * @return the period unit for days, not null
      */

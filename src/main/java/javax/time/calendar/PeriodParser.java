@@ -105,7 +105,6 @@ final class PeriodParser {
     /**
      * Performs the parse.
      *
-     * @param text  the input string in the format PnYnMnDTnHnMn.nS, validated not null
      * @return the created Period, not null
      * @throws CalendricalParseException if the text cannot be parsed to a Period
      */

@@ -259,9 +259,9 @@ public final class DateTimeParseContext {
      * @return the value mapped to the specified rule, null if rule not in the map
      */
     @SuppressWarnings("unchecked")
-    public <T> T getParsed(Class<T> clazz) {
+    public <T> T getParsed(Class<T> rule) {
         for (Calendrical cal : currentCalendrical().calendricals) {
-            if (clazz.isInstance(cal)) {
+            if (rule.isInstance(cal)) {
                 return (T) cal;
             }
         }

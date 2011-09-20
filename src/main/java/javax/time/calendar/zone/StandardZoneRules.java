@@ -160,7 +160,7 @@ final class StandardZoneRules extends ZoneRules implements Serializable {
      *
      * @param standardTransitions  the standard transitions, not null
      * @param standardOffsets  the standard offsets, not null
-     * @param savingsLocalTransitions  the standard transitions, not null
+     * @param savingsInstantTransitions  the standard transitions, not null
      * @param wallOffsets  the wall offsets, not null
      * @param lastRules  the recurring last rules, size 15 or less, not null
      */
@@ -544,7 +544,7 @@ final class StandardZoneRules extends ZoneRules implements Serializable {
      * <p>
      * The entire state of the object is compared.
      *
-     * @param other  the other object to compare to, null returns false
+     * @param otherRules  the other object to compare to, null returns false
      * @return true if equal
      */
     @Override
