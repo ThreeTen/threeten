@@ -36,7 +36,7 @@ import static javax.time.calendar.ISODateTimeRule.WEEK_BASED_YEAR;
 import java.io.Serializable;
 
 import javax.time.CalendricalException;
-import javax.time.MathUtils;
+import javax.time.calendar.MathUtils;
 import javax.time.calendar.Calendrical;
 import javax.time.calendar.CalendricalMatcher;
 import javax.time.calendar.CalendricalEngine;
@@ -45,9 +45,9 @@ import javax.time.calendar.DateTimeField;
 import javax.time.calendar.DateTimeRule;
 import javax.time.calendar.ISOChronology;
 import javax.time.calendar.IllegalCalendarFieldValueException;
-import javax.time.calendar.LocalDate;
-import javax.time.calendar.MonthOfYear;
-import javax.time.calendar.Year;
+import javax.time.LocalDate;
+import javax.time.MonthOfYear;
+import javax.time.Year;
 
 /**
  * A representation of a week-based-year in the ISO-8601 calendar system.

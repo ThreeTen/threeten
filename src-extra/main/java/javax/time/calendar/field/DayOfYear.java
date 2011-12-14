@@ -38,7 +38,7 @@ import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import javax.time.CalendricalException;
-import javax.time.MathUtils;
+import javax.time.calendar.MathUtils;
 import javax.time.calendar.Calendrical;
 import javax.time.calendar.CalendricalMatcher;
 import javax.time.calendar.CalendricalEngine;
@@ -49,8 +49,8 @@ import javax.time.calendar.DateTimeRule;
 import javax.time.calendar.ISOChronology;
 import javax.time.calendar.IllegalCalendarFieldValueException;
 import javax.time.calendar.InvalidCalendarFieldException;
-import javax.time.calendar.LocalDate;
-import javax.time.calendar.Year;
+import javax.time.LocalDate;
+import javax.time.Year;
 
 /**
  * A representation of a day-of-year in the ISO-8601 calendar system.

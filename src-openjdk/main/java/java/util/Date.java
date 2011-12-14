@@ -37,7 +37,7 @@ import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 
 import javax.time.Instant;
-import javax.time.InstantProvider;
+import javax.time.calendar.InstantProvider;
 
 import sun.util.calendar.BaseCalendar;
 import sun.util.calendar.CalendarSystem;

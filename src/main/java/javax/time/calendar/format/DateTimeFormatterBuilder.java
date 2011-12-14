@@ -42,8 +42,8 @@ import javax.time.calendar.Chronology;
 import javax.time.calendar.DateTimeRule;
 import javax.time.calendar.ISOChronology;
 import javax.time.calendar.ISODateTimeRule;
-import javax.time.calendar.ZoneId;
-import javax.time.calendar.ZoneOffset;
+import javax.time.ZoneId;
+import javax.time.ZoneOffset;
 
 /**
  * Builder to create formatters for calendricals.

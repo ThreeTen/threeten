@@ -41,9 +41,9 @@ import java.util.Locale;
 
 import javax.time.calendar.Calendrical;
 import javax.time.calendar.DateTimeRule;
-import javax.time.calendar.LocalDate;
-import javax.time.calendar.ZoneId;
-import javax.time.calendar.ZoneOffset;
+import javax.time.LocalDate;
+import javax.time.ZoneId;
+import javax.time.ZoneOffset;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

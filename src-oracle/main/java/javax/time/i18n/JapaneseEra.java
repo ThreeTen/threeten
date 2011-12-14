@@ -9,7 +9,7 @@ import javax.time.calendar.CalendricalEngine;
 import javax.time.calendar.CalendricalRule;
 import javax.time.calendar.DateTimeRule;
 import javax.time.calendar.IllegalCalendarFieldValueException;
-import javax.time.calendar.LocalDate;
+import javax.time.LocalDate;
 
 /**
  * Defines the valid eras for the Japanese Imperial calendar system.

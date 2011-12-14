@@ -37,7 +37,7 @@ import javax.time.calendar.Calendrical;
 import javax.time.calendar.CalendricalEngine;
 import javax.time.calendar.CalendricalRule;
 import javax.time.calendar.ISOChronology;
-import javax.time.calendar.LocalDate;
+import javax.time.LocalDate;
 
 /**
  * A mock date.

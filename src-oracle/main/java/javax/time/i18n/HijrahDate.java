@@ -17,14 +17,14 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.time.CalendricalException;
-import javax.time.MathUtils;
+import javax.time.calendar.MathUtils;
 import javax.time.calendar.Calendrical;
 import javax.time.calendar.CalendricalEngine;
 import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.DayOfWeek;
+import javax.time.DayOfWeek;
 import javax.time.calendar.IllegalCalendarFieldValueException;
 import javax.time.calendar.InvalidCalendarFieldException;
-import javax.time.calendar.LocalDate;
+import javax.time.LocalDate;
 
 /**
  * A date in the Hijrah calendar system.

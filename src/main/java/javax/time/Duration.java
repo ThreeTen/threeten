@@ -31,6 +31,8 @@
  */
 package javax.time;
 
+import javax.time.calendar.InstantProvider;
+import javax.time.calendar.MathUtils;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;

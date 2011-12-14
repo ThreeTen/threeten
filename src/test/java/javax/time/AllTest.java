@@ -31,6 +31,9 @@
  */
 package javax.time;
 
+import javax.time.calendar.TestUTCInstant;
+import javax.time.calendar.TestTAIInstant;
+import javax.time.calendar.TestUTCRules;
 import java.util.Arrays;
 
 import javax.time.calendar.TestAmPmOfDay;
@@ -78,7 +81,6 @@ import javax.time.calendar.TestOffsetTime;
 import javax.time.calendar.TestPeriod;
 import javax.time.calendar.TestPeriodField;
 import javax.time.calendar.TestPeriodFields;
-import javax.time.calendar.TestPeriodParser;
 import javax.time.calendar.TestPeriodUnit;
 import javax.time.calendar.TestQuarterOfYear;
 import javax.time.calendar.TestWeekRules;

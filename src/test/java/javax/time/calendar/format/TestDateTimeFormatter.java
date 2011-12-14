@@ -49,10 +49,10 @@ import javax.time.calendar.Calendrical;
 import javax.time.calendar.CalendricalEngine;
 import javax.time.calendar.CalendricalRule;
 import javax.time.calendar.DateTimeField;
-import javax.time.calendar.LocalDate;
-import javax.time.calendar.LocalTime;
-import javax.time.calendar.OffsetDate;
-import javax.time.calendar.ZoneOffset;
+import javax.time.LocalDate;
+import javax.time.LocalTime;
+import javax.time.OffsetDate;
+import javax.time.ZoneOffset;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

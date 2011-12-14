@@ -16,11 +16,11 @@ import java.lang.reflect.Modifier;
 import javax.time.CalendricalException;
 import javax.time.calendar.Calendrical;
 import javax.time.calendar.DateTimeFields;
-import javax.time.calendar.DayOfWeek;
+import javax.time.DayOfWeek;
 import javax.time.calendar.IllegalCalendarFieldValueException;
-import javax.time.calendar.LocalDate;
-import javax.time.calendar.LocalTime;
-import javax.time.calendar.MonthOfYear;
+import javax.time.LocalDate;
+import javax.time.LocalTime;
+import javax.time.MonthOfYear;
 
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;

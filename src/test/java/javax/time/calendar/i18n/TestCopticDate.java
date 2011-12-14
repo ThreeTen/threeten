@@ -50,11 +50,11 @@ import javax.time.calendar.CalendricalRule;
 import javax.time.calendar.CalendricalRuleException;
 import javax.time.calendar.Chronology;
 import javax.time.calendar.DateTimeFields;
-import javax.time.calendar.DayOfWeek;
+import javax.time.DayOfWeek;
 import javax.time.calendar.IllegalCalendarFieldValueException;
 import javax.time.calendar.InvalidCalendarFieldException;
-import javax.time.calendar.LocalDate;
-import javax.time.calendar.LocalTime;
+import javax.time.LocalDate;
+import javax.time.LocalTime;
 import javax.time.i18n.CopticChronology;
 import javax.time.i18n.CopticDate;
 

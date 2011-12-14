@@ -14,8 +14,8 @@ import javax.time.calendar.Chronology;
 import javax.time.calendar.DateTimeField;
 import javax.time.calendar.DateTimeRule;
 import javax.time.calendar.DateTimeRuleRange;
-import javax.time.calendar.ISOPeriodUnit;
-import javax.time.calendar.PeriodUnit;
+import javax.time.ISOPeriodUnit;
+import javax.time.PeriodUnit;
 import javax.time.calendar.format.TextStyle;
 
 /**

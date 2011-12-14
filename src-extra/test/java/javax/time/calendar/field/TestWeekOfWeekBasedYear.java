@@ -52,8 +52,8 @@ import javax.time.calendar.DateTimeFields;
 import javax.time.calendar.DateTimeRule;
 import javax.time.calendar.ISODateTimeRule;
 import javax.time.calendar.IllegalCalendarFieldValueException;
-import javax.time.calendar.LocalDate;
-import javax.time.calendar.LocalTime;
+import javax.time.LocalDate;
+import javax.time.LocalTime;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

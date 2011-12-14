@@ -31,6 +31,8 @@
  */
 package javax.time;
 
+import javax.time.calendar.InstantProvider;
+
 /**
  * Mock InstantProvider that returns null.
  *

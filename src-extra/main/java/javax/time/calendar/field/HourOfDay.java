@@ -38,7 +38,7 @@ import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.AmPmOfDay;
+import javax.time.AmPmOfDay;
 import javax.time.calendar.Calendrical;
 import javax.time.calendar.CalendricalMatcher;
 import javax.time.calendar.CalendricalEngine;
@@ -47,7 +47,7 @@ import javax.time.calendar.DateTimeField;
 import javax.time.calendar.DateTimeRule;
 import javax.time.calendar.ISOChronology;
 import javax.time.calendar.IllegalCalendarFieldValueException;
-import javax.time.calendar.LocalTime;
+import javax.time.LocalTime;
 import javax.time.calendar.TimeAdjuster;
 
 /**

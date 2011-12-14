@@ -44,7 +44,7 @@ import javax.time.calendar.CalendricalRule;
 import javax.time.calendar.DateTimeField;
 import javax.time.calendar.DateTimeRule;
 import javax.time.calendar.ISOChronology;
-import javax.time.calendar.LocalTime;
+import javax.time.LocalTime;
 import javax.time.calendar.TimeAdjuster;
 
 /**

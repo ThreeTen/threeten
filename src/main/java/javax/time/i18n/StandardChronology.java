@@ -37,7 +37,7 @@ import javax.time.calendar.CalendricalEngine;
 import javax.time.calendar.CalendricalRule;
 import javax.time.calendar.Chronology;
 import javax.time.calendar.DateTimeRuleRange;
-import javax.time.calendar.LocalDate;
+import javax.time.LocalDate;
 
 /**
  * A standard calendar system formed of eras, years, months and days.

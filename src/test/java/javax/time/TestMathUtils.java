@@ -31,6 +31,7 @@
  */
 package javax.time;
 
+import javax.time.calendar.MathUtils;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
