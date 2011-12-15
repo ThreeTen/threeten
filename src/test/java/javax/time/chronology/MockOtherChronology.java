@@ -29,8 +29,9 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.Chronology;
 import javax.time.PeriodUnit;
 import javax.time.Duration;
 

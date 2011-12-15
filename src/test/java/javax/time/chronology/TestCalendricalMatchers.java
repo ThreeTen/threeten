@@ -29,8 +29,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.CalendricalMatchers;
+import javax.time.chronology.CalendricalMatcher;
 import javax.time.MonthOfYear;
 import javax.time.LocalTime;
 import javax.time.LocalDate;

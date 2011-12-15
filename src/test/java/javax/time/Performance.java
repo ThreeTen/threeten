@@ -31,11 +31,12 @@
  */
 package javax.time;
 
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_MONTH;
-import static javax.time.calendar.ISODateTimeRule.HOUR_OF_DAY;
-import static javax.time.calendar.ISODateTimeRule.MINUTE_OF_HOUR;
-import static javax.time.calendar.ISODateTimeRule.MONTH_OF_YEAR;
-import static javax.time.calendar.ISODateTimeRule.YEAR;
+import javax.time.chronology.ZoneResolvers;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_MONTH;
+import static javax.time.chronology.ISODateTimeRule.HOUR_OF_DAY;
+import static javax.time.chronology.ISODateTimeRule.MINUTE_OF_HOUR;
+import static javax.time.chronology.ISODateTimeRule.MONTH_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.YEAR;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;

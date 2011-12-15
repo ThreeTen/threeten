@@ -43,7 +43,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import javax.time.ISOPeriodUnit;
-import javax.time.calendar.PeriodFields;
+import javax.time.chronology.PeriodFields;
 import javax.time.PeriodUnit;
 
 import org.testng.annotations.Test;

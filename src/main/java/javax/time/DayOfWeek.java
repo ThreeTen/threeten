@@ -31,18 +31,18 @@
  */
 package javax.time;
 
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_WEEK;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_WEEK;
 
 import java.util.Locale;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalMatcher;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.DateTimeField;
-import javax.time.calendar.ExtendedCalendricalRule;
-import javax.time.calendar.IllegalCalendarFieldValueException;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalMatcher;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.ExtendedCalendricalRule;
+import javax.time.chronology.IllegalCalendarFieldValueException;
 import javax.time.calendar.format.TextStyle;
 
 /**

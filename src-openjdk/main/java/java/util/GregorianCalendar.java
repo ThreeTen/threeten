@@ -48,9 +48,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import javax.time.Instant;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalRule;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalRule;
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.LocalTime;

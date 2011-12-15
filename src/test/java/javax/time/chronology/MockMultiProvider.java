@@ -29,8 +29,11 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.InstantProvider;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalRule;
 import javax.time.ZoneOffset;
 import javax.time.OffsetDateTime;
 import javax.time.Instant;

@@ -31,8 +31,8 @@
  */
 package javax.time.calendar.format;
 
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_MONTH;
-import static javax.time.calendar.ISODateTimeRule.MONTH_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_MONTH;
+import static javax.time.chronology.ISODateTimeRule.MONTH_OF_YEAR;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
 
@@ -45,10 +45,10 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.DateTimeField;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.DateTimeField;
 import javax.time.LocalDate;
 import javax.time.LocalTime;
 import javax.time.OffsetDate;

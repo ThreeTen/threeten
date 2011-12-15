@@ -31,29 +31,32 @@
  */
 package javax.time;
 
-import static javax.time.calendar.ISOChronology.HOURS_PER_DAY;
-import static javax.time.calendar.ISOChronology.MINUTES_PER_DAY;
-import static javax.time.calendar.ISOChronology.NANOS_PER_DAY;
-import static javax.time.calendar.ISOChronology.NANOS_PER_HOUR;
-import static javax.time.calendar.ISOChronology.NANOS_PER_MINUTE;
-import static javax.time.calendar.ISOChronology.NANOS_PER_SECOND;
-import static javax.time.calendar.ISOChronology.SECONDS_PER_DAY;
+import javax.time.chronology.DateResolver;
+import javax.time.chronology.ZoneResolver;
+import javax.time.chronology.ZoneResolvers;
+import static javax.time.chronology.ISOChronology.HOURS_PER_DAY;
+import static javax.time.chronology.ISOChronology.MINUTES_PER_DAY;
+import static javax.time.chronology.ISOChronology.NANOS_PER_DAY;
+import static javax.time.chronology.ISOChronology.NANOS_PER_HOUR;
+import static javax.time.chronology.ISOChronology.NANOS_PER_MINUTE;
+import static javax.time.chronology.ISOChronology.NANOS_PER_SECOND;
+import static javax.time.chronology.ISOChronology.SECONDS_PER_DAY;
 
 import java.io.Serializable;
 
 import javax.time.CalendricalException;
 import javax.time.Duration;
 import javax.time.Instant;
-import javax.time.calendar.MathUtils;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalMatcher;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.DateAdjuster;
-import javax.time.calendar.ISOCalendricalRule;
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.PeriodProvider;
-import javax.time.calendar.TimeAdjuster;
+import javax.time.chronology.MathUtils;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalMatcher;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.DateAdjuster;
+import javax.time.chronology.ISOCalendricalRule;
+import javax.time.chronology.ISOChronology;
+import javax.time.chronology.PeriodProvider;
+import javax.time.chronology.TimeAdjuster;
 import javax.time.calendar.format.CalendricalParseException;
 import javax.time.calendar.format.DateTimeFormatter;
 import javax.time.calendar.format.DateTimeFormatters;

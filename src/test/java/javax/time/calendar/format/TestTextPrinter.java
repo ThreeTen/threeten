@@ -31,16 +31,16 @@
  */
 package javax.time.calendar.format;
 
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_MONTH;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_WEEK;
-import static javax.time.calendar.ISODateTimeRule.MONTH_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_MONTH;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_WEEK;
+import static javax.time.chronology.ISODateTimeRule.MONTH_OF_YEAR;
 import static org.testng.Assert.assertEquals;
 
 import java.util.Locale;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.DateTimeField;
-import javax.time.calendar.DateTimeRule;
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.DateTimeRule;
 import javax.time.MonthOfYear;
 
 import org.testng.annotations.DataProvider;

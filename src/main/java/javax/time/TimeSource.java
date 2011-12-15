@@ -34,9 +34,9 @@ package javax.time;
 import java.io.Serializable;
 import javax.time.Duration;
 import javax.time.Instant;
-import javax.time.calendar.InstantProvider;
-import javax.time.calendar.TAIInstant;
-import javax.time.calendar.UTCInstant;
+import javax.time.chronology.InstantProvider;
+import javax.time.chronology.TAIInstant;
+import javax.time.chronology.UTCInstant;
 
 /**
  * A source providing access to the current instant.

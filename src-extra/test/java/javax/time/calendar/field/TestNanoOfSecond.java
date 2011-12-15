@@ -46,15 +46,15 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalMatcher;
-import javax.time.calendar.DateTimeFields;
-import javax.time.calendar.DateTimeRule;
-import javax.time.calendar.ISODateTimeRule;
-import javax.time.calendar.IllegalCalendarFieldValueException;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalMatcher;
+import javax.time.chronology.DateTimeFields;
+import javax.time.chronology.DateTimeRule;
+import javax.time.chronology.ISODateTimeRule;
+import javax.time.chronology.IllegalCalendarFieldValueException;
 import javax.time.LocalDate;
 import javax.time.LocalTime;
-import javax.time.calendar.TimeAdjuster;
+import javax.time.chronology.TimeAdjuster;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

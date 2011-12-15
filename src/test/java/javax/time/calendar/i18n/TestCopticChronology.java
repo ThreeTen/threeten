@@ -45,9 +45,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import javax.time.calendar.DateTimeField;
-import javax.time.calendar.DateTimeRule;
-import javax.time.calendar.DateTimeRuleRange;
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.DateTimeRule;
+import javax.time.chronology.DateTimeRuleRange;
 import javax.time.i18n.CopticChronology;
 import javax.time.i18n.CopticDate;
 

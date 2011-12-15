@@ -29,8 +29,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.PeriodFields;
+import javax.time.chronology.PeriodField;
 import javax.time.ISOPeriodUnit;
 import javax.time.PeriodUnit;
 import static org.testng.Assert.assertEquals;

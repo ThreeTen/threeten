@@ -54,7 +54,7 @@ import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 
 import javax.time.Instant;
-import javax.time.calendar.InstantProvider;
+import javax.time.chronology.InstantProvider;
 
 import sun.util.calendar.ZoneInfo;
 import sun.util.resources.LocaleData;

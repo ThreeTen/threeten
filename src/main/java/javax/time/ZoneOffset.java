@@ -36,11 +36,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.ISOCalendricalRule;
-import javax.time.calendar.PeriodProvider;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.ISOCalendricalRule;
+import javax.time.chronology.PeriodProvider;
 
 /**
  * A time-zone offset from UTC, such as {@code +02:00}.

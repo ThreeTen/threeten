@@ -29,8 +29,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.PeriodFields;
+import javax.time.chronology.PeriodProvider;
+import javax.time.chronology.Chronology;
+import javax.time.chronology.PeriodField;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalRule;
 import javax.time.YearMonth;
 import javax.time.MonthDay;
 import javax.time.ZoneOffset;
@@ -40,9 +46,9 @@ import javax.time.LocalTime;
 import javax.time.Period;
 import javax.time.OffsetDateTime;
 import javax.time.LocalDate;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_MONTH;
-import static javax.time.calendar.ISODateTimeRule.HOUR_OF_DAY;
-import static javax.time.calendar.ISODateTimeRule.YEAR;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_MONTH;
+import static javax.time.chronology.ISODateTimeRule.HOUR_OF_DAY;
+import static javax.time.chronology.ISODateTimeRule.YEAR;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;

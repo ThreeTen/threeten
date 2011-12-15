@@ -34,4 +34,4 @@
  * Provides classes to manage the human time-scale including date, time,
  * date-time and time-zone representations.
  */
-package javax.time.calendar;
+package javax.time.chronology;

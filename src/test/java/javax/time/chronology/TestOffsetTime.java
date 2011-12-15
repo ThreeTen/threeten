@@ -29,8 +29,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.Chronology;
+import javax.time.chronology.PeriodProvider;
+import javax.time.chronology.CalendricalMatcher;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.ISOChronology;
+import javax.time.chronology.TimeAdjuster;
 import javax.time.YearMonth;
 import javax.time.MonthDay;
 import javax.time.AmPmOfDay;
@@ -46,21 +53,21 @@ import javax.time.Period;
 import javax.time.LocalDate;
 import javax.time.OffsetDateTime;
 import javax.time.TimeSource;
-import static javax.time.calendar.ISODateTimeRule.AMPM_OF_DAY;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_MONTH;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_WEEK;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_YEAR;
-import static javax.time.calendar.ISODateTimeRule.HOUR_OF_AMPM;
-import static javax.time.calendar.ISODateTimeRule.HOUR_OF_DAY;
-import static javax.time.calendar.ISODateTimeRule.MINUTE_OF_HOUR;
-import static javax.time.calendar.ISODateTimeRule.MONTH_OF_QUARTER;
-import static javax.time.calendar.ISODateTimeRule.MONTH_OF_YEAR;
-import static javax.time.calendar.ISODateTimeRule.NANO_OF_SECOND;
-import static javax.time.calendar.ISODateTimeRule.QUARTER_OF_YEAR;
-import static javax.time.calendar.ISODateTimeRule.SECOND_OF_MINUTE;
-import static javax.time.calendar.ISODateTimeRule.WEEK_BASED_YEAR;
-import static javax.time.calendar.ISODateTimeRule.WEEK_OF_WEEK_BASED_YEAR;
-import static javax.time.calendar.ISODateTimeRule.YEAR;
+import static javax.time.chronology.ISODateTimeRule.AMPM_OF_DAY;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_MONTH;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_WEEK;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.HOUR_OF_AMPM;
+import static javax.time.chronology.ISODateTimeRule.HOUR_OF_DAY;
+import static javax.time.chronology.ISODateTimeRule.MINUTE_OF_HOUR;
+import static javax.time.chronology.ISODateTimeRule.MONTH_OF_QUARTER;
+import static javax.time.chronology.ISODateTimeRule.MONTH_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.NANO_OF_SECOND;
+import static javax.time.chronology.ISODateTimeRule.QUARTER_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.SECOND_OF_MINUTE;
+import static javax.time.chronology.ISODateTimeRule.WEEK_BASED_YEAR;
+import static javax.time.chronology.ISODateTimeRule.WEEK_OF_WEEK_BASED_YEAR;
+import static javax.time.chronology.ISODateTimeRule.YEAR;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;

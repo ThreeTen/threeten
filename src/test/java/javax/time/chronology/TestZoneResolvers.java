@@ -29,13 +29,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.ZoneResolvers;
+import javax.time.chronology.ZoneResolver;
 import javax.time.ZoneOffset;
-import javax.time.ZoneResolvers;
 import javax.time.LocalDateTime;
 import javax.time.ZoneId;
-import javax.time.ZoneResolver;
 import javax.time.OffsetDateTime;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;

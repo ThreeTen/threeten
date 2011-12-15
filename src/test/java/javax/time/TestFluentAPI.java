@@ -31,16 +31,17 @@
  */
 package javax.time;
 
-import static javax.time.calendar.DateAdjusters.dayOfWeekInMonth;
-import static javax.time.calendar.DateAdjusters.firstInMonth;
-import static javax.time.calendar.DateAdjusters.lastDayOfMonth;
-import static javax.time.calendar.DateAdjusters.next;
-import static javax.time.calendar.DateAdjusters.nextOrCurrent;
+import javax.time.chronology.DateResolvers;
+import static javax.time.chronology.DateAdjusters.dayOfWeekInMonth;
+import static javax.time.chronology.DateAdjusters.firstInMonth;
+import static javax.time.chronology.DateAdjusters.lastDayOfMonth;
+import static javax.time.chronology.DateAdjusters.next;
+import static javax.time.chronology.DateAdjusters.nextOrCurrent;
 import static javax.time.DayOfWeek.FRIDAY;
 import static javax.time.DayOfWeek.MONDAY;
 import static javax.time.DayOfWeek.TUESDAY;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_MONTH;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_WEEK;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_MONTH;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_WEEK;
 
 import static javax.time.MonthOfYear.AUGUST;
 import static javax.time.MonthOfYear.DECEMBER;
@@ -53,7 +54,7 @@ import static javax.time.Period.ofMinutes;
 import static javax.time.Period.ofMonths;
 import static javax.time.Period.ofSeconds;
 import static javax.time.Period.ofYears;
-import javax.time.calendar.DateTimeFields;
+import javax.time.chronology.DateTimeFields;
 import javax.time.calendar.zone.ZoneOffsetTransition;
 
 /**

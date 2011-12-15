@@ -37,7 +37,7 @@ import java.util.TimeZone;
 
 import javax.time.CalendricalException;
 import javax.time.Instant;
-import javax.time.calendar.ISOChronology;
+import javax.time.chronology.ISOChronology;
 
 /**
  * A clock providing access to the current date and time.

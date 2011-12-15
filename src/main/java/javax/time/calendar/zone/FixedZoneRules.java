@@ -38,7 +38,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.time.calendar.InstantProvider;
+import javax.time.chronology.InstantProvider;
 import javax.time.LocalDateTime;
 import javax.time.ZoneOffset;
 

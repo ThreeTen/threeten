@@ -34,7 +34,7 @@ package javax.time.calendar.zone;
 import java.util.List;
 
 import javax.time.Instant;
-import javax.time.calendar.InstantProvider;
+import javax.time.chronology.InstantProvider;
 import javax.time.LocalDateTime;
 import javax.time.OffsetDate;
 import javax.time.OffsetDateTime;

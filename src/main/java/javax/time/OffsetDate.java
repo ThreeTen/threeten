@@ -31,20 +31,22 @@
  */
 package javax.time;
 
+import javax.time.chronology.DateResolver;
+import javax.time.chronology.ZoneResolvers;
 import java.io.Serializable;
 
 import javax.time.CalendricalException;
 import javax.time.Instant;
-import javax.time.calendar.InstantProvider;
-import javax.time.calendar.MathUtils;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalMatcher;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.DateAdjuster;
-import javax.time.calendar.ISOCalendricalRule;
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.PeriodProvider;
+import javax.time.chronology.InstantProvider;
+import javax.time.chronology.MathUtils;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalMatcher;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.DateAdjuster;
+import javax.time.chronology.ISOCalendricalRule;
+import javax.time.chronology.ISOChronology;
+import javax.time.chronology.PeriodProvider;
 import javax.time.calendar.format.CalendricalParseException;
 import javax.time.calendar.format.DateTimeFormatter;
 import javax.time.calendar.format.DateTimeFormatters;

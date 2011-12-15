@@ -31,19 +31,20 @@
  */
 package javax.time;
 
-import static javax.time.calendar.DateAdjusters.lastDayOfMonth;
+import javax.time.chronology.ZoneResolvers;
+import static javax.time.chronology.DateAdjusters.lastDayOfMonth;
 import static javax.time.DayOfWeek.FRIDAY;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_MONTH;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_WEEK;
-import static javax.time.calendar.ISODateTimeRule.MONTH_OF_YEAR;
-import static javax.time.calendar.ISODateTimeRule.QUARTER_OF_YEAR;
-import static javax.time.calendar.ISODateTimeRule.YEAR;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_MONTH;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_WEEK;
+import static javax.time.chronology.ISODateTimeRule.MONTH_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.QUARTER_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.YEAR;
 import static javax.time.MonthOfYear.DECEMBER;
 
 import static javax.time.Period.ofDateFields;
 import java.util.Locale;
 
-import javax.time.calendar.DateTimeFields;
+import javax.time.chronology.DateTimeFields;
 import javax.time.calendar.format.DateTimeFormatter;
 import javax.time.calendar.format.DateTimeFormatterBuilder;
 import javax.time.calendar.format.DateTimeFormatters;

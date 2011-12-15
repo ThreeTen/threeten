@@ -31,17 +31,17 @@
  */
 package javax.time.calendar.format;
 
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_MONTH;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_WEEK;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_YEAR;
-import static javax.time.calendar.ISODateTimeRule.HOUR_OF_DAY;
-import static javax.time.calendar.ISODateTimeRule.MINUTE_OF_HOUR;
-import static javax.time.calendar.ISODateTimeRule.MONTH_OF_YEAR;
-import static javax.time.calendar.ISODateTimeRule.NANO_OF_SECOND;
-import static javax.time.calendar.ISODateTimeRule.SECOND_OF_MINUTE;
-import static javax.time.calendar.ISODateTimeRule.WEEK_BASED_YEAR;
-import static javax.time.calendar.ISODateTimeRule.WEEK_OF_WEEK_BASED_YEAR;
-import static javax.time.calendar.ISODateTimeRule.YEAR;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_MONTH;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_WEEK;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.HOUR_OF_DAY;
+import static javax.time.chronology.ISODateTimeRule.MINUTE_OF_HOUR;
+import static javax.time.chronology.ISODateTimeRule.MONTH_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.NANO_OF_SECOND;
+import static javax.time.chronology.ISODateTimeRule.SECOND_OF_MINUTE;
+import static javax.time.chronology.ISODateTimeRule.WEEK_BASED_YEAR;
+import static javax.time.chronology.ISODateTimeRule.WEEK_OF_WEEK_BASED_YEAR;
+import static javax.time.chronology.ISODateTimeRule.YEAR;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
@@ -54,11 +54,11 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.CalendricalRuleException;
-import javax.time.calendar.DateTimeFields;
-import javax.time.calendar.DateTimeRule;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.CalendricalRuleException;
+import javax.time.chronology.DateTimeFields;
+import javax.time.chronology.DateTimeRule;
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.OffsetDateTime;

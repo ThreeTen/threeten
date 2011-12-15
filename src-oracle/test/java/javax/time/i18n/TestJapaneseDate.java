@@ -14,10 +14,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.DateTimeFields;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.DateTimeFields;
 import javax.time.DayOfWeek;
-import javax.time.calendar.IllegalCalendarFieldValueException;
+import javax.time.chronology.IllegalCalendarFieldValueException;
 import javax.time.LocalDate;
 import javax.time.LocalTime;
 import javax.time.MonthOfYear;

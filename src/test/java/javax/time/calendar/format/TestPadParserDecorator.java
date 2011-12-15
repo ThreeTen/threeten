@@ -31,11 +31,11 @@
  */
 package javax.time.calendar.format;
 
-import static javax.time.calendar.ISODateTimeRule.MONTH_OF_YEAR;
+import static javax.time.chronology.ISODateTimeRule.MONTH_OF_YEAR;
 import static org.testng.Assert.assertEquals;
 
-import javax.time.calendar.DateTimeField;
-import javax.time.calendar.DateTimeRule;
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.DateTimeRule;
 
 import org.testng.annotations.Test;
 

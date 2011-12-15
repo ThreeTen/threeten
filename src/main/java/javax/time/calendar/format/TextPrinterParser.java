@@ -34,8 +34,8 @@ package javax.time.calendar.format;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import javax.time.calendar.DateTimeField;
-import javax.time.calendar.DateTimeRule;
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.DateTimeRule;
 
 /**
  * Prints or parses field text.

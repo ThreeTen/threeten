@@ -29,11 +29,11 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.ZoneResolver;
 import javax.time.LocalDateTime;
 import javax.time.ZoneId;
-import javax.time.ZoneResolver;
 import javax.time.OffsetDateTime;
 import javax.time.calendar.zone.ZoneOffsetInfo;
 import javax.time.calendar.zone.ZoneRules;

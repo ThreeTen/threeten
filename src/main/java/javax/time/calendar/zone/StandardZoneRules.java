@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.time.Instant;
-import javax.time.calendar.InstantProvider;
+import javax.time.chronology.InstantProvider;
 import javax.time.LocalDateTime;
 import javax.time.OffsetDateTime;
 import javax.time.Year;

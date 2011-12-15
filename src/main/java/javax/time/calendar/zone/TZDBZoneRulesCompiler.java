@@ -31,9 +31,9 @@
  */
 package javax.time.calendar.zone;
 
-import static javax.time.calendar.ISODateTimeRule.HOUR_OF_DAY;
-import static javax.time.calendar.ISODateTimeRule.MINUTE_OF_HOUR;
-import static javax.time.calendar.ISODateTimeRule.SECOND_OF_MINUTE;
+import static javax.time.chronology.ISODateTimeRule.HOUR_OF_DAY;
+import static javax.time.chronology.ISODateTimeRule.MINUTE_OF_HOUR;
+import static javax.time.chronology.ISODateTimeRule.SECOND_OF_MINUTE;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -56,10 +56,10 @@ import java.util.TreeSet;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
-import javax.time.calendar.DateAdjusters;
-import javax.time.calendar.DateTimeField;
+import javax.time.chronology.DateAdjusters;
+import javax.time.chronology.DateTimeField;
 import javax.time.DayOfWeek;
-import javax.time.calendar.ISOChronology;
+import javax.time.chronology.ISOChronology;
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.LocalTime;

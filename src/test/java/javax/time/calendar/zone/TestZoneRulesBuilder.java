@@ -47,7 +47,7 @@ import static javax.time.calendar.zone.ZoneOffsetTransitionRule.TimeDefinition.U
 import static javax.time.calendar.zone.ZoneOffsetTransitionRule.TimeDefinition.WALL;
 import static org.testng.Assert.assertEquals;
 
-import javax.time.calendar.IllegalCalendarFieldValueException;
+import javax.time.chronology.IllegalCalendarFieldValueException;
 import javax.time.LocalDateTime;
 import javax.time.LocalTime;
 import javax.time.MonthOfYear;

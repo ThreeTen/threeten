@@ -43,7 +43,7 @@ import javax.time.CalendricalException;
 import javax.time.DayOfWeek;
 import javax.time.MonthOfYear;
 import javax.time.OffsetDateTime;
-import javax.time.calendar.TestZoneId;
+import javax.time.chronology.TestZoneId;
 import javax.time.ZoneOffset;
 
 import org.testng.annotations.Test;

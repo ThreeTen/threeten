@@ -33,8 +33,8 @@ package javax.time.calendar.format;
 
 import java.io.IOException;
 
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.CalendricalRuleException;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.CalendricalRuleException;
 
 /**
  * An exception thrown when an error occurs during printing.

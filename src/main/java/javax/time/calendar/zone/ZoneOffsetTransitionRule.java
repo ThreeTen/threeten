@@ -36,9 +36,9 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.Serializable;
 
-import javax.time.calendar.DateAdjusters;
+import javax.time.chronology.DateAdjusters;
 import javax.time.DayOfWeek;
-import javax.time.calendar.ISOChronology;
+import javax.time.chronology.ISOChronology;
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.LocalTime;

@@ -29,11 +29,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.DateAdjuster;
+import javax.time.chronology.CalendricalMatcher;
+import javax.time.chronology.Calendrical;
 import javax.time.DayOfWeek;
 import javax.time.LocalDate;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_WEEK;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_WEEK;
 
 /**
  * A helper class for rules around weekends.

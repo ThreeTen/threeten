@@ -34,9 +34,9 @@ package javax.time;
 import java.io.Serializable;
 
 import javax.time.Duration;
-import javax.time.calendar.MathUtils;
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.PeriodField;
+import javax.time.chronology.MathUtils;
+import javax.time.chronology.ISOChronology;
+import javax.time.chronology.PeriodField;
 
 /**
  * A unit of time for measuring a period, such as 'Days' or 'Minutes'.

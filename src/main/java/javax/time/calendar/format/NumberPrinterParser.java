@@ -33,8 +33,8 @@ package javax.time.calendar.format;
 
 import java.math.BigInteger;
 
-import javax.time.calendar.DateTimeField;
-import javax.time.calendar.DateTimeRule;
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.DateTimeRule;
 
 /**
  * Prints and parses a numeric date-time field with optional padding.

@@ -38,10 +38,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.time.calendar.Chronology;
-import javax.time.calendar.DateTimeRule;
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.ISODateTimeRule;
+import javax.time.chronology.Chronology;
+import javax.time.chronology.DateTimeRule;
+import javax.time.chronology.ISOChronology;
+import javax.time.chronology.ISODateTimeRule;
 import javax.time.ZoneId;
 import javax.time.ZoneOffset;
 

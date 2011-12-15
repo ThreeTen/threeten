@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
 import javax.time.OffsetDate;
 import javax.time.ZonedDateTime;
@@ -40,9 +40,9 @@ import javax.time.LocalTime;
 import javax.time.OffsetDateTime;
 import javax.time.LocalDate;
 import javax.time.ZoneOffset;
-import static javax.time.calendar.ISODateTimeRule.MILLI_OF_DAY;
-import static javax.time.calendar.ISODateTimeRule.MINUTE_OF_DAY;
-import static javax.time.calendar.ISODateTimeRule.SECOND_OF_DAY;
+import static javax.time.chronology.ISODateTimeRule.MILLI_OF_DAY;
+import static javax.time.chronology.ISODateTimeRule.MINUTE_OF_DAY;
+import static javax.time.chronology.ISODateTimeRule.SECOND_OF_DAY;
 
 import java.io.Serializable;
 

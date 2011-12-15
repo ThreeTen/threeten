@@ -33,10 +33,10 @@ package javax.time.calendar.i18n;
 
 import java.io.Serializable;
 
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.ISOChronology;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.ISOChronology;
 import javax.time.LocalDate;
 
 /**

@@ -29,13 +29,16 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.IllegalCalendarFieldValueException;
+import javax.time.chronology.CalendricalMatcher;
+import javax.time.chronology.Calendrical;
 import javax.time.AmPmOfDay;
 import javax.time.LocalTime;
 import javax.time.LocalDate;
-import static javax.time.calendar.ISODateTimeRule.AMPM_OF_DAY;
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_WEEK;
+import static javax.time.chronology.ISODateTimeRule.AMPM_OF_DAY;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_WEEK;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;

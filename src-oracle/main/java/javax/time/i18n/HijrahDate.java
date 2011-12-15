@@ -17,13 +17,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.MathUtils;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalRule;
+import javax.time.chronology.MathUtils;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalRule;
 import javax.time.DayOfWeek;
-import javax.time.calendar.IllegalCalendarFieldValueException;
-import javax.time.calendar.InvalidCalendarFieldException;
+import javax.time.chronology.IllegalCalendarFieldValueException;
+import javax.time.chronology.InvalidCalendarFieldException;
 import javax.time.LocalDate;
 
 /**

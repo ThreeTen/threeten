@@ -31,7 +31,7 @@
  */
 package javax.time;
 
-import javax.time.calendar.InstantProvider;
+import javax.time.chronology.InstantProvider;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;

@@ -29,9 +29,11 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time;
+package javax.time.chronology;
 
-import javax.time.calendar.ISOChronology;
+import javax.time.LocalDate;
+import javax.time.MonthOfYear;
+import javax.time.chronology.ISOChronology;
 
 
 /**

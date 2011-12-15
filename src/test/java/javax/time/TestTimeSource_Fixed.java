@@ -31,8 +31,8 @@
  */
 package javax.time;
 
-import javax.time.calendar.UTCInstant;
-import javax.time.calendar.TAIInstant;
+import javax.time.chronology.UTCInstant;
+import javax.time.chronology.TAIInstant;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;

@@ -32,7 +32,7 @@
 package javax.time;
 
 
-import javax.time.calendar.MathUtils;
+import javax.time.chronology.MathUtils;
 import static javax.time.ISOPeriodUnit.DAYS;
 import static javax.time.ISOPeriodUnit.HOURS;
 import static javax.time.ISOPeriodUnit.MINUTES;
@@ -43,10 +43,10 @@ import static javax.time.ISOPeriodUnit.YEARS;
 import java.io.Serializable;
 import java.util.TreeMap;
 
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.PeriodField;
-import javax.time.calendar.PeriodFields;
-import javax.time.calendar.PeriodProvider;
+import javax.time.chronology.ISOChronology;
+import javax.time.chronology.PeriodField;
+import javax.time.chronology.PeriodFields;
+import javax.time.chronology.PeriodProvider;
 import javax.time.calendar.format.CalendricalParseException;
 
 /**

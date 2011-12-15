@@ -42,7 +42,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import java.util.zip.ZipInputStream;
 
-import javax.time.calendar.Calendrical;
+import javax.time.chronology.Calendrical;
 
 /**
  * Test Class loading.

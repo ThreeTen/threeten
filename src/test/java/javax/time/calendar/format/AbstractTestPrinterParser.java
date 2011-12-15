@@ -33,7 +33,7 @@ package javax.time.calendar.format;
 
 import java.util.Locale;
 
-import javax.time.calendar.DateTimeFields;
+import javax.time.chronology.DateTimeFields;
 import javax.time.ZoneId;
 import javax.time.ZonedDateTime;
 

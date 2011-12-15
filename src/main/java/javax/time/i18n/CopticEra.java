@@ -34,8 +34,8 @@ package javax.time.i18n;
 import java.util.Calendar;
 import java.util.Locale;
 
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.IllegalCalendarFieldValueException;
+import javax.time.chronology.ISOChronology;
+import javax.time.chronology.IllegalCalendarFieldValueException;
 import javax.time.calendar.format.TextStyle;
 
 /**

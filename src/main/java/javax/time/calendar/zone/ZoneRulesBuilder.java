@@ -31,7 +31,7 @@
  */
 package javax.time.calendar.zone;
 
-import static javax.time.calendar.ISODateTimeRule.YEAR;
+import static javax.time.chronology.ISODateTimeRule.YEAR;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,10 +39,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.time.calendar.DateAdjusters;
+import javax.time.chronology.DateAdjusters;
 import javax.time.DayOfWeek;
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.IllegalCalendarFieldValueException;
+import javax.time.chronology.ISOChronology;
+import javax.time.chronology.IllegalCalendarFieldValueException;
 import javax.time.LocalDate;
 import javax.time.LocalDateTime;
 import javax.time.LocalTime;

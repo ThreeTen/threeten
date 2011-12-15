@@ -44,11 +44,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.ISOCalendricalRule;
-import javax.time.calendar.ISOChronology;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.ISOCalendricalRule;
+import javax.time.chronology.ISOChronology;
 import javax.time.calendar.format.TextStyle;
 import javax.time.calendar.zone.ZoneRules;
 import javax.time.calendar.zone.ZoneRulesGroup;

@@ -31,25 +31,27 @@
  */
 package javax.time;
 
-import static javax.time.calendar.ISODateTimeRule.DAY_OF_MONTH;
-import static javax.time.calendar.ISODateTimeRule.MONTH_OF_YEAR;
+import javax.time.chronology.DateResolver;
+import javax.time.chronology.DateResolvers;
+import static javax.time.chronology.ISODateTimeRule.DAY_OF_MONTH;
+import static javax.time.chronology.ISODateTimeRule.MONTH_OF_YEAR;
 import static javax.time.MonthOfYear.FEBRUARY;
 
 import java.io.Serializable;
 
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalMatcher;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.DateAdjuster;
-import javax.time.calendar.DateTimeField;
-import javax.time.calendar.DateTimeFields;
-import javax.time.calendar.ExtendedCalendricalRule;
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.ISODateTimeRule;
-import javax.time.calendar.IllegalCalendarFieldValueException;
-import javax.time.calendar.InvalidCalendarFieldException;
-import javax.time.calendar.MathUtils;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalMatcher;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.DateAdjuster;
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.DateTimeFields;
+import javax.time.chronology.ExtendedCalendricalRule;
+import javax.time.chronology.ISOChronology;
+import javax.time.chronology.ISODateTimeRule;
+import javax.time.chronology.IllegalCalendarFieldValueException;
+import javax.time.chronology.InvalidCalendarFieldException;
+import javax.time.chronology.MathUtils;
 import javax.time.calendar.format.CalendricalParseException;
 import javax.time.calendar.format.DateTimeFormatter;
 import javax.time.calendar.format.DateTimeFormatterBuilder;

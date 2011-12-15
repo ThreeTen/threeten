@@ -31,8 +31,8 @@
  */
 package javax.time.period.field;
 
-import javax.time.calendar.MathUtils;
-import javax.time.calendar.PeriodFields;
+import javax.time.chronology.MathUtils;
+import javax.time.chronology.PeriodFields;
 import javax.time.PeriodUnit;
 
 /**

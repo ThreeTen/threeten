@@ -35,10 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.DateTimeField;
-import javax.time.calendar.DateTimeRule;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.DateTimeRule;
 
 /**
  * Context object used during date and time parsing.

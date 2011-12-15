@@ -33,7 +33,7 @@ package javax.time.i18n;
 
 import java.io.Serializable;
 
-import javax.time.calendar.MathUtils;
+import javax.time.chronology.MathUtils;
 import javax.time.LocalDate;
 
 /**

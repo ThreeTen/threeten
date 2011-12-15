@@ -29,8 +29,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package javax.time.calendar;
+package javax.time.chronology;
 
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.DateTimeFields;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.DateTimeField;
 import javax.time.Year;
 import javax.time.ZoneOffset;
 import javax.time.LocalDateTime;
@@ -38,7 +43,7 @@ import javax.time.ZonedDateTime;
 import javax.time.OffsetDate;
 import javax.time.ZoneId;
 import javax.time.LocalDate;
-import static javax.time.calendar.ISODateTimeRule.YEAR;
+import static javax.time.chronology.ISODateTimeRule.YEAR;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
