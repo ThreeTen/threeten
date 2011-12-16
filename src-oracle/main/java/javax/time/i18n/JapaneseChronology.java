@@ -8,17 +8,17 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import javax.time.Duration;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.Chronology;
-import javax.time.calendar.DateTimeField;
-import javax.time.calendar.DateTimeRule;
-import javax.time.calendar.DateTimeRuleRange;
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.ISOPeriodUnit;
-import javax.time.calendar.MonthOfYear;
-import javax.time.calendar.PeriodUnit;
-import javax.time.calendar.format.TextStyle;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.Chronology;
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.DateTimeRule;
+import javax.time.chronology.DateTimeRuleRange;
+import javax.time.chronology.ISOChronology;
+import javax.time.ISOPeriodUnit;
+import javax.time.MonthOfYear;
+import javax.time.PeriodUnit;
+import javax.time.format.TextStyle;
 
 /**
  * The Japanese Imperial calendar system.

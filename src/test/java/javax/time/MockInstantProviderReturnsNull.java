@@ -31,6 +31,8 @@
  */
 package javax.time;
 
+import javax.time.chronology.InstantProvider;
+
 /**
  * Mock InstantProvider that returns null.
  *

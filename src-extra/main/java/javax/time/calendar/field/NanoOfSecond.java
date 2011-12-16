@@ -31,21 +31,21 @@
  */
 package javax.time.calendar.field;
 
-import static javax.time.calendar.ISODateTimeRule.NANO_OF_SECOND;
+import static javax.time.chronology.ISODateTimeRule.NANO_OF_SECOND;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalMatcher;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.DateTimeField;
-import javax.time.calendar.DateTimeRule;
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.LocalTime;
-import javax.time.calendar.TimeAdjuster;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalMatcher;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.DateTimeField;
+import javax.time.chronology.DateTimeRule;
+import javax.time.chronology.ISOChronology;
+import javax.time.LocalTime;
+import javax.time.chronology.TimeAdjuster;
 
 /**
  * A representation of a nano-of-second in the ISO-8601 calendar system.
