@@ -134,7 +134,7 @@
         <subant genericantfile="build.xml" target="tzdb-unpack">
             <dirset dir="${tzdata.main.workarea}" includes="*" />
         </subant>
-        <java classpath="${core.main.classes}" classname="javax.time.calendar.zone.TZDBZoneRulesCompiler" fork="true" failonerror="true">
+        <java classpath="${core.main.classes}" classname="javax.time.zone.TZDBZoneRulesCompiler" fork="true" failonerror="true">
             <arg line="-srcdir ${tzdata.main.workarea}" />
             <arg line="-dstdir ${lib.optional}" />
             <arg line="${tzdb.files}" />
@@ -154,12 +154,18 @@
     <target name="compile" depends="compile-core, compile-extra, compile-oracle, compile-openjdk, compile-tzdb" description="compile all sources" />
 
     <!-- ==================================================================== -->
+    <tstamp>
+        <format property="CURR_TIME" pattern="d-MMMM-yyyy hh:mm" />
+    </tstamp>
+    
     <target name="javadoc" depends="init" description="generates javadoc for the api">
       <mkdir dir="${build.javadoc}"/>
       <javadoc sourcepath="${core.main};${ojdk.main};${oracle.main}" destdir="${build.javadoc}"
                classpathref="main.path"
                windowtitle="ThreeTen date and time API"
                failonerror="true"
+               use="true"
+               header="Version ${version.full}&lt;BR&gt;${CURR_TIME}"
                packagenames="javax.time**/*,java.util**/*"
                overview="${core.main}/javax/time/overview.html" />
     </target>

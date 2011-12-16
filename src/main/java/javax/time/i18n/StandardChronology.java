@@ -33,11 +33,11 @@ package javax.time.i18n;
 
 import java.io.Serializable;
 
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.Chronology;
-import javax.time.calendar.DateTimeRuleRange;
-import javax.time.calendar.LocalDate;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.Chronology;
+import javax.time.chronology.DateTimeRuleRange;
+import javax.time.LocalDate;
 
 /**
  * A standard calendar system formed of eras, years, months and days.

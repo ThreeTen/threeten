@@ -31,7 +31,7 @@
  */
 
 /**
- * Provides classes to manage the continuous time-scale including a wrapper
- * for the system clock.
+ * Provides classes for date, time, date-time and time-zone representations.
+ * These classes are based on ISO-8601 and UTC-SLS.
  */
 package javax.time;

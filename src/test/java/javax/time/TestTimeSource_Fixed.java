@@ -31,6 +31,8 @@
  */
 package javax.time;
 
+import javax.time.chronology.UTCInstant;
+import javax.time.chronology.TAIInstant;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -42,8 +44,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import javax.time.calendar.OffsetDateTime;
-import javax.time.calendar.ZoneOffset;
 
 import org.testng.annotations.Test;
 

@@ -33,8 +33,8 @@ package javax.time.period.field;
 
 import java.io.Serializable;
 
-import javax.time.calendar.ISOPeriodUnit;
-import javax.time.calendar.PeriodUnit;
+import javax.time.ISOPeriodUnit;
+import javax.time.PeriodUnit;
 
 /**
  * A period representing a number of hours.

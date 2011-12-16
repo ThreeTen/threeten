@@ -34,15 +34,15 @@ package javax.time.i18n;
 import java.io.Serializable;
 
 import javax.time.CalendricalException;
-import javax.time.MathUtils;
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalEngine;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.CalendricalRuleException;
-import javax.time.calendar.DayOfWeek;
-import javax.time.calendar.IllegalCalendarFieldValueException;
-import javax.time.calendar.InvalidCalendarFieldException;
-import javax.time.calendar.LocalDate;
+import javax.time.chronology.MathUtils;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalEngine;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.CalendricalRuleException;
+import javax.time.DayOfWeek;
+import javax.time.chronology.IllegalCalendarFieldValueException;
+import javax.time.chronology.InvalidCalendarFieldException;
+import javax.time.LocalDate;
 
 /**
  * A date in the Coptic calendar system.

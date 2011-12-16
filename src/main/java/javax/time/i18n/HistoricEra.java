@@ -34,11 +34,11 @@ package javax.time.i18n;
 import java.util.Calendar;
 import java.util.Locale;
 
-import javax.time.calendar.Calendrical;
-import javax.time.calendar.CalendricalRule;
-import javax.time.calendar.ISOChronology;
-import javax.time.calendar.IllegalCalendarFieldValueException;
-import javax.time.calendar.format.TextStyle;
+import javax.time.chronology.Calendrical;
+import javax.time.chronology.CalendricalRule;
+import javax.time.chronology.ISOChronology;
+import javax.time.chronology.IllegalCalendarFieldValueException;
+import javax.time.format.TextStyle;
 
 /**
  * An era in the historic calendar system, with the values 'BCE' and 'CE'.

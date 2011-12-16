@@ -42,9 +42,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import javax.time.calendar.ISOPeriodUnit;
-import javax.time.calendar.PeriodFields;
-import javax.time.calendar.PeriodUnit;
+import javax.time.ISOPeriodUnit;
+import javax.time.chronology.PeriodFields;
+import javax.time.PeriodUnit;
 
 import org.testng.annotations.Test;
 

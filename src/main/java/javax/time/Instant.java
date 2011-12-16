@@ -31,14 +31,14 @@
  */
 package javax.time;
 
+import javax.time.chronology.InstantProvider;
+import javax.time.chronology.MathUtils;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
-import javax.time.calendar.Clock;
-import javax.time.calendar.OffsetDateTime;
-import javax.time.calendar.format.CalendricalParseException;
+import javax.time.format.CalendricalParseException;
 
 /**
  * An instantaneous point on the time-line.
@@ -138,7 +138,7 @@ public final class Instant
      * @param errorMessage  the error to throw
      * @throws NullPointerException if the object is null
      */
-    static void checkNotNull(Object object, String errorMessage) {
+    public static void checkNotNull(Object object, String errorMessage) {
         if (object == null) {
             throw new NullPointerException(errorMessage);
         }
