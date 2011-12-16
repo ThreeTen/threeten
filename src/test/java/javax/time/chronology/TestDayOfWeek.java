@@ -50,7 +50,7 @@ import java.util.Locale;
 
 import javax.time.CalendricalException;
 import javax.time.DayOfWeek;
-import javax.time.calendar.format.TextStyle;
+import javax.time.format.TextStyle;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

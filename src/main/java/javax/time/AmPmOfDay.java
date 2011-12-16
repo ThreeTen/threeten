@@ -44,7 +44,7 @@ import javax.time.chronology.CalendricalRule;
 import javax.time.chronology.DateTimeField;
 import javax.time.chronology.ExtendedCalendricalRule;
 import javax.time.chronology.IllegalCalendarFieldValueException;
-import javax.time.calendar.format.TextStyle;
+import javax.time.format.TextStyle;
 
 /**
  * A half-day before or after midday, with the values 'AM' and 'PM'.

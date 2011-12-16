@@ -51,7 +51,7 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Locale;
 
-import javax.time.calendar.format.TextStyle;
+import javax.time.format.TextStyle;
 
 import org.testng.annotations.Test;
 

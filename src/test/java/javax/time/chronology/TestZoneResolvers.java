@@ -49,7 +49,7 @@ import java.lang.reflect.Modifier;
 import java.util.Collections;
 
 import javax.time.CalendricalException;
-import javax.time.calendar.zone.ZoneRules;
+import javax.time.zone.ZoneRules;
 
 import org.testng.annotations.Test;
 

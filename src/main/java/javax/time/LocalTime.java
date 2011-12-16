@@ -62,9 +62,9 @@ import javax.time.chronology.ISOCalendricalRule;
 import javax.time.chronology.ISOChronology;
 import javax.time.chronology.PeriodProvider;
 import javax.time.chronology.TimeAdjuster;
-import javax.time.calendar.format.CalendricalParseException;
-import javax.time.calendar.format.DateTimeFormatter;
-import javax.time.calendar.format.DateTimeFormatters;
+import javax.time.format.CalendricalParseException;
+import javax.time.format.DateTimeFormatter;
+import javax.time.format.DateTimeFormatters;
 
 /**
  * A time without time-zone in the ISO-8601 calendar system,

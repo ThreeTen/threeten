@@ -18,7 +18,7 @@ import javax.time.chronology.ISOChronology;
 import javax.time.ISOPeriodUnit;
 import javax.time.MonthOfYear;
 import javax.time.PeriodUnit;
-import javax.time.calendar.format.TextStyle;
+import javax.time.format.TextStyle;
 
 /**
  * The Japanese Imperial calendar system.

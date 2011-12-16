@@ -38,7 +38,7 @@ import javax.time.chronology.Calendrical;
 import javax.time.chronology.CalendricalRule;
 import javax.time.chronology.ISOChronology;
 import javax.time.chronology.IllegalCalendarFieldValueException;
-import javax.time.calendar.format.TextStyle;
+import javax.time.format.TextStyle;
 
 /**
  * An era in the historic calendar system, with the values 'BCE' and 'CE'.

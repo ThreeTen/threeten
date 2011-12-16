@@ -35,8 +35,8 @@ import javax.time.chronology.ZoneResolver;
 import javax.time.LocalDateTime;
 import javax.time.ZoneId;
 import javax.time.OffsetDateTime;
-import javax.time.calendar.zone.ZoneOffsetInfo;
-import javax.time.calendar.zone.ZoneRules;
+import javax.time.zone.ZoneOffsetInfo;
+import javax.time.zone.ZoneRules;
 
 /**
  * Mock ZoneResolver that returns null.

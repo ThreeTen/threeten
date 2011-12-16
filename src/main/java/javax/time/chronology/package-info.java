@@ -31,7 +31,7 @@
  */
 
 /**
- * Provides classes to manage the human time-scale including date, time,
- * date-time and time-zone representations.
+ * Provides classes for dates and times based on general purpose rules, 
+ * date and time conversions and TAI and UTC time systems.
  */
 package javax.time.chronology;

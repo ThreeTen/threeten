@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 import javax.time.CalendricalException;
 import javax.time.Duration;
 import javax.time.Instant;
-import javax.time.calendar.format.CalendricalParseException;
+import javax.time.format.CalendricalParseException;
 
 /**
  * An instantaneous point on the time-line measured in the TAI time-scale.

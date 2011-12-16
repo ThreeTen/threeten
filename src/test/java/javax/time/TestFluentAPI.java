@@ -55,7 +55,7 @@ import static javax.time.Period.ofMonths;
 import static javax.time.Period.ofSeconds;
 import static javax.time.Period.ofYears;
 import javax.time.chronology.DateTimeFields;
-import javax.time.calendar.zone.ZoneOffsetTransition;
+import javax.time.zone.ZoneOffsetTransition;
 
 /**
  * Test class.

@@ -92,8 +92,8 @@ import java.util.Iterator;
 import javax.time.CalendricalException;
 import javax.time.Duration;
 import javax.time.Instant;
-import javax.time.calendar.format.CalendricalParseException;
-import javax.time.calendar.format.DateTimeFormatters;
+import javax.time.format.CalendricalParseException;
+import javax.time.format.DateTimeFormatters;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;

@@ -37,9 +37,9 @@ import javax.time.LocalDateTime;
 import javax.time.OffsetDateTime;
 import javax.time.ZoneId;
 import javax.time.chronology.ISOChronology;
-import javax.time.calendar.zone.ZoneOffsetInfo;
-import javax.time.calendar.zone.ZoneOffsetTransition;
-import javax.time.calendar.zone.ZoneRules;
+import javax.time.zone.ZoneOffsetInfo;
+import javax.time.zone.ZoneOffsetTransition;
+import javax.time.zone.ZoneRules;
 
 /**
  * Provides common implementations of {@code ZoneResolver}.

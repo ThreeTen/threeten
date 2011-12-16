@@ -49,9 +49,9 @@ import javax.time.chronology.CalendricalEngine;
 import javax.time.chronology.CalendricalRule;
 import javax.time.chronology.ISOCalendricalRule;
 import javax.time.chronology.ISOChronology;
-import javax.time.calendar.format.TextStyle;
-import javax.time.calendar.zone.ZoneRules;
-import javax.time.calendar.zone.ZoneRulesGroup;
+import javax.time.format.TextStyle;
+import javax.time.zone.ZoneRules;
+import javax.time.zone.ZoneRulesGroup;
 
 /**
  * A time-zone id representing the set of rules by which the zone offset

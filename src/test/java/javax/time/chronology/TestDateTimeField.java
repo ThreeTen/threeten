@@ -71,7 +71,7 @@ import java.lang.reflect.Modifier;
 import java.util.Locale;
 
 import javax.time.MonthOfYear;
-import javax.time.calendar.format.TextStyle;
+import javax.time.format.TextStyle;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

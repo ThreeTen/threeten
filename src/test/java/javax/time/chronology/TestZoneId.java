@@ -66,9 +66,9 @@ import java.util.Map;
 
 import javax.time.CalendricalException;
 import javax.time.Instant;
-import javax.time.calendar.format.TextStyle;
-import javax.time.calendar.zone.ZoneOffsetInfo;
-import javax.time.calendar.zone.ZoneOffsetTransition;
+import javax.time.format.TextStyle;
+import javax.time.zone.ZoneOffsetInfo;
+import javax.time.zone.ZoneOffsetTransition;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

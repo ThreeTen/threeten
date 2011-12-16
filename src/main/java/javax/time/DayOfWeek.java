@@ -43,7 +43,7 @@ import javax.time.chronology.CalendricalRule;
 import javax.time.chronology.DateTimeField;
 import javax.time.chronology.ExtendedCalendricalRule;
 import javax.time.chronology.IllegalCalendarFieldValueException;
-import javax.time.calendar.format.TextStyle;
+import javax.time.format.TextStyle;
 
 /**
  * A day-of-week, such as 'Tuesday'.

@@ -49,8 +49,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import javax.time.calendar.format.DateTimeFormatter;
-import javax.time.calendar.format.DateTimeFormatters;
+import javax.time.format.DateTimeFormatter;
+import javax.time.format.DateTimeFormatters;
 
 /**
  * Test Performance.

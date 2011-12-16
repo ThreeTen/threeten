@@ -36,7 +36,7 @@ import java.util.Locale;
 
 import javax.time.chronology.ISOChronology;
 import javax.time.chronology.IllegalCalendarFieldValueException;
-import javax.time.calendar.format.TextStyle;
+import javax.time.format.TextStyle;
 
 /**
  * An era in the Coptic calendar system.
