@@ -219,8 +219,8 @@ public final class DateTimeFormatter implements CalendricalFormatter {
         DateTimes.checkNotNull(type, "Class must not be null");
         String str = text.toString();  // parsing whole String, so this makes sense
         try {
-            DateTimeBuilder builder = parseToBuilder(str);
-            T result = builder.resolve().extract(type);
+            DateTimeBuilder builder = parseToBuilder(str).resolve();
+            T result = DateTimeBuilder.invokeFrom(type, builder);
             if (result == null) {
                 throw new CalendricalException("Unable to convert parsed text to " + type);
             }
@@ -273,7 +273,7 @@ public final class DateTimeFormatter implements CalendricalFormatter {
         try {
             DateTimeBuilder builder = parseToBuilder(str).resolve();
             for (Class<?> type : types) {
-                DateTime cal = (DateTime) builder.extract(type);
+                DateTime cal = (DateTime)DateTimeBuilder.invokeFrom(type, builder);
                 if (cal != null) {
                     return cal;
                 }

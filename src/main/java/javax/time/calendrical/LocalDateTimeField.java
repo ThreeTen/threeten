@@ -49,6 +49,11 @@ import static javax.time.calendrical.LocalPeriodUnit.YEARS;
 import javax.time.DateTimes;
 import javax.time.LocalDate;
 import javax.time.Month;
+import javax.time.DayOfWeek;
+import javax.time.CalendricalException;
+import javax.time.chrono.ChronoDate;
+import javax.time.chrono.Chronology;
+import javax.time.chrono.ISOChronology;
 
 /**
  * A standard set of fields.
@@ -444,8 +449,192 @@ public enum LocalDateTimeField implements DateTimeField {
     }
 
     //-----------------------------------------------------------------------
+    /**
+     * Synthesize year, month, day from this field and hour, minute, second, nanos
+     * if the builder contains enough information.
+     *
+     * @param builder the builder
+     * @param value the value of this field
+     * @return {@code true} if the builder was changed; {@code false} otherwise
+     *
+     * @throws CalendricalException if there are not enough or the right
+     *        fields to convert to the basic fields, year, month, and day.
+     */
     @Override
     public boolean resolve(DateTimeBuilder builder, long value) {
+        Chronology chrono = builder.extract(Chronology.class);
+        if (chrono == null) {
+            chrono = ISOChronology.INSTANCE;
+        }
+        switch (this) {
+            case YEAR:
+                return false;
+            case MONTH_OF_YEAR:
+                return false;
+            case ALIGNED_WEEK_OF_YEAR:
+                // Handled in ALIGNED_DAY_OF_WEEK_IN_YEAR
+                return false;
+            case ALIGNED_WEEK_OF_MONTH:
+                // Handled in ALIGNED_DAY_OF_WEEK_IN_MONTH
+                return false;
+            case EPOCH_DAY: {
+                // Expand EPOCH_DAY to YEAR, MONTH_OF_YEAR, DAY_OF_MONTH
+                long ed = DateTimes.safeToInt(value);
+                ChronoDate d = chrono.dateFromEpochDay(ed);
+                builder.addFieldValue(DAY_OF_MONTH, d.getDayOfMonth());
+                builder.addFieldValue(MONTH_OF_YEAR, d.getMonth());
+                builder.addFieldValue(YEAR, d.getProlepticYear());
+                break;
+            }
+            case EPOCH_MONTH: {
+                // Expand EPOCH_MONTH to YEAR, MONTH_OF_YEAR
+                long em = value;
+                ChronoDate d = chrono.dateFromEpochMonth(em);
+                builder.addFieldValue(MONTH_OF_YEAR, d.getMonth());
+                builder.addFieldValue(YEAR, d.getProlepticYear());
+                break;
+            }
+            case DAY_OF_YEAR: {
+                // Expand DAY_OF_YEAR to MONTH_OF_YEAR, DAY_OF_MONTH
+                long y = builder.get(YEAR);
+                long doy = value;
+                ChronoDate d = chrono.date((int)y, (int)doy);
+                builder.addFieldValue(DAY_OF_MONTH, d.getDayOfMonth());
+                builder.addFieldValue(MONTH_OF_YEAR, d.getMonth());
+                break;
+            }
+            case ALIGNED_DAY_OF_WEEK_IN_MONTH: {
+                // Needs YEAR and ALIGNED_WEEK_OF_MONTH
+                int y = DateTimes.safeToInt(builder.get(YEAR));
+                int moy = DateTimes.safeToInt(builder.get(MONTH_OF_YEAR));
+                int aw = DateTimes.safeToInt(builder.get(ALIGNED_WEEK_OF_MONTH));
+                int ad = DateTimes.safeToInt(value);
+                ChronoDate d = chrono.date(y, moy, 1).plusDays((aw - 1) * 7 + (ad - 1));
+                builder.addFieldValue(MONTH_OF_YEAR, d.getMonth());
+                builder.addFieldValue(DAY_OF_MONTH, d.getDayOfMonth());
+                break;
+            }
+            case ALIGNED_DAY_OF_WEEK_IN_YEAR: {
+                // Needs YEAR and ALIGNED_WEEK_OF_YEAR
+                int y = DateTimes.safeToInt(builder.get(YEAR));
+                int aw = DateTimes.safeToInt(builder.get(ALIGNED_WEEK_OF_YEAR));
+                int ad = DateTimes.safeToInt(value);
+                int doy = (aw - 1) * 7 + (ad - 1);
+                ChronoDate d = chrono.date(y, doy);
+                builder.addFieldValue(MONTH_OF_YEAR, d.getMonth());
+                builder.addFieldValue(DAY_OF_MONTH, d.getDayOfMonth());
+                break;
+            }
+            case DAY_OF_WEEK: {
+                // Needs either ALIGNED_WEEK_OF_YEAR or ALIGNED_WEEK_OF_MONTH + MONTH_OF_YEAR
+                ChronoDate d = null;
+                if (builder.containsFieldValue(ALIGNED_WEEK_OF_YEAR)) {
+                    int y = DateTimes.safeToInt(builder.get(YEAR));
+                    int aw = DateTimes.safeToInt(builder.get(ALIGNED_WEEK_OF_YEAR));
+                    d = chrono.date(y, (aw - 1) * 7);
+                } else if (builder.containsFieldValue(ALIGNED_WEEK_OF_MONTH)) {
+                    int y = DateTimes.safeToInt(builder.get(YEAR));
+                    int m = DateTimes.safeToInt(builder.get(MONTH_OF_YEAR));
+                    int aw = DateTimes.safeToInt(builder.get(ALIGNED_WEEK_OF_MONTH));
+                    d = chrono.date(y, m, (aw - 1) * 7);
+                } else {
+                    throw new CalendricalException("Not enough fields to resolve from DAY_OF_WEEK");
+                }
+                int dow = DateTimes.safeToInt(value);
+                d = d.with(DateTimeAdjusters.nextOrCurrent(DayOfWeek.of(dow)));
+                builder.addFieldValue(MONTH_OF_YEAR, d.getMonth());
+                builder.addFieldValue(DAY_OF_MONTH, d.getDayOfMonth());
+                break;
+            }
+            case HOUR_OF_DAY: {
+                break;
+            }
+            case MINUTE_OF_HOUR: {
+                break;
+            }
+            case SECOND_OF_MINUTE: {
+                break;
+            }
+            case NANO_OF_SECOND: {
+                break;
+            }
+            case AMPM_OF_DAY: {
+                // Handled by HOUR_OF_AMPM or CLOCK_HOUR_OF_AMPM
+                break;
+            }
+            case HOUR_OF_AMPM: {
+                if (builder.containsFieldValue(AMPM_OF_DAY)) {
+                    builder.addFieldValue(HOUR_OF_DAY, value + 12 * builder.getFieldValue(AMPM_OF_DAY));
+                    return true;
+                }
+                return false;
+            }
+            case CLOCK_HOUR_OF_DAY: {
+                builder.addFieldValue(HOUR_OF_DAY, value == 24 ? 0 : value);
+                return true;
+            }
+            case CLOCK_HOUR_OF_AMPM: {
+                if (builder.containsFieldValue(AMPM_OF_DAY)) {
+                    builder.addFieldValue(HOUR_OF_DAY, (value == 12 ? 0 : value) + 12 * builder.getFieldValue(AMPM_OF_DAY));
+                    return true;
+                }
+                return false;
+            }
+            case NANO_OF_DAY: {
+                // TBD: is value >= 0?
+                long seconds = value / DateTimes.NANOS_PER_SECOND;
+                long minutes = seconds / DateTimes.SECONDS_PER_MINUTE;
+                long hours = minutes / DateTimes.MINUTES_PER_HOUR;
+                builder.addFieldValue(HOUR_OF_DAY, hours % DateTimes.HOURS_PER_DAY);
+                builder.addFieldValue(MINUTE_OF_HOUR, minutes % DateTimes.MINUTES_PER_HOUR);
+                builder.addFieldValue(SECOND_OF_MINUTE, seconds % DateTimes.SECONDS_PER_MINUTE);
+                builder.addFieldValue(NANO_OF_SECOND, value % DateTimes.NANOS_PER_SECOND);
+                return true;
+            }
+            case MICRO_OF_DAY: {
+                long seconds = value / 1000000L;
+                long minutes = seconds / DateTimes.SECONDS_PER_MINUTE;
+                long hours = minutes / DateTimes.MINUTES_PER_HOUR;
+                builder.addFieldValue(HOUR_OF_DAY, hours % DateTimes.HOURS_PER_DAY);
+                builder.addFieldValue(MINUTE_OF_HOUR, minutes % DateTimes.MINUTES_PER_HOUR);
+                builder.addFieldValue(SECOND_OF_MINUTE, seconds % DateTimes.SECONDS_PER_MINUTE);
+                builder.addFieldValue(NANO_OF_SECOND, value % 1000000L * 1000L);
+                return true;
+            }
+            case MILLI_OF_DAY: {
+                long seconds = value / 1000L;
+                long minutes = seconds / DateTimes.SECONDS_PER_MINUTE;
+                long hours = minutes / DateTimes.MINUTES_PER_HOUR;
+                builder.addFieldValue(HOUR_OF_DAY, hours % DateTimes.HOURS_PER_DAY);
+                builder.addFieldValue(MINUTE_OF_HOUR, minutes % DateTimes.MINUTES_PER_HOUR);
+                builder.addFieldValue(SECOND_OF_MINUTE, seconds % DateTimes.SECONDS_PER_MINUTE);
+                builder.addFieldValue(NANO_OF_SECOND, value % 1000 * 1000000L);
+                return true;
+            }
+            case SECOND_OF_DAY: {
+                builder.addFieldValue(HOUR_OF_DAY, value / 3600);
+                builder.addFieldValue(MINUTE_OF_HOUR, (value / 60) % 60);
+                builder.addFieldValue(SECOND_OF_MINUTE, value % 60);
+                return true;
+            }
+            case MINUTE_OF_DAY: {
+                builder.addFieldValue(HOUR_OF_DAY, value / 60);
+                builder.addFieldValue(MINUTE_OF_HOUR, value % 60);
+                return true;
+            }
+            case MILLI_OF_SECOND: {
+                // TBD: Odd combination; addFieldValue should fail since the value is different
+                if (builder.containsFieldValue(MICRO_OF_SECOND)) {
+                    long cos = builder.removeFieldValue(MICRO_OF_SECOND);
+                    builder.addFieldValue(MICRO_OF_SECOND, value * 1000 + (cos % 1000));
+                    return true;
+                }
+                return false;
+            }
+
+            default:
+                break;
+        }
         return false;  // resolve implemented in builder
     }
 

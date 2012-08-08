@@ -101,6 +101,13 @@ public abstract class Chronology {
         CHRONOS.putIfAbsent(this.getName(), this);
     }
 
+    public static Chronology from(DateTime calendrical) {
+        if (calendrical instanceof Chronology) {
+            return (Chronology)calendrical;
+        }
+        return calendrical.extract(Chronology.class);
+    }
+
     //-----------------------------------------------------------------------
     /**
      * Obtains an instance of {@code Chronology} from a calendrical.
@@ -181,6 +188,17 @@ public abstract class Chronology {
     public abstract ChronoDate date(int prolepticYear, int month, int dayOfMonth);
 
     /**
+     * Creates a date in this calendar system from the proleptic-year,  and day-of-year fields.
+     *
+     * @param prolepticYear  the calendar system proleptic-year
+     * @param dayOfYear  the calendar system day-of-year
+     * @return the date in this calendar system, not null
+     */
+    public  /* tbd: should be abstract */ ChronoDate date(int prolepticYear, int dayOfYear) {
+        throw new RuntimeException("NYI: date(year, day-of-year");
+    }
+
+    /**
      * Creates a date in this calendar system from another calendrical object.
      * <p>
      * This implementation uses {@link #dateFromEpochDay(long)}.
@@ -200,6 +218,16 @@ public abstract class Chronology {
      * @return the date in this calendar system, not null
      */
     public abstract ChronoDate dateFromEpochDay(long epochDay);
+
+    /**
+     * Creates a date in this calendar system from the epoch Month from 1970-01-01 (ISO).
+     *
+     * @param epochDay  the epoch day measured from 1970-01-01 (ISO), not null
+     * @return the date in this calendar system, not null
+     */
+    public /* tbd: should be abstract */ ChronoDate dateFromEpochMonth(long epochMonth) {
+        throw new RuntimeException("NYI: dateFromEpochMonth(year, day-of-year");
+    }
 
     /**
      * Creates the current date in this calendar system from the system clock in the default time-zone.

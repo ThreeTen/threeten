@@ -170,11 +170,12 @@ public interface DateTimeField extends Comparator<DateTime> {
     <R extends DateTime> R doSet(R calendrical, long newValue);
 
     /**
-     * Resolves the date/time information in the builder
+     * Resolves the date/time information in the builder.
      * <p>
      * This method is invoked during the resolve of the builder.
-     * Implementations should combine the associated field with others to form
-     * objects like {@code LocalDate}, {@code LocalTime} and {@code LocalDateTime}
+     * Implementations should combine the associated field with others to supply
+     * the basic fields  Chronology, TZInfo, TZOffset, year, month, day,
+     * hour, minute, second, and nanosecond.
      *
      * @param builder  the builder to resolve, not null
      * @param value  the value of the associated field
