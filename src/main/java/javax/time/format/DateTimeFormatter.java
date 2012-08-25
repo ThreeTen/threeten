@@ -220,7 +220,7 @@ public final class DateTimeFormatter implements CalendricalFormatter {
         String str = text.toString();  // parsing whole String, so this makes sense
         try {
             DateTimeBuilder builder = parseToBuilder(str).resolve();
-            T result = DateTimeBuilder.invokeFrom(type, builder);
+            T result = DateTimeBuilder.from(type, builder);
             if (result == null) {
                 throw new CalendricalException("Unable to convert parsed text to " + type);
             }
@@ -273,9 +273,13 @@ public final class DateTimeFormatter implements CalendricalFormatter {
         try {
             DateTimeBuilder builder = parseToBuilder(str).resolve();
             for (Class<?> type : types) {
-                DateTime cal = (DateTime)DateTimeBuilder.invokeFrom(type, builder);
-                if (cal != null) {
-                    return cal;
+                try {
+                    DateTime cal = (DateTime)DateTimeBuilder.from(type, builder);
+                    if (cal != null) {
+                        return cal;
+                    }
+                } catch (CalendricalException cex) {
+                    // ignore and try next
                 }
             }
             throw new CalendricalException("Unable to convert parsed text to any specified type: " + Arrays.toString(types));

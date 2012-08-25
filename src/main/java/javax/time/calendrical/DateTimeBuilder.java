@@ -31,33 +31,10 @@
  */
 package javax.time.calendrical;
 
-import static javax.time.calendrical.DateTimeAdjusters.nextOrCurrent;
-import static javax.time.calendrical.LocalDateTimeField.ALIGNED_DAY_OF_WEEK_IN_MONTH;
-import static javax.time.calendrical.LocalDateTimeField.ALIGNED_DAY_OF_WEEK_IN_YEAR;
-import static javax.time.calendrical.LocalDateTimeField.ALIGNED_WEEK_OF_MONTH;
-import static javax.time.calendrical.LocalDateTimeField.ALIGNED_WEEK_OF_YEAR;
-import static javax.time.calendrical.LocalDateTimeField.AMPM_OF_DAY;
-import static javax.time.calendrical.LocalDateTimeField.CLOCK_HOUR_OF_AMPM;
-import static javax.time.calendrical.LocalDateTimeField.CLOCK_HOUR_OF_DAY;
-import static javax.time.calendrical.LocalDateTimeField.DAY_OF_MONTH;
-import static javax.time.calendrical.LocalDateTimeField.DAY_OF_WEEK;
-import static javax.time.calendrical.LocalDateTimeField.DAY_OF_YEAR;
-import static javax.time.calendrical.LocalDateTimeField.EPOCH_DAY;
-import static javax.time.calendrical.LocalDateTimeField.EPOCH_MONTH;
-import static javax.time.calendrical.LocalDateTimeField.HOUR_OF_AMPM;
 import static javax.time.calendrical.LocalDateTimeField.HOUR_OF_DAY;
-import static javax.time.calendrical.LocalDateTimeField.MICRO_OF_DAY;
-import static javax.time.calendrical.LocalDateTimeField.MICRO_OF_SECOND;
-import static javax.time.calendrical.LocalDateTimeField.MILLI_OF_DAY;
-import static javax.time.calendrical.LocalDateTimeField.MILLI_OF_SECOND;
-import static javax.time.calendrical.LocalDateTimeField.MINUTE_OF_DAY;
 import static javax.time.calendrical.LocalDateTimeField.MINUTE_OF_HOUR;
-import static javax.time.calendrical.LocalDateTimeField.MONTH_OF_YEAR;
-import static javax.time.calendrical.LocalDateTimeField.NANO_OF_DAY;
 import static javax.time.calendrical.LocalDateTimeField.NANO_OF_SECOND;
-import static javax.time.calendrical.LocalDateTimeField.SECOND_OF_DAY;
 import static javax.time.calendrical.LocalDateTimeField.SECOND_OF_MINUTE;
-import static javax.time.calendrical.LocalDateTimeField.YEAR;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -70,24 +47,13 @@ import java.util.Map.Entry;
 
 import javax.time.CalendricalException;
 import javax.time.DateTimes;
-import javax.time.DayOfWeek;
-import javax.time.LocalDate;
-import javax.time.LocalDateTime;
-import javax.time.LocalTime;
-import javax.time.MonthDay;
-import javax.time.OffsetDate;
-import javax.time.OffsetDateTime;
-import javax.time.OffsetTime;
-import javax.time.Year;
-import javax.time.YearMonth;
 import javax.time.ZoneId;
 import javax.time.ZoneOffset;
-import javax.time.ZonedDateTime;
 
 /**
- * Builder that can combine date and time fields into date and time objects.
+ * Builder that can holds date and time fields and related Calendrical objects.
  * <p>
- * The builder is used to make sense of different elements of date and time.
+ * The builder is used to hold onto different elements of date and time.
  * It is designed as two separate maps:
  * <ul>
  * <li>from {@link DateTimeField} to {@code long} value, where the value may be
@@ -95,9 +61,6 @@ import javax.time.ZonedDateTime;
  * <li>from {@code Class} to {@link DateTime}, holding larger scale objects
  * like {@code LocalDateTime}.
  * </ul>
- * <p>
- * All implementations of {@code CalendricalObject} will return a builder if
- * {@code DateTimeBuilder.class} is passed to {@link DateTime#extract(Class) extract(Class)}.
  * 
  * <h4>Implementation notes</h4>
  * This class is mutable and not thread-safe.
@@ -114,31 +77,9 @@ public final class DateTimeBuilder implements DateTime, Cloneable {
      */
     private final EnumMap<LocalDateTimeField, Long> standardFields = new EnumMap<LocalDateTimeField, Long>(LocalDateTimeField.class);
     /**
-     * The map of calendrical objects by type.
-     * A concurrent map is used to ensure no nulls are added.
+     * The list of calendrical objects by type.
      */
     private final List<Object> objects = new ArrayList<Object>(2);
-
-    //-----------------------------------------------------------------------
-    /**
-     * Obtains an instance of {@code DateTimeBuilder} from a calendrical.
-     * <p>
-     * A calendrical represents some form of date and time information.
-     * This factory converts the arbitrary calendrical to an instance of {@code DateTimeBuilder}.
-     * All implementations of {@link DateTime} must return {@code DateTimeBuilder}
-     * so this method should never fail.
-     * 
-     * @param calendrical  the calendrical to convert, not null
-     * @return the local date, not null
-     * @throws CalendricalException if unable to convert to a {@code DateTimeBuilder}
-     */
-    public static DateTimeBuilder from(DateTime calendrical) {
-        DateTimeBuilder obj = calendrical.extract(DateTimeBuilder.class);
-        if (obj == null) {
-            throw new CalendricalException("Unable to convert calendrical to DateTimeBuilder: " + calendrical.getClass());
-        }
-        return obj;
-    }
 
     //-----------------------------------------------------------------------
     /**
@@ -154,15 +95,6 @@ public final class DateTimeBuilder implements DateTime, Cloneable {
      */
     public DateTimeBuilder(DateTimeField field, long value) {
         addFieldValue(field, value);
-    }
-
-    /**
-     * Creates a new instance of the builder with a single calendrical.
-     * <p>
-     * This is equivalent to using {@link #addCalendrical(Object)} on an empty builder.
-     */
-    public DateTimeBuilder(Object calendrical) {
-        addCalendrical(calendrical);
     }
 
     //-----------------------------------------------------------------------
@@ -361,16 +293,7 @@ public final class DateTimeBuilder implements DateTime, Cloneable {
      * @throws CalendricalException if the field is already present with a different value
      */
     public DateTimeBuilder addCalendrical(Object calendrical) {
-        // special case
-        if (calendrical instanceof DateTimeBuilder) {
-            DateTimeBuilder dtb = (DateTimeBuilder) calendrical;
-            for (DateTimeField field : dtb.getFieldValueMap().keySet()) {
-                addFieldValue(field, dtb.getFieldValue(field));
-            }
-            return this;
-        }
         objects.add(calendrical);
-
         return this;
     }
 
@@ -417,12 +340,6 @@ public final class DateTimeBuilder implements DateTime, Cloneable {
     @SuppressWarnings("unchecked")
     @Override
     public <R> R extract(Class<R> type) {
-        if (type == Class.class) {
-            return (R) DateTimeBuilder.class;
-        }
-        if (type == DateTimeBuilder.class) {
-            return (R) this;
-        }
         R result = null;
         for (Object obj : objects) {
             if (type.isInstance(obj)) {
@@ -435,17 +352,25 @@ public final class DateTimeBuilder implements DateTime, Cloneable {
         return result;
     }
 
-    public static <T> T invokeFrom(Class<T> type, DateTime calendrical) {
-        try {
+    /**
+     * Invoked the class's {@code from(datetime)} method with a datetime
+     * and returns the value.
+     * @param <T>  The parameter type to return
+     * @param type The type to invoke {@code from} on.
+     * @param datetime the datetime to pass as the argument
+     * @return the value returned from the {@code from} method, or {@code null} if any exception occurred
+     */
+    public static <T> T from(Class<T> type, DateTime datetime) {
+       try {
             Method m = type.getDeclaredMethod("from", DateTime.class);
-            return (T)type.cast(m.invoke(null, calendrical));
+            return (T)type.cast(m.invoke(null, datetime));
         } catch (NoSuchMethodException nsm) {
             return null;
         } catch (ReflectiveOperationException ex) {
-            if (ex.getCause() instanceof CalendricalException) {
+            if (false && ex.getCause() instanceof CalendricalException) {
                 return null;
             }
-            throw new CalendricalException(ex.getMessage(), ex);
+            throw (CalendricalException)ex.getCause();
         }
     }
 

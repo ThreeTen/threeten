@@ -101,10 +101,12 @@ public abstract class Chronology {
         CHRONOS.putIfAbsent(this.getName(), this);
     }
 
+    /**
+     * Returns the Chronology extracted from the calendrical, if available.
+     * @param calendrical the calendrical to extract from.
+     * @return the Chronology of the calendrical, or null if not available.
+     */
     public static Chronology from(DateTime calendrical) {
-        if (calendrical instanceof Chronology) {
-            return (Chronology)calendrical;
-        }
         return calendrical.extract(Chronology.class);
     }
 
@@ -218,16 +220,6 @@ public abstract class Chronology {
      * @return the date in this calendar system, not null
      */
     public abstract ChronoDate dateFromEpochDay(long epochDay);
-
-    /**
-     * Creates a date in this calendar system from the epoch Month from 1970-01-01 (ISO).
-     *
-     * @param epochDay  the epoch day measured from 1970-01-01 (ISO), not null
-     * @return the date in this calendar system, not null
-     */
-    public /* tbd: should be abstract */ ChronoDate dateFromEpochMonth(long epochMonth) {
-        throw new RuntimeException("NYI: dateFromEpochMonth(year, day-of-year");
-    }
 
     /**
      * Creates the current date in this calendar system from the system clock in the default time-zone.

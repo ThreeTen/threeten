@@ -565,7 +565,7 @@ public final class LocalDate
      * This adjusts the date according to the rules of the specified adjuster.
      * A simple adjuster might simply set the one of the fields, such as the year field.
      * A more complex adjuster might set the date to the last day of the month.
-     * A selection of common adjustments is provided in {@link DateTimeAdjusters}.
+     * A selection of common adjustments is provided in {@link javax.time.calendrical.DateTimeAdjusters}.
      * These include finding the "last day of the month" and "next Wednesday".
      * The adjuster is responsible for handling special cases, such as the varying
      * lengths of month and leap years.
@@ -1162,11 +1162,7 @@ public final class LocalDate
     public <R> R extract(Class<R> type) {
         if (type == LocalDate.class) {
             return (R) this;
-        } else if (type == Class.class) {
-            return (R) LocalDate.class;
-        } else if (type == DateTimeBuilder.class) {
-            return (R) new DateTimeBuilder(this);
-        }
+        } 
         return null;
     }
 

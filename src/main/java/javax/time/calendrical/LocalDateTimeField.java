@@ -486,14 +486,6 @@ public enum LocalDateTimeField implements DateTimeField {
                 builder.addFieldValue(YEAR, d.getProlepticYear());
                 break;
             }
-            case EPOCH_MONTH: {
-                // Expand EPOCH_MONTH to YEAR, MONTH_OF_YEAR
-                long em = value;
-                ChronoDate d = chrono.dateFromEpochMonth(em);
-                builder.addFieldValue(MONTH_OF_YEAR, d.getMonth());
-                builder.addFieldValue(YEAR, d.getProlepticYear());
-                break;
-            }
             case DAY_OF_YEAR: {
                 // Expand DAY_OF_YEAR to MONTH_OF_YEAR, DAY_OF_MONTH
                 long y = builder.get(YEAR);

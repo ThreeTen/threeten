@@ -1492,11 +1492,7 @@ public final class OffsetDateTime
             return (R) offset;
         } else if (type == Instant.class) {
             return (R) toInstant();
-        } else if (type == Class.class) {
-            return (R) OffsetDateTime.class;
-        } else if (type == DateTimeBuilder.class) {
-            return (R) new DateTimeBuilder(this);
-        }
+        } 
         return null;
     }
 
