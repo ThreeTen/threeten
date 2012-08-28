@@ -173,9 +173,10 @@ public interface DateTimeField extends Comparator<DateTime> {
      * Resolves the date/time information in the builder.
      * <p>
      * This method is invoked during the resolve of the builder.
-     * Implementations should combine the associated field with others to supply
-     * the basic fields  Chronology, TZInfo, TZOffset, year, month, day,
-     * hour, minute, second, and nanosecond.
+     * Implementations should combine this field with others to create the
+     * basic set of date-time objects and fields.
+     * The output of a resolve will include the chronology, time-zone id,
+     * zone-offset, year, month, day, hour, minute, second and nanosecond.
      *
      * @param builder  the builder to resolve, not null
      * @param value  the value of the associated field

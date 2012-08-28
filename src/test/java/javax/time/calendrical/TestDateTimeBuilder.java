@@ -31,9 +31,16 @@
  */
 package javax.time.calendrical;
 
-import javax.time.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+
+import javax.time.CalendricalException;
+import javax.time.LocalDate;
+import javax.time.LocalDateTime;
+import javax.time.LocalTime;
+import javax.time.OffsetDateTime;
+import javax.time.Year;
+import javax.time.ZoneOffset;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -118,11 +125,12 @@ public class TestDateTimeBuilder {
             return e;
         }
     }
-    private Object testBuilderFrom(Class type, DateTime datetime) {
+    private Object testBuilderFrom(Class<?> type, DateTime datetime) {
         try {
             return DateTimeBuilder.from(type, datetime);
         } catch (Exception e) {
             return e;
         }
     }
+
 }

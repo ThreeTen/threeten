@@ -490,7 +490,7 @@ public enum LocalDateTimeField implements DateTimeField {
                 // Expand DAY_OF_YEAR to MONTH_OF_YEAR, DAY_OF_MONTH
                 long y = builder.get(YEAR);
                 long doy = value;
-                ChronoDate d = chrono.date((int)y, (int)doy);
+                ChronoDate d = chrono.date((int) y, (int) doy);
                 builder.addFieldValue(DAY_OF_MONTH, d.getDayOfMonth());
                 builder.addFieldValue(MONTH_OF_YEAR, d.getMonth());
                 break;
@@ -502,6 +502,7 @@ public enum LocalDateTimeField implements DateTimeField {
                 int aw = DateTimes.safeToInt(builder.get(ALIGNED_WEEK_OF_MONTH));
                 int ad = DateTimes.safeToInt(value);
                 ChronoDate d = chrono.date(y, moy, 1).plusDays((aw - 1) * 7 + (ad - 1));
+                builder.addFieldValue(YEAR, d.getProlepticYear());
                 builder.addFieldValue(MONTH_OF_YEAR, d.getMonth());
                 builder.addFieldValue(DAY_OF_MONTH, d.getDayOfMonth());
                 break;

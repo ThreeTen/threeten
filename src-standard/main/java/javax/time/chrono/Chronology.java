@@ -101,15 +101,6 @@ public abstract class Chronology {
         CHRONOS.putIfAbsent(this.getName(), this);
     }
 
-    /**
-     * Returns the Chronology extracted from the calendrical, if available.
-     * @param calendrical the calendrical to extract from.
-     * @return the Chronology of the calendrical, or null if not available.
-     */
-    public static Chronology from(DateTime calendrical) {
-        return calendrical.extract(Chronology.class);
-    }
-
     //-----------------------------------------------------------------------
     /**
      * Obtains an instance of {@code Chronology} from a calendrical.

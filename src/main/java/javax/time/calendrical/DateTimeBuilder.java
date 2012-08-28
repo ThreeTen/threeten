@@ -230,7 +230,7 @@ public final class DateTimeBuilder implements DateTime, Cloneable {
     public void removeFieldValues(DateTimeField... fields) {
         for (DateTimeField field : fields) {
             if (field instanceof LocalDateTimeField) {
-                standardFields.remove((LocalDateTimeField)field);
+                standardFields.remove(field);
             } else if (otherFields != null) {
                 otherFields.remove(field);
             }
@@ -308,6 +308,15 @@ public final class DateTimeBuilder implements DateTime, Cloneable {
      * @return {@code this}, for method chaining
      */
     public DateTimeBuilder resolve() {
+        outer:
+        while (true) {
+            for (Entry<LocalDateTimeField, Long> entry : standardFields.entrySet()) {
+                if (entry.getKey().resolve(this, entry.getValue())) {
+                    continue outer;
+                }
+            }
+            break;
+        }
         // handle unusual fields
         if (otherFields != null) {
             outer:
@@ -355,22 +364,23 @@ public final class DateTimeBuilder implements DateTime, Cloneable {
     /**
      * Invoked the class's {@code from(datetime)} method with a datetime
      * and returns the value.
+     * 
      * @param <T>  The parameter type to return
-     * @param type The type to invoke {@code from} on.
-     * @param datetime the datetime to pass as the argument
+     * @param type  the type to invoke {@code from} on
+     * @param datetime  the datetime to pass as the argument
      * @return the value returned from the {@code from} method, or {@code null} if any exception occurred
      */
     public static <T> T from(Class<T> type, DateTime datetime) {
        try {
             Method m = type.getDeclaredMethod("from", DateTime.class);
-            return (T)type.cast(m.invoke(null, datetime));
+            return (T) type.cast(m.invoke(null, datetime));
         } catch (NoSuchMethodException nsm) {
             return null;
         } catch (ReflectiveOperationException ex) {
-            if (false && ex.getCause() instanceof CalendricalException) {
+            if (ex.getCause() instanceof CalendricalException == false) {
                 return null;
             }
-            throw (CalendricalException)ex.getCause();
+            throw (CalendricalException) ex.getCause();
         }
     }
 

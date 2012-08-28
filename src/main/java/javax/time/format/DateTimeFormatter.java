@@ -274,7 +274,7 @@ public final class DateTimeFormatter implements CalendricalFormatter {
             DateTimeBuilder builder = parseToBuilder(str).resolve();
             for (Class<?> type : types) {
                 try {
-                    DateTime cal = (DateTime)DateTimeBuilder.from(type, builder);
+                    DateTime cal = (DateTime) DateTimeBuilder.from(type, builder);
                     if (cal != null) {
                         return cal;
                     }
