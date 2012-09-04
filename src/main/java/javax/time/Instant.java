@@ -37,6 +37,8 @@ import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
 import javax.time.calendrical.DateTime;
+import javax.time.calendrical.DateTimeField;
+import javax.time.calendrical.LocalDateTimeField;
 import javax.time.format.CalendricalParseException;
 
 
@@ -130,7 +132,7 @@ import javax.time.format.CalendricalParseException;
  * This class is immutable and thread-safe.
  */
 public final class Instant
-        implements Comparable<Instant>, Serializable {
+        implements DateTime, Comparable<Instant>, Serializable {
 
     /**
      * Constant for the 1970-01-01T00:00:00Z epoch instant.
@@ -313,6 +315,101 @@ public final class Instant
     public static Instant from(DateTime calendrical) {
         Instant obj = calendrical.extract(Instant.class);
         return DateTimes.ensureNotNull(obj, "Unable to convert calendrical to Instant: ", calendrical.getClass());
+    }
+
+    /**
+     * Extracts date-time information in a generic way.
+     * <p>
+     * This method exists to fulfill the {@link DateTime} interface.
+     * This implementation returns the following types:
+     * <ul>
+     * <li>ZoneOffset - returns {@link javax.time.ZoneOffset#UTC}</li>
+     * <li>Instant - returns the instant</li>
+     * </ul>
+     *
+     * @param <T> the type to extract
+     * @param type  the type to extract, null returns null
+     * @return the extracted object, null if unable to extract
+     */
+    public <T> T extract(Class<T> type) {
+        if (type == Instant.class) {
+            return (T)this;
+        }
+        if (type == ZoneOffset.class) {
+            return (T)ZoneOffset.UTC;
+        }
+        return null;
+    }
+
+    /**
+     * Gets the value of the specified date-time field.
+     * <p>
+     * Instant supports the fields {@link LocalDateTimeField#NANO_OF_DAY} and
+     * {@link LocalDateTimeField#EPOCH_DAY}.
+     *
+     * <h4>Implementation notes</h4>
+     * Implementations must check and handle any fields defined in {@link LocalDateTimeField} before
+     * delegating on to the {@link DateTimeField#doGet(DateTime) doGet method} on the specified field.
+     *
+     * @param field  the field to get, not null
+     * @return the value for the field
+     * @throws CalendricalException if a value for the field cannot be obtained
+     */
+    @Override
+    public long get(DateTimeField field) {
+        if (field instanceof LocalDateTimeField) {
+            switch ((LocalDateTimeField)field) {
+                case NANO_OF_DAY:
+                    return (seconds % DateTimes.SECONDS_PER_DAY) * DateTimes.NANOS_PER_SECOND + nanos;
+                case EPOCH_DAY:
+                    return seconds / DateTimes.SECONDS_PER_DAY;
+                case NANO_OF_SECOND:
+                    return nanos;
+                default:
+                    throw new CalendricalException("Unsupported field: " + field.getName());
+            }
+        }
+        return field.doGet(this);
+    }
+
+    /**
+     * Returns an object of the same type as this object with the specified field altered.
+     * <p>
+     * Instant supports the fields {@link LocalDateTimeField#NANO_OF_DAY} and
+     * {@link LocalDateTimeField#EPOCH_DAY}.
+     *
+     * <h4>Implementation notes</h4>
+     * Implementations must check and handle any fields defined in {@link LocalDateTimeField} before
+     * delegating on to the {@link DateTimeField#doSet(DateTime, long) doSet method} on the specified field.
+     * If the implementing class is immutable, then this method must return an updated copy of the original.
+     * If the class is mutable, then this method must update the original and return it.
+     *
+     * @param field  the field to set in the returned {@code Instant}, not null
+     * @param newValue  the new value of the field in the returned date, not null
+     * @return an Instant with the specified field set, not null
+     * @throws CalendricalException if the specified value is invalid
+     * @throws CalendricalException if the field cannot be set on this type
+     * @throws RuntimeException if the result exceeds the supported range
+     */
+    @Override
+    public Instant with(DateTimeField field, long newValue) {
+        if (field instanceof LocalDateTimeField) {
+            switch ((LocalDateTimeField)field) {
+                case NANO_OF_DAY:
+                    long nano = newValue % DateTimes.NANOS_PER_SECOND;
+                    long sec = newValue / DateTimes.NANOS_PER_SECOND;
+                    long day = seconds / DateTimes.SECONDS_PER_DAY;
+                    return ofEpochSecond(day * DateTimes.SECONDS_PER_DAY + sec, DateTimes.safeToInt(nano));
+                case EPOCH_DAY:
+                    long s2 = seconds % DateTimes.SECONDS_PER_DAY;
+                    return create(newValue * DateTimes.SECONDS_PER_DAY + s2, nanos);
+                case NANO_OF_SECOND:
+                    return create(seconds, DateTimes.safeToInt(newValue));
+                default:
+                    throw new CalendricalException("Unsupported field: " + field.getName());
+            }
+        }
+        return field.doSet(this, newValue);
     }
 
     //-----------------------------------------------------------------------

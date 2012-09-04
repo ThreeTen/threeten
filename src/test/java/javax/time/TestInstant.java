@@ -43,6 +43,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
+import javax.time.calendrical.LocalDateTimeField;
 
 import javax.time.format.CalendricalParseException;
 
@@ -1524,6 +1525,60 @@ public class TestInstant {
         assertEquals(Instant.ofEpochSecond(0L, -999999).toEpochMilli(), -1L);
         assertEquals(Instant.ofEpochSecond(0L, -1000000).toEpochMilli(), -1L);
         assertEquals(Instant.ofEpochSecond(0L, -1000001).toEpochMilli(), -2L);
+    }
+
+    //-----------------------------------------------------------------------
+    // extract()
+    //-----------------------------------------------------------------------
+    @Test(groups={"tck"})
+    public void test_extract() {
+        Instant instant = Instant.EPOCH;
+        assertEquals(instant.extract(Instant.class), instant);
+        assertEquals(instant.extract(ZoneOffset.class), ZoneOffset.UTC);
+        assertEquals(instant.extract(LocalDate.class), null);
+        assertEquals(instant.extract(LocalTime.class), null);
+    }
+
+    //-----------------------------------------------------------------------
+    // get()
+    //-----------------------------------------------------------------------
+    @Test(groups={"tck"})
+    public void test_get() {
+        final long DAYS1 = 100L;
+        final long SECONDS1 = 200L;
+        final long NANOS1 = 300L;
+        Instant instant = Instant.EPOCH;
+        assertEquals(instant.get(LocalDateTimeField.EPOCH_DAY), 0L);
+        assertEquals(instant.get(LocalDateTimeField.NANO_OF_SECOND), 0L);
+        assertEquals(instant.get(LocalDateTimeField.NANO_OF_DAY), 0L);
+        instant = Instant.ofEpochSecond(DAYS1 * DateTimes.SECONDS_PER_DAY + SECONDS1, NANOS1);
+        assertEquals(instant.get(LocalDateTimeField.EPOCH_DAY), DAYS1);
+        assertEquals(instant.get(LocalDateTimeField.NANO_OF_SECOND), NANOS1);
+        assertEquals(instant.get(LocalDateTimeField.NANO_OF_DAY), SECONDS1 * DateTimes.NANOS_PER_SECOND + NANOS1);
+    }
+
+    //-----------------------------------------------------------------------
+    // with()
+    //-----------------------------------------------------------------------
+    @Test(groups={"tck"})
+    public void test_with() {
+        final long DAYS1 = 100L;
+        final long SECONDS1 = 200L;
+        final long NANOS1 = 300L;
+        final long DAYS2 = 400;
+        final long SECONDS2 = 500L;
+        final long NANOS2 = 600L;
+        final long NANOS3 = 700L;
+        Instant instant = Instant.ofEpochSecond(DAYS1 * DateTimes.SECONDS_PER_DAY + SECONDS1, NANOS1);
+        instant = instant.with(LocalDateTimeField.EPOCH_DAY, DAYS2);
+        assertEquals(instant.getEpochSecond(), DAYS2 * DateTimes.SECONDS_PER_DAY + SECONDS1);
+        assertEquals(instant.getNano(), NANOS1);
+        instant = instant.with(LocalDateTimeField.NANO_OF_DAY, SECONDS2 * DateTimes.NANOS_PER_SECOND + NANOS2);
+        assertEquals(instant.getEpochSecond(), DAYS2 * DateTimes.SECONDS_PER_DAY + SECONDS2);
+        assertEquals(instant.getNano(), NANOS2);
+        instant = instant.with(LocalDateTimeField.NANO_OF_SECOND, NANOS3);
+        assertEquals(instant.getEpochSecond(), DAYS2 * DateTimes.SECONDS_PER_DAY + SECONDS2);
+        assertEquals(instant.getNano(), NANOS3);
     }
 
     @Test(expectedExceptions=ArithmeticException.class, groups={"tck"})
