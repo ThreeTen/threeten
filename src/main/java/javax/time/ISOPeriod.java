@@ -206,21 +206,21 @@ public final class ISOPeriod implements Serializable {
      */
     public static ISOPeriod of(int amount, LocalPeriodUnit unit) {
     	switch (unit) {
-		case CENTURIES: return ofYears(amount * 100);
+		case CENTURIES: return ofYears(DateTimes.safeMultiply(amount, 100));
 		case DAYS: return ofDays(amount);
-		case DECADES: return ofYears(amount * 10);
-		case HALF_DAYS: return ofHours(amount * 12);
-		case HALF_YEARS: return ofMonths(amount * 6);
+		case DECADES: return ofYears(DateTimes.safeMultiply(amount, 10));
+		case HALF_DAYS: return ofHours(DateTimes.safeMultiply(amount, 12));
+		case HALF_YEARS: return ofMonths(DateTimes.safeMultiply(amount, 6));
 		case HOURS: return ofHours(amount);
-		case MICROS: return ofNanos(amount * 10);
-		case MILLENNIA: return ofYears(amount * 1000);
-		case MILLIS: return ofNanos(amount * 100);
+		case MICROS: return ofNanos(DateTimes.safeMultiply(amount, 10));
+		case MILLENNIA: return ofYears(DateTimes.safeMultiply(amount, 1000));
+		case MILLIS: return ofNanos(DateTimes.safeMultiply(amount, 100));
 		case MINUTES: return ofMinutes(amount);
 		case MONTHS: return ofMonths(amount);
 		case NANOS: return ofNanos(amount);
-		case QUARTER_YEARS: return ofMonths(amount * 3);
+		case QUARTER_YEARS: return ofMonths(DateTimes.safeMultiply(amount, 3));
 		case SECONDS: return ofSeconds(amount);
-		case WEEKS: return ofDays(amount * 7);
+		case WEEKS: return ofDays(DateTimes.safeMultiply(amount, 7));
 		case YEARS: return ofYears(amount);
 		default: throw new CalendricalException("Unable to create a period of: " + unit);
 		}

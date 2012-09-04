@@ -56,6 +56,8 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import javax.time.calendrical.LocalPeriodUnit;
+
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -1947,6 +1949,16 @@ public class TestISOPeriod {
         ISOPeriod test = ISOPeriod.of(0, 0, 0, 1, 1000000, Integer.MAX_VALUE, 0);
         assertEquals(test.totalNanosWith24HourDays(), n);
     }
+    
+    @Test(expectedExceptions=ArithmeticException.class)
+    public void test_factory_multipleOverflow_Millenia() {
+    	ISOPeriod.of(Integer.MAX_VALUE, LocalPeriodUnit.MILLENNIA);
+    }
+    
+    @Test(expectedExceptions=ArithmeticException.class)
+    public void test_factory_multipleOverflow_Weeks() {
+    	ISOPeriod.of(Integer.MAX_VALUE, LocalPeriodUnit.WEEKS);
+    }
 
     //-----------------------------------------------------------------------
     // toEstimatedDuration()
@@ -2268,4 +2280,5 @@ public class TestISOPeriod {
     }
 
 }
+
 
