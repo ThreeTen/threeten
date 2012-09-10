@@ -124,7 +124,7 @@ public final class LocalDateTime
     /**
      * Obtains the current date-time from the system clock in the specified time-zone.
      * <p>
-     * This will query the {@link Clock#system(ZoneId)) system clock} to obtain the current date-time.
+     * This will query the {@link Clock#system(ZoneId) system clock} to obtain the current date-time.
      * Specifying the time-zone avoids dependence on the default time-zone.
      * <p>
      * Using this method will prevent the ability to use an alternate clock for testing
@@ -963,7 +963,29 @@ public final class LocalDateTime
         }
         return unit.doAdd(this, periodAmount);
     }
+    /**
+     * Returns a copy of this date-time with the specified ISOPeriod added.
+     * The ISOPeriod is normalized so hours over 24 will not be lost and the time
+     * is added to the time and the date fields are added to the date.
+     * 
+     * @param period the ISOPeriod to add
+     * @return the LocalDateTime with the fields of the period added
+     */
+    public LocalDateTime plus(ISOPeriod period) {
+        ISOPeriod p = period.normalized();
+        return with(date.plus(ISOPeriod.ofDate(p.getYears(), p.getMonths(), p.getDays())),
+                time.plus(ISOPeriod.ofTime(p.getHours(), p.getMinutes(), p.getSeconds(), p.getNanos())));
+    }
 
+    /**
+     * Returns a copy of this date-time with the ISOPeriod subtracted.
+     * {@code minus(period)} is equivalent to {@code plus(period.negated())}.
+     * @param period the ISOPeriod to subtract
+     * @return the LocalDateTime with the fields of the period subtracted
+     */
+    public LocalDateTime minus(ISOPeriod period) {
+        return plus(period.negated());
+    }
     //-----------------------------------------------------------------------
     /**
      * Returns a copy of this {@code LocalDateTime} with the specified period in years added.

@@ -1082,6 +1082,65 @@ public class TestLocalTime {
     }
 
     //-----------------------------------------------------------------------
+    // plus(ISOPeriod)
+    //-----------------------------------------------------------------------
+    @Test(groups={"tck"})
+    public void test_plus_LocalPeriod() {
+        ISOPeriod period = ISOPeriod.of(0, 0, 0, 4, 5, 6, 7);
+        LocalTime t = TEST_12_30_40_987654321.plus(period);
+        assertEquals(t, LocalTime.of(16, 35, 46, 987654328));
+    }
+
+    @Test(groups={"tck"})
+    public void test_plus_LocalPeriod_max() {
+        ISOPeriod period = ISOPeriod.of(0, 0, 0, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Long.MAX_VALUE);
+        LocalTime t = TEST_12_30_40_987654321.plus(period);
+        assertEquals(t, TEST_12_30_40_987654321.plusHours(Integer.MAX_VALUE).plusMinutes(Integer.MAX_VALUE).plusSeconds(Integer.MAX_VALUE).plusNanos(Long.MAX_VALUE));
+    }
+
+    @Test(groups={"tck"})
+    public void test_plus_LocalPeriod_dateIgnored() {
+        ISOPeriod period = ISOPeriod.of(1, 2, Integer.MAX_VALUE, 4, 5, 6, 7);
+        LocalTime t = TEST_12_30_40_987654321.plus(period);
+        assertEquals(t, LocalTime.of(16, 35, 46, 987654328));
+    }
+
+    @Test(groups={"implementation"})
+    public void test_plus_LocalPeriod_zero_same() {
+        LocalTime t = TEST_12_30_40_987654321.plus(ISOPeriod.ZERO);
+        assertSame(t, TEST_12_30_40_987654321);
+    }
+
+    @Test(groups={"tck"})
+    public void test_plus_LocalPeriod_zero_equal() {
+        LocalTime t = TEST_12_30_40_987654321.plus(ISOPeriod.ZERO);
+        assertEquals(t, TEST_12_30_40_987654321);
+    }
+
+    @Test(groups={"tck"})
+    public void test_plus_LocalPeriod_overflowIgnored() {
+        ISOPeriod period = ISOPeriod.ofTime(1, 0, 0);
+        LocalTime t = LocalTime.of(23, 30).plus(period);
+        assertEquals(t, LocalTime.of(0, 30));
+    }
+
+    @Test(expectedExceptions=NullPointerException.class, groups={"tck"})
+    public void test_plus_LocalPeriod_null() {
+        TEST_12_30_40_987654321.plus((ISOPeriod) null);
+    }
+
+    @Test(expectedExceptions=NullPointerException.class, groups={"tck"})
+    public void test_plus_LocalPeriod_nullLocalPeriod() {
+        ISOPeriod period = null;
+        TEST_12_30_40_987654321.plus(period);
+    }
+
+    @Test(expectedExceptions=ArithmeticException.class, groups={"tck"})
+    public void test_plus_LocalPeriod_big() {
+        TEST_12_30_40_987654321.plus(ISOPeriod.of(Long.MAX_VALUE, LocalPeriodUnit.HALF_DAYS));
+    }
+
+    //-----------------------------------------------------------------------
     // plus(Duration)
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})

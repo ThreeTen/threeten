@@ -77,7 +77,7 @@ import javax.time.zone.ZoneResolvers;
  * <p>
  * However, any application that makes use of historical dates and requires them
  * to be accurate will find the ISO-8601 rules unsuitable. In this case, the
- * application code should use {@code HistoricDate} and define an explicit
+ * application code should use {@link HistoricDate} and define an explicit
  * cutover date between the Julian and Gregorian calendar systems.
  * 
  * <h4>Implementation notes</h4>
@@ -144,7 +144,7 @@ public final class LocalDate
     /**
      * Obtains the current date from the system clock in the specified time-zone.
      * <p>
-     * This will query the {@link Clock#system(ZoneId)) system clock} to obtain the current date.
+     * This will query the {@link Clock#system(ZoneId) system clock} to obtain the current date.
      * Specifying the time-zone avoids dependence on the default time-zone.
      * <p>
      * Using this method will prevent the ability to use an alternate clock for testing
@@ -781,6 +781,73 @@ public final class LocalDate
 
     //-----------------------------------------------------------------------
     /**
+     * Returns a copy of this {@code LocalDate} with the specified date period added.
+     * <p>
+     * This adds the specified period to this date, returning a new date.
+     * Any time-based ISO fields are ignored, thus adding a time-based
+     * period to this date will have no effect. If you want to take time fields into
+     * account, call {@link ISOPeriod#normalized()} on the input period.
+     * <p>
+     * The detailed rules for the addition have some complexity due to variable length months.
+     * The goal is to match the code for {@code plusYears().plusMonths().plusDays()} in most cases.
+     * The principle case of difference is best expressed by example:
+     * {@code 2010-01-31} plus {@code P1M-1D} yields {@code 2010-02-28} whereas
+     * {@code plusMonths(1).plusDays(-1)} gives {@code 2010-02-27}.
+     * <p>
+     * The rules are expressed in five steps:
+     * <ol>
+     * <li>Add the input years and months to calculate the resulting year-month</li>
+     * <li>Form an imaginary date from the year-month and the original day-of-month,
+     *  a date that may be invalid, such as February 30th</li>
+     * <li>Add the input days to the imaginary date treating the first move to a later date
+     *  from an invalid date as a move to the 1st of the next month</li>
+     * <li>Check if the resulting date would be invalid</li>
+     * <li>Adjust the day-of-month to the last valid day if necessary</li>
+     * </ol>
+     * <p>
+     * For example, this table shows what happens when for various inputs and periods:
+     * <pre>
+     *   2010-01-30 plus P1M2D  = 2010-03-02
+     *   2010-01-30 plus P1M1D  = 2010-03-01
+     *   2010-01-30 plus P1M    = 2010-02-28
+     *   2010-01-30 plus P1M-1D = 2010-02-28
+     *   2010-01-30 plus P1M-2D = 2010-02-28
+     *   2010-01-30 plus P1M-3D = 2010-02-27
+     * </pre>
+     * <p>
+     * This instance is immutable and unaffected by this method call.
+     *
+     * @param period  the period to add, not null
+     * @return a {@code LocalDate} based on this date with the period added, not null
+     * @throws DateTimeException if the result exceeds the supported date range
+     */
+    public LocalDate plus(ISOPeriod period) {
+        DateTimes.checkNotNull(period, "ISOPeriod must not be null");
+        if (period.getHours() != 0 || period.getMinutes() != 0 ||
+                period.getSeconds() != 0 || period.getNanos() != 0) {
+            throw new DateTimeException("Non-zero time not supported");
+        }
+        long periodMonths = period.getYears() * 12L + period.getMonths();
+        long periodDays = period.getDays();
+        if (periodMonths == 0) {
+            return plusDays(periodDays);  // optimization that also returns this for zero
+        }
+        
+        long monthCount = ((long) year) * 12 + (month - 1);
+        long calcMonths = monthCount + periodMonths;  // safe overflow
+        int newYear = YEAR.checkValidIntValue(DateTimes.floorDiv(calcMonths, 12));
+
+        Month newMonth = Month.of(DateTimes.floorMod(calcMonths, 12) + 1);
+        int newMonthLen = newMonth.length(Year.isLeap(newYear));
+        int newDay = Math.min(day, newMonthLen);
+        if (periodDays < 0 && day > newMonthLen) {
+            periodDays = Math.min(periodDays + (day - newMonthLen), 0);  // adjust for invalid days
+        }
+        return LocalDate.of(newYear, newMonth, newDay).plusDays(periodDays);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
      * Returns a copy of this {@code LocalDate} with the specified period in years added.
      * <p>
      * This method adds the specified amount to the years field in three steps:
@@ -896,6 +963,22 @@ public final class LocalDate
      */
     public LocalDate minus(Period period) {
         return minus(period.getAmount(), period.getUnit());
+    }
+
+    /**
+     * Returns a copy of this date with the specified ISOPeriod subtracted.
+     * <p>
+     * This method returns a new date based on this date with the specified period subtracted.
+     * The calculation is the same as adding the negative of the ISOPeriod.
+     * <p>
+     * This instance is immutable and unaffected by this method call.
+     *
+     * @param period  the period to subtract, not null
+     * @return a {@code LocalDate} based on this date with the ISOPeriod subtracted, not null
+     * @throws DateTimeException if the unit cannot be subtracted from this type
+     */
+    public LocalDate minus(ISOPeriod period) {
+        return plus(period.negated());
     }
 
     /**

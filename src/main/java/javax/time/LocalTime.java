@@ -152,7 +152,7 @@ public final class LocalTime
     /**
      * Obtains the current time from the system clock in the specified time-zone.
      * <p>
-     * This will query the {@link Clock#system(ZoneId)) system clock} to obtain the current time.
+     * This will query the {@link Clock#system(ZoneId) system clock} to obtain the current time.
      * Specifying the time-zone avoids dependence on the default time-zone.
      * <p>
      * Using this method will prevent the ability to use an alternate clock for testing
@@ -675,6 +675,54 @@ public final class LocalTime
             throw new DateTimeException("Unsupported unit: " + unit.getName());
         }
         return unit.doAdd(this, periodAmount);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Returns a copy of this {@code LocalTime} with the specified LocalPeriod added.
+     * <p>
+     * This adds the specified LocalPeriod to this time, returning a new time.
+     * The calculation wraps around midnight and ignores any date-based ISO fields.
+     * <p>
+     * Those rules ignore any date-based ISO fields, thus adding a date-based
+     * period to this time will have no effect.
+     * <p>
+     * This instance is immutable and unaffected by this method call.
+     *
+     * @param period  the period to add, not null
+     * @return a {@code LocalTime} based on this time with the period added, not null
+     * @throws ArithmeticException if the period overflows during conversion to hours/minutes/seconds/nanos
+     */
+    public LocalTime plus(ISOPeriod period) {
+        long periodHours = period.getHours();
+        long periodMinutes = period.getMinutes();
+        long periodSeconds = period.getSeconds();
+        long periodNanos = period.getNanos();
+        long totNanos = periodNanos % NANOS_PER_DAY +                    //   max  86400000000000
+                (periodSeconds % SECONDS_PER_DAY) * NANOS_PER_SECOND +   //   max  86400000000000
+                (periodMinutes % MINUTES_PER_DAY) * NANOS_PER_MINUTE +   //   max  86400000000000
+                (periodHours % HOURS_PER_DAY) * NANOS_PER_HOUR;          //   max  86400000000000
+        return plusNanos(totNanos);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Returns a copy of this {@code LocalTime} with the specified LocalPeriod subtracted.
+     * <p>
+     * Subtracts the specified LocalPeriod from this time, returning a new time.
+     * The calculation wraps around midnight and ignores any date-based ISO fields.
+     * <p>
+     * Those rules ignore any date-based fields, thus subtracting a date-based
+     * period to this time will have no effect.
+     * <p>
+     * This instance is immutable and unaffected by this method call.
+     *
+     * @param period  the period to subtract, not null
+     * @return a {@code LocalTime} based on this time with the period subtracted, not null
+     * @throws ArithmeticException if the period overflows during conversion to hours/minutes/seconds/nanos
+     */
+    public LocalTime minus(ISOPeriod period) {
+        return plus(period.negated());
     }
 
     //-----------------------------------------------------------------------

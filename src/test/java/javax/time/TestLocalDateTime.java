@@ -1620,6 +1620,46 @@ public class TestLocalDateTime extends AbstractTest {
     }
 
     //-----------------------------------------------------------------------
+    // plus(ISOPeriod)
+    //-----------------------------------------------------------------------
+    @Test(groups={"tck"})
+    public void test_plus_LocalPeriod_positive() {
+        ISOPeriod period = ISOPeriod.of(1, 1, 1, 1, 1, 1, 1);
+        LocalDateTime t = TEST_2007_07_15_12_30_40_987654321.plus(period);
+        assertEquals(t, LocalDateTime.of(2008, 8, 16, 13, 31, 41, 987654322));
+    }
+
+    @Test(groups={"tck"})
+    public void test_plus_LocalPeriod_negativeDays() {
+        ISOPeriod period = ISOPeriod.of(-25, LocalPeriodUnit.DAYS);
+        LocalDateTime t = TEST_2007_07_15_12_30_40_987654321.plus(period);
+        assertEquals(t, LocalDateTime.of(2007, 6, 20, 12, 30, 40, 987654321));
+    }
+
+    @Test(groups={"implementation"})
+    public void test_plus_LocalPeriod_zero() {
+        LocalDateTime t = TEST_2007_07_15_12_30_40_987654321.plus(ISOPeriod.ZERO);
+        assertSame(t, TEST_2007_07_15_12_30_40_987654321);
+    }
+
+    @Test(expectedExceptions=NullPointerException.class, groups={"tck"})
+    public void test_plus_LocalPeriod_null() {
+        TEST_2007_07_15_12_30_40_987654321.plus((ISOPeriod) null);
+    }
+
+    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    public void test_plus_LocalPeriod_invalidTooLarge() {
+        ISOPeriod period = ISOPeriod.of(1, LocalPeriodUnit.YEARS);
+        LocalDateTime.of(Year.MAX_YEAR, 1, 1, 0, 0).plus(period);
+    }
+
+    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    public void test_plus_LocalPeriod_invalidTooSmall() {
+        ISOPeriod period = ISOPeriod.of(-1, LocalPeriodUnit.YEARS);
+        LocalDateTime.of(Year.MIN_YEAR, 1, 1, 0, 0).plus(period);
+    }
+
+    //-----------------------------------------------------------------------
     // plus(long,PeriodUnit)
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})

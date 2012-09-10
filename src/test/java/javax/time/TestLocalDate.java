@@ -961,6 +961,99 @@ public class TestLocalDate extends AbstractTest {
     }
 
     //-----------------------------------------------------------------------
+    // plus(ISOPeriod)
+    //-----------------------------------------------------------------------
+    @Test(groups={"tck"})
+    public void test_plus_LocalPeriod_positiveMonths() {
+        ISOPeriod period = ISOPeriod.of(7, LocalPeriodUnit.MONTHS);
+        LocalDate t = TEST_2007_07_15.plus(period);
+        assertEquals(t, LocalDate.of(2008, 2, 15));
+    }
+
+    @Test(groups={"tck"})
+    public void test_plus_LocalPeriod_negativeDays() {
+        ISOPeriod period = ISOPeriod.of(-25, LocalPeriodUnit.DAYS);
+        LocalDate t = TEST_2007_07_15.plus(period);
+        assertEquals(t, LocalDate.of(2007, 6, 20));
+    }
+
+    @Test(groups={"tck"}, expectedExceptions=DateTimeException.class)
+    public void test_plus_LocalPeriod_timeNotAllowed() {
+        ISOPeriod period = ISOPeriod.of(7, LocalPeriodUnit.HOURS);
+        TEST_2007_07_15.plus(period);
+    }
+
+    @Test(groups={"implementation"})
+    public void test_plus_LocalPeriod_zero() {
+        LocalDate t = TEST_2007_07_15.plus(ISOPeriod.ZERO);
+        assertSame(t, TEST_2007_07_15);
+    }
+
+    @Test(expectedExceptions=NullPointerException.class, groups={"tck"})
+    public void test_plus_LocalPeriod_null() {
+        TEST_2007_07_15.plus((ISOPeriod) null);
+    }
+
+    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    public void test_plus_LocalPeriod_invalidTooLarge() {
+        Period period = Period.of(2, LocalPeriodUnit.YEARS);
+        LocalDate.of(Year.MAX_YEAR, 1, 1).plus(period);
+    }
+
+    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    public void test_plus_LocalPeriod_invalidTooSmall() {
+        ISOPeriod period = ISOPeriod.of(-2, LocalPeriodUnit.YEARS);
+        LocalDate.of(Year.MIN_YEAR, 1, 1).plus(period);
+    }
+
+    //-----------------------------------------------------------------------
+    // minus(ISOPeriod)
+    //-----------------------------------------------------------------------
+    @Test(groups={"tck"})
+    public void test_minus_LocalPeriod_negativeMonths() {
+        ISOPeriod period = ISOPeriod.of(-7, LocalPeriodUnit.MONTHS);
+        LocalDate t = TEST_2007_07_15.minus(period);
+        assertEquals(t, LocalDate.of(2008, 2, 15));
+    }
+
+    @Test(groups={"tck"})
+    public void test_minus_LocalPeriod_positiveDays() {
+        ISOPeriod period = ISOPeriod.of(25, LocalPeriodUnit.DAYS);
+        LocalDate t = TEST_2007_07_15.minus(period);
+        assertEquals(t, LocalDate.of(2007, 6, 20));
+    }
+
+    @Test(groups={"tck"}, expectedExceptions=DateTimeException.class)
+    public void test_minus_LocalPeriod_timeNotAllowed() {
+        ISOPeriod period = ISOPeriod.of(7, LocalPeriodUnit.HOURS);
+        TEST_2007_07_15.minus(period);
+    }
+
+    @Test(groups={"implementation"})
+    public void test_minus_LocalPeriod_zero() {
+        LocalDate t = TEST_2007_07_15.minus(ISOPeriod.ZERO);
+        assertSame(t, TEST_2007_07_15);
+    }
+
+    @Test(expectedExceptions=NullPointerException.class, groups={"tck"})
+    public void test_minus_LocalPeriod_null() {
+        TEST_2007_07_15.minus((ISOPeriod) null);
+    }
+
+    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    public void test_minus_LocalPeriod_invalidTooLarge() {
+        Period period = Period.of(-1, LocalPeriodUnit.YEARS);
+        LocalDate.of(Year.MAX_YEAR, 1, 1).minus(period);
+    }
+
+    @Test(expectedExceptions=DateTimeException.class, groups={"tck"})
+    public void test_minus_LocalPeriod_invalidTooSmall() {
+        ISOPeriod period = ISOPeriod.of(1, LocalPeriodUnit.YEARS);
+        LocalDate.of(Year.MIN_YEAR, 1, 1).minus(period);
+    }
+
+
+    //-----------------------------------------------------------------------
     // plusYears()
     //-----------------------------------------------------------------------
     @Test(groups={"tck"})
