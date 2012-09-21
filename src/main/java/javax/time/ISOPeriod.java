@@ -37,6 +37,7 @@ import javax.time.calendrical.DateTime;
 import javax.time.calendrical.LocalPeriodUnit;
 import javax.time.calendrical.PeriodUnit;
 import javax.time.chrono.ISOChronology;
+import javax.time.format.DateTimeParseException;
 
 /**
  * An immutable period consisting of the ISO-8601 year, month, day, hour,
@@ -225,7 +226,7 @@ public final class ISOPeriod
                 case DAYS:
                     return ISOPeriod.ofDate(0, 0, DateTimes.safeToInt(amount));
                 case HALF_DAYS:
-                    return ISOPeriod.ofTime(DateTimes.safeToInt(amount * 12), 0, 0, 0);
+                    return ISOPeriod.ofTime(DateTimes.safeToInt(DateTimes.safeMultiply(amount, 12)), 0, 0, 0);
                 case HOURS:
                     return ISOPeriod.ofTime(DateTimes.safeToInt(amount), 0, 0, 0);
                 case MINUTES:
@@ -242,7 +243,7 @@ public final class ISOPeriod
                     // Fall through to handle throw unsupported PeriodUnit
             }
         }
-        throw new DateTimeException("Unsupported unit: " + unit.getName());
+        throw new DateTimeException("Cannot create a ISOPeriod of the unit " + unit);
     }
 
     /**
@@ -254,8 +255,7 @@ public final class ISOPeriod
      * and the units for decades, centuries, and millennia are converted to
      * equivalent years.
      *
-     * @param amount  the amount of the period, measured in terms of the unit, positive or negative
-     * @param unit  the unit that the period is measured in, not null
+     * @param period  the period
      * @return the period, not null
      * @throws DateTimeException if the unit is not supported
      */
@@ -272,7 +272,7 @@ public final class ISOPeriod
      * The created period will have normalized values for the hours, minutes,
      * seconds and nanoseconds fields. The years, months and days fields will be zero.
      * <p>
-     * To populate the days field, call {@link #normalizedWith24HourDays()} on the created period.
+     * To populate the days field, call {@link LocalPeriod#normalized} on the created period.
      *
      * @param duration  the duration to create from, not null
      * @return the {@code PeriodFields} instance, not null
@@ -286,119 +286,6 @@ public final class ISOPeriod
         int hours = DateTimes.safeToInt(duration.getSeconds() / 3600);
         int amount = (int) (duration.getSeconds() % 3600L);
         return new ISOPeriod(0, 0, 0, hours, (amount / 60), (amount % 60), duration.getNano());
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Returns an {@code ISOPeriod} consisting of the number of years, months, days,
-     * hours, minutes, seconds, and nanoseconds between two {@code DateTime} instances.
-     * <p>
-     * The start date is included, but the end date is not. Only whole years count.
-     * For example, from {@code 2010-01-15} to {@code 2011-03-18} is one year, two months and three days.
-     * <p>
-     * The result of this method can be a negative period if the end is before the start.
-     * The negative sign will be the same in each of year, month and day.
-     * <p>
-     * Adding the result of this method to the start date will always yield the end date.
-     *
-     * @param start  the start date, inclusive, not null
-     * @param end  the end date, exclusive, not null
-     * @return the period in days, not null
-     * @throws DateTimeException if {@code LocalDate} and {@code LocalTime}
-     *      cannot be extracted from the {@code start} and {@code end}
-     * @throws ArithmeticException if the period exceeds the supported range
-     */
-    public static ISOPeriod between(DateTime start, DateTime end) {
-        ISOPeriod delta = ISOPeriod.ZERO;
-        
-        LocalDate date1 = start.extract(LocalDate.class);
-        LocalTime time1 = start.extract(LocalTime.class);
-        LocalDate date2 = end.extract(LocalDate.class);
-        LocalTime time2 = end.extract(LocalTime.class);
-
-        if (date1 != null && date2 != null) {
-            delta.plus(between(date1, date2));
-        } else {
-            if (date1 != null || date2 != null) {
-                throw new DateTimeException("LocalDate not available for between");
-            }
-        }
-        if (time1 != null && time2 != null) {
-            delta.plus(between(time1, time2));
-        } else {
-            if (time1 != null || time2 != null) {
-                throw new DateTimeException("LocalTime not available for between");
-            }
-        }
-        return delta;
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Obtains an {@code ISOPeriod} consisting of the number of years, months,
-     * and days between two dates.
-     * <p>
-     * The start date is included, but the end date is not. Only whole years count.
-     * For example, from {@code 2010-01-15} to {@code 2011-03-18} is one year, two months and three days.
-     * <p>
-     * The result of this method can be a negative period if the end is before the start.
-     * The negative sign will be the same in each of year, month and day.
-     * <p>
-     * Adding the result of this method to the start date will always yield the end date.
-     *
-     * @param startDate  the start date, inclusive, not null
-     * @param endDate  the end date, exclusive, not null
-     * @return the period in days, not null
-     * @throws ArithmeticException if the period exceeds the supported range
-     */
-    public static ISOPeriod between(LocalDate startDate, LocalDate endDate) {
-        long startMonth = startDate.getYear() * 12L + startDate.getMonth().ordinal();  // safe
-        long endMonth = endDate.getYear() * 12L + endDate.getMonth().ordinal();  // safe
-        long totalMonths = endMonth - startMonth;  // safe
-        int days = endDate.getDayOfMonth() - startDate.getDayOfMonth();
-        if (totalMonths > 0 && days < 0) {
-            totalMonths--;
-            LocalDate calcDate = startDate.plusMonths(totalMonths);
-            days = (int) (endDate.toEpochDay() - calcDate.toEpochDay());  // safe
-        } else if (totalMonths < 0 && days > 0) {
-            totalMonths++;
-            days -= endDate.lengthOfMonth();
-        }
-        long years = totalMonths / 12;  // safe
-        int months = (int) (totalMonths % 12);  // safe
-        return ofDate(DateTimes.safeToInt(years), months, days);
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Obtains an {@code ISOPeriod} consisting of the number of hours, minutes,
-     * seconds, and nanoseconds between two times.
-     * <p>
-     * The start time is included, but the end time is not.
-     * For example, from {@code 13:45.30.123456789} to {@code 14:50.00}
-     * {@code 01:05.30.123456789}.
-     * <p>
-     * The result of this method can be a negative period if the end is before the start.
-     * The negative sign will be the same in each of year, month and day.
-     * <p>
-     * Adding the result of this method to the start time will always yield the end time.
-     *
-     * @param startDate  the start date, inclusive, not null
-     * @param endDate  the end date, exclusive, not null
-     * @return the period in days, not null
-     * @throws ArithmeticException if the period exceeds the supported range
-     */
-    public static ISOPeriod between(LocalTime startTime, LocalTime endTime) {
-        long delta = endTime.toNanoOfDay() - startTime.toNanoOfDay();
-
-        long nanos = DateTimes.floorMod(delta, 1000000000L);
-        long total = DateTimes.floorDiv(delta, 1000000000L);  // safe from overflow
-        int seconds = DateTimes.floorMod(total, 60);
-        total  = DateTimes.floorDiv(total, 60);
-        int minutes = DateTimes.floorMod(total, 60);
-        total  = DateTimes.floorDiv(total, 60);
-        int hours = DateTimes.safeToInt(total);
-        return ISOPeriod.ofTime(hours, minutes, seconds, nanos);
     }
 
     //-----------------------------------------------------------------------
@@ -422,7 +309,7 @@ public final class ISOPeriod
      *
      * @param text  the text to parse, not null
      * @return the parsed period, not null
-     * @throws CalendricalParseException if the text cannot be parsed to a period
+     * @throws DateTimeParseException if the text cannot be parsed to a LocalPeriod
      */
     public static ISOPeriod parse(final CharSequence text) {
         DateTimes.checkNotNull(text, "Text to parse must not be null");
@@ -776,7 +663,8 @@ public final class ISOPeriod
                     // Fall through to handle throw unsupported PeriodUnit
             }
         }
-        throw new DateTimeException("Unsupported unit: " + unit.getName());
+
+        throw new DateTimeException("Cannot create a ISOPeriod of the unit " + unit);
     }
 
     //-----------------------------------------------------------------------
@@ -808,7 +696,7 @@ public final class ISOPeriod
      * This instance is immutable and unaffected by this method call.
      *
      * @param period  the period to add, not null
-     * @return an {@code ISOPeriod} based on this period with the requested period added, not null
+     * @return an {@code ISOPeriod} based on this period with the requested period subtracted, not null
      * @throws DateTimeException if the unit is not supported by {@code ISOPeriod}
      * @throws ArithmeticException if the capacity of any field is exceeded
      */
@@ -832,100 +720,23 @@ public final class ISOPeriod
 
     //-----------------------------------------------------------------------
     /**
-     * Returns a new instance with each element in this period multiplied
-     * by the specified scalar.
-     *
-     * @param scalar  the scalar to multiply by, not null
-     * @return an {@code ISOPeriod} based on this period with the amounts multiplied by the scalar, not null
-     * @throws ArithmeticException if the capacity of any field is exceeded
-     */
-    public ISOPeriod multipliedBy(int scalar) {
-        if (this == ZERO || scalar == 1) {
-            return this;
-        }
-        return of(
-                DateTimes.safeMultiply(years, scalar),
-                DateTimes.safeMultiply(months, scalar),
-                DateTimes.safeMultiply(days, scalar),
-                DateTimes.safeMultiply(hours, scalar),
-                DateTimes.safeMultiply(minutes, scalar),
-                DateTimes.safeMultiply(seconds, scalar),
-                DateTimes.safeMultiply(nanos, scalar));
-    }
-
-    /**
-     * Returns a new instance with each element in this period divided
-     * by the specified value.
-     * <p>
-     * The implementation simply divides each separate field by the divisor
-     * using integer division.
-     *
-     * @param divisor  the value to divide by, not null
-     * @return an {@code ISOPeriod} based on this period with the amounts divided by the divisor, not null
-     * @throws ArithmeticException if dividing by zero
-     */
-    public ISOPeriod dividedBy(int divisor) {
-        if (divisor == 0) {
-            throw new ArithmeticException("Cannot divide by zero");
-        }
-        if (this == ZERO || divisor == 1) {
-            return this;
-        }
-        return of(
-                years / divisor, months / divisor, days / divisor,
-                hours / divisor, minutes / divisor, seconds / divisor, nanos / divisor);
-    }
-
-    /**
      * Returns a new instance with each amount in this period negated.
      *
      * @return an {@code ISOPeriod} based on this period with the amounts negated, not null
      * @throws ArithmeticException if any field has the minimum value
      */
     public ISOPeriod negated() {
-        return multipliedBy(-1);
+        return of(
+                DateTimes.safeToInt(DateTimes.safeNegate(years)),
+                DateTimes.safeToInt(DateTimes.safeNegate(months)),
+                DateTimes.safeToInt(DateTimes.safeNegate(days)),
+                DateTimes.safeToInt(DateTimes.safeNegate(hours)),
+                DateTimes.safeToInt(DateTimes.safeNegate(minutes)),
+                DateTimes.safeToInt(DateTimes.safeNegate(seconds)),
+                DateTimes.safeToInt(DateTimes.safeNegate(nanos)));
     }
 
     //-----------------------------------------------------------------------
-    /**
-     * Returns a copy of this period with all amounts normalized to the
-     * standard ranges for date-time fields.
-     * <p>
-     * Two normalizations occur, one for years and months, and one for
-     * hours, minutes, seconds and nanoseconds.
-     * Days are not normalized, as a day may vary in length at daylight savings cutover.
-     * For example, a period of {@code P1Y15M1DT28H61M} will be normalized to {@code P2Y3M1DT29H1M}.
-     * <p>
-     * Note that this method normalizes using ISO-8601:
-     * <ul>
-     * <li>12 months in a year</li>
-     * <li>60 minutes in an hour</li>
-     * <li>60 seconds in a minute</li>
-     * <li>1,000,000,000 nanoseconds in a second</li>
-     * </ul>
-     * <p>
-     * This instance is immutable and unaffected by this method call.
-     *
-     * @return an {@code ISOPeriod} based on this period with the amounts normalized, not null
-     * @throws ArithmeticException if the capacity of any field is exceeded
-     */
-    public ISOPeriod normalized() {
-        if (this == ZERO) {
-            return ZERO;
-        }
-        int years = DateTimes.safeAdd(this.years, DateTimes.floorDiv(this.months, 12));
-        int months = DateTimes.floorMod(this.months, 12);
-        long total = (this.hours * 60L * 60L) + (this.minutes * 60L) + this.seconds;  // safe from overflow
-        long nanos = DateTimes.floorMod(this.nanos, 1000000000L);
-        total += DateTimes.floorDiv(this.nanos, 1000000000L);  // safe from overflow
-        int seconds = DateTimes.floorMod(total, 60);
-        total  = DateTimes.floorDiv(total, 60);
-        int minutes = DateTimes.floorMod(total, 60);
-        total  = DateTimes.floorDiv(total, 60);
-        int hours = DateTimes.safeToInt(total);
-        return of(years, months, days, hours, minutes, seconds, nanos);
-    }
-
     /**
      * Returns a copy of this period with all amounts normalized to the
      * standard ranges for date-time fields including the assumption that
@@ -949,7 +760,7 @@ public final class ISOPeriod
      * @return an {@code ISOPeriod} based on this period with the amounts normalized, not null
      * @throws ArithmeticException if the capacity of any field is exceeded
      */
-    public ISOPeriod normalizedWith24HourDays() {
+    public ISOPeriod normalized() {
         if (this == ZERO) {
             return ZERO;
         }
@@ -982,7 +793,7 @@ public final class ISOPeriod
     }
 
     /**
-     * Calculates the duration of this period.
+     * Returns the duration of this period.
      * <p>
      * The calculation uses the days, hours, minutes, seconds and nanoseconds fields.
      * If years or months are present an exception is thrown.

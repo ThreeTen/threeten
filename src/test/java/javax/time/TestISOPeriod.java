@@ -346,115 +346,6 @@ public class TestISOPeriod {
     }
 
     //-----------------------------------------------------------------------
-    // between
-    //-----------------------------------------------------------------------
-    @DataProvider(name="Between")
-    Object[][] data_between() {
-        return new Object[][] {
-            {2010, 1, 1, 2010, 1, 1, 0, 0, 0},
-            {2010, 1, 1, 2010, 1, 2, 0, 0, 1},
-            {2010, 1, 1, 2010, 1, 31, 0, 0, 30},
-            {2010, 1, 1, 2010, 2, 1, 0, 1, 0},
-            {2010, 1, 1, 2010, 2, 28, 0, 1, 27},
-            {2010, 1, 1, 2010, 3, 1, 0, 2, 0},
-            {2010, 1, 1, 2010, 12, 31, 0, 11, 30},
-            {2010, 1, 1, 2011, 1, 1, 1, 0, 0},
-            {2010, 1, 1, 2011, 12, 31, 1, 11, 30},
-            {2010, 1, 1, 2012, 1, 1, 2, 0, 0},
-            
-            {2010, 1, 10, 2010, 1, 1, 0, 0, -9},
-            {2010, 1, 10, 2010, 1, 2, 0, 0, -8},
-            {2010, 1, 10, 2010, 1, 9, 0, 0, -1},
-            {2010, 1, 10, 2010, 1, 10, 0, 0, 0},
-            {2010, 1, 10, 2010, 1, 11, 0, 0, 1},
-            {2010, 1, 10, 2010, 1, 31, 0, 0, 21},
-            {2010, 1, 10, 2010, 2, 1, 0, 0, 22},
-            {2010, 1, 10, 2010, 2, 9, 0, 0, 30},
-            {2010, 1, 10, 2010, 2, 10, 0, 1, 0},
-            {2010, 1, 10, 2010, 2, 28, 0, 1, 18},
-            {2010, 1, 10, 2010, 3, 1, 0, 1, 19},
-            {2010, 1, 10, 2010, 3, 9, 0, 1, 27},
-            {2010, 1, 10, 2010, 3, 10, 0, 2, 0},
-            {2010, 1, 10, 2010, 12, 31, 0, 11, 21},
-            {2010, 1, 10, 2011, 1, 1, 0, 11, 22},
-            {2010, 1, 10, 2011, 1, 9, 0, 11, 30},
-            {2010, 1, 10, 2011, 1, 10, 1, 0, 0},
-            
-            {2010, 3, 30, 2011, 5, 1, 1, 1, 1},
-            {2010, 4, 30, 2011, 5, 1, 1, 0, 1},
-            
-            {2010, 2, 28, 2012, 2, 27, 1, 11, 30},
-            {2010, 2, 28, 2012, 2, 28, 2, 0, 0},
-            {2010, 2, 28, 2012, 2, 29, 2, 0, 1},
-            
-            {2012, 2, 28, 2014, 2, 27, 1, 11, 30},
-            {2012, 2, 28, 2014, 2, 28, 2, 0, 0},
-            {2012, 2, 28, 2014, 3, 1, 2, 0, 1},
-            
-            {2012, 2, 29, 2014, 2, 28, 1, 11, 30},
-            {2012, 2, 29, 2014, 3, 1, 2, 0, 1},
-            {2012, 2, 29, 2014, 3, 2, 2, 0, 2},
-            
-            {2012, 2, 29, 2016, 2, 28, 3, 11, 30},
-            {2012, 2, 29, 2016, 2, 29, 4, 0, 0},
-            {2012, 2, 29, 2016, 3, 1, 4, 0, 1},
-            
-            {2010, 1, 1, 2009, 12, 31, 0, 0, -1},
-            {2010, 1, 1, 2009, 12, 30, 0, 0, -2},
-            {2010, 1, 1, 2009, 12, 2, 0, 0, -30},
-            {2010, 1, 1, 2009, 12, 1, 0, -1, 0},
-            {2010, 1, 1, 2009, 11, 30, 0, -1, -1},
-            {2010, 1, 1, 2009, 11, 2, 0, -1, -29},
-            {2010, 1, 1, 2009, 11, 1, 0, -2, 0},
-            {2010, 1, 1, 2009, 1, 2, 0, -11, -30},
-            {2010, 1, 1, 2009, 1, 1, -1, 0, 0},
-            
-            {2010, 1, 15, 2010, 1, 15, 0, 0, 0},
-            {2010, 1, 15, 2010, 1, 14, 0, 0, -1},
-            {2010, 1, 15, 2010, 1, 1, 0, 0, -14},
-            {2010, 1, 15, 2009, 12, 31, 0, 0, -15},
-            {2010, 1, 15, 2009, 12, 16, 0, 0, -30},
-            {2010, 1, 15, 2009, 12, 15, 0, -1, 0},
-            {2010, 1, 15, 2009, 12, 14, 0, -1, -1},
-            
-            {2010, 2, 28, 2009, 3, 1, 0, -11, -27},
-            {2010, 2, 28, 2009, 2, 28, -1, 0, 0},
-            {2010, 2, 28, 2009, 2, 27, -1, 0, -1},
-            
-            {2010, 2, 28, 2008, 2, 29, -1, -11, -28},
-            {2010, 2, 28, 2008, 2, 28, -2, 0, 0},
-            {2010, 2, 28, 2008, 2, 27, -2, 0, -1},
-            
-            {2012, 2, 29, 2009, 3, 1, -2, -11, -28},
-            {2012, 2, 29, 2009, 2, 28, -3, 0, -1},
-            {2012, 2, 29, 2009, 2, 27, -3, 0, -2},
-            
-            {2012, 2, 29, 2008, 3, 1, -3, -11, -28},
-            {2012, 2, 29, 2008, 2, 29, -4, 0, 0},
-            {2012, 2, 29, 2008, 2, 28, -4, 0, -1},
-        };
-    }
-
-    @Test(dataProvider="Between")
-    public void factory_between(int y1, int m1, int d1, int y2, int m2, int d2, int ye, int me, int de) {
-        LocalDate start = LocalDate.of(y1, m1, d1);
-        LocalDate end = LocalDate.of(y2, m2, d2);
-        ISOPeriod test = ISOPeriod.between(start, end);
-        assertPeriod(test, ye, me, de, 0, 0, 0, 0);
-        //assertEquals(start.plus(test), end);
-    }
-
-    @Test(expectedExceptions=NullPointerException.class)
-    public void factory_between_nullFirst() {
-        ISOPeriod.between((LocalDate) null, LocalDate.of(2010, 1, 1));
-    }
-
-    @Test(expectedExceptions=NullPointerException.class)
-    public void factory_between_nullSecond() {
-        ISOPeriod.between(LocalDate.of(2010, 1, 1), (LocalDate) null);
-    }
-
-    //-----------------------------------------------------------------------
     // parse()
     //-----------------------------------------------------------------------
     @Test(dataProvider="toStringAndParse")
@@ -1110,72 +1001,6 @@ public class TestISOPeriod {
     }
 
     //-----------------------------------------------------------------------
-    // multipliedBy()
-    //-----------------------------------------------------------------------
-    public void test_multipliedBy() {
-        ISOPeriod test = ISOPeriod.of(1, 2, 3, 4, 5, 6, 7);
-        assertPeriod(test.multipliedBy(2), 2, 4, 6, 8, 10, 12, 14);
-        assertPeriod(test.multipliedBy(-3), -3, -6, -9, -12, -15, -18, -21);
-    }
-
-    public void test_multipliedBy_zeroBase() {
-        assertSame(ISOPeriod.ZERO.multipliedBy(2), ISOPeriod.ZERO);
-    }
-
-    public void test_multipliedBy_zero() {
-        ISOPeriod test = ISOPeriod.of(1, 2, 3, 4, 5, 6, 7);
-        assertSame(test.multipliedBy(0), ISOPeriod.ZERO);
-    }
-
-    public void test_multipliedBy_one() {
-        ISOPeriod test = ISOPeriod.of(1, 2, 3, 4, 5, 6, 7);
-        assertSame(test.multipliedBy(1), test);
-    }
-
-    @Test(expectedExceptions=ArithmeticException.class)
-    public void test_multipliedBy_overflowTooBig() {
-        ISOPeriod test = ISOPeriod.of(Integer.MAX_VALUE / 2 + 1, YEARS);
-        test.multipliedBy(2);
-    }
-
-    @Test(expectedExceptions=ArithmeticException.class)
-    public void test_multipliedBy_overflowTooSmall() {
-        ISOPeriod test = ISOPeriod.of(Integer.MIN_VALUE / 2 - 1, YEARS);
-        test.multipliedBy(2);
-    }
-
-    //-----------------------------------------------------------------------
-    // dividedBy()
-    //-----------------------------------------------------------------------
-    public void test_dividedBy() {
-        ISOPeriod test = ISOPeriod.of(12, 12, 12, 12, 12, 11, 9);
-        assertSame(ISOPeriod.ZERO.dividedBy(2), ISOPeriod.ZERO);
-        assertSame(test.dividedBy(1), test);
-        assertPeriod(test.dividedBy(2), 6, 6, 6, 6, 6, 5, 4);
-        assertPeriod(test.dividedBy(-3), -4, -4, -4, -4, -4, -3, -3);
-    }
-
-    public void test_dividedBy_zeroBase() {
-        assertSame(ISOPeriod.ZERO.dividedBy(2), ISOPeriod.ZERO);
-    }
-
-    public void test_dividedBy_one() {
-        ISOPeriod test = ISOPeriod.of(12, 12, 12, 12, 12, 11, 11);
-        assertSame(test.dividedBy(1), test);
-    }
-
-    @Test(expectedExceptions=ArithmeticException.class)
-    public void test_dividedBy_divideByZero() {
-        ISOPeriod test = ISOPeriod.of(12, 12, 12, 12, 12, 12, 12);
-        test.dividedBy(0);
-    }
-
-    @Test(expectedExceptions=ArithmeticException.class)
-    public void test_dividedBy_zeroBase_divideByZero() {
-        ISOPeriod.ZERO.dividedBy(0);
-    }
-
-    //-----------------------------------------------------------------------
     // negated()
     //-----------------------------------------------------------------------
     public void test_negated() {
@@ -1201,6 +1026,7 @@ public class TestISOPeriod {
     //-----------------------------------------------------------------------
     public void test_normalized() {
         assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 6, 7).normalized(), 1, 2, 3, 4, 5, 6, 7);
+        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 6).normalized(), 1, 2, 3, 4, 5, 6, 0);
     }
 
     public void test_normalized_months() {
@@ -1208,7 +1034,7 @@ public class TestISOPeriod {
         assertPeriod(ISOPeriod.of(1, 12, 3, 4, 5, 6).normalized(), 2, 0, 3, 4, 5, 6, 0);
         assertPeriod(ISOPeriod.of(1, 23, 3, 4, 5, 6).normalized(), 2, 11, 3, 4, 5, 6, 0);
         assertPeriod(ISOPeriod.of(1, 24, 3, 4, 5, 6).normalized(), 3, 0, 3, 4, 5, 6, 0);
-        
+
         assertPeriod(ISOPeriod.of(3, -2, 3, 4, 5, 6).normalized(), 2, 10, 3, 4, 5, 6, 0);
     }
 
@@ -1223,9 +1049,7 @@ public class TestISOPeriod {
         assertPeriod(ISOPeriod.of(1, 2, 3, 4, 59, 59, 1000000000).normalized(), 1, 2, 3, 5, 0, 0, 0);
         
         assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 59, 999999999).normalized(), 1, 2, 3, 23, 59, 59, 999999999);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 59, 1000000000).normalized(), 1, 2, 3, 24, 0, 0, 0);
-        
-        assertPeriod(ISOPeriod.of(1, 2, 3, 0, 1, 0, -1).normalized(), 1, 2, 3, 0, 0, 59, 999999999);
+        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 59, 1000000000).normalized(), 1, 2, 4, 0, 0, 0, 0);
     }
 
     public void test_normalized_seconds() {
@@ -1238,9 +1062,9 @@ public class TestISOPeriod {
         assertPeriod(ISOPeriod.of(1, 2, 3, 4, 59, 60).normalized(), 1, 2, 3, 5, 0, 0, 0);
         
         assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 59).normalized(), 1, 2, 3, 23, 59, 59, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 60).normalized(), 1, 2, 3, 24, 0, 0, 0);
+        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 60).normalized(), 1, 2, 4, 0, 0, 0, 0);
         
-        assertPeriod(ISOPeriod.of(1, 2, 3, 0, 0, -1).normalized(), 1, 2, 3, -1, 59, 59, 0);
+        assertPeriod(ISOPeriod.of(1, 2, 3, 0, 0, -1).normalized(), 1, 2, 2, 23, 59, 59, 0);
     }
 
     public void test_normalized_minutes() {
@@ -1250,7 +1074,7 @@ public class TestISOPeriod {
         assertPeriod(ISOPeriod.of(1, 2, 3, 4, 120, 6).normalized(), 1, 2, 3, 6, 0, 6, 0);
         
         assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 6).normalized(), 1, 2, 3, 23, 59, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 60, 6).normalized(), 1, 2, 3, 24, 0, 6, 0);
+        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 60, 6).normalized(), 1, 2, 4, 0, 0, 6, 0);
         
         assertPeriod(ISOPeriod.of(1, 2, 3, 23, -1, 0).normalized(), 1, 2, 3, 22, 59, 0, 0);
         assertPeriod(ISOPeriod.of(1, 2, 3, 23, -1, 60).normalized(), 1, 2, 3, 23, 0, 0, 0);
@@ -1258,7 +1082,9 @@ public class TestISOPeriod {
 
     public void test_normalized_hours() {
         assertPeriod(ISOPeriod.of(1, 2, 3, 23, 5, 6).normalized(), 1, 2, 3, 23, 5, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 24, 5, 6).normalized(), 1, 2, 3, 24, 5, 6, 0);
+        assertPeriod(ISOPeriod.of(1, 2, 3, 24, 5, 6).normalized(), 1, 2, 4, 0, 5, 6, 0);
+        assertPeriod(ISOPeriod.of(1, 2, 3, 47, 5, 6).normalized(), 1, 2, 4, 23, 5, 6, 0);
+        assertPeriod(ISOPeriod.of(1, 2, 3, 48, 5, 6).normalized(), 1, 2, 5, 0, 5, 6, 0);
     }
 
     public void test_normalized_zero() {
@@ -1274,11 +1100,13 @@ public class TestISOPeriod {
         total = total / 60 + 5;
         int mins = (int) (total % 60);
         total = total / 60 + 4;
+        int hours = (int) (total % 24);
+        total = total / 24 + 3;
         if (total > Integer.MAX_VALUE) {
             throw new AssertionError("Bad test");
         }
-        int hours = (int) total;
-        assertPeriod(big.normalized(), 1, 2, 3, hours, mins, secs, nanos);
+        int days = (int) total;
+        assertPeriod(big.normalized(), 1, 2, days, hours, mins, secs, nanos);
     }
 
     @Test(expectedExceptions=ArithmeticException.class)
@@ -1293,107 +1121,6 @@ public class TestISOPeriod {
         ISOPeriod base = ISOPeriod.of(0, 0, Integer.MAX_VALUE,
                 Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Long.MAX_VALUE);
         base.normalized();
-    }
-
-    //-----------------------------------------------------------------------
-    // normalizedWith24HourDays()
-    //-----------------------------------------------------------------------
-    public void test_normalizedWith24HourDays() {
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 6).normalizedWith24HourDays(), 1, 2, 3, 4, 5, 6, 0);
-        
-        assertPeriod(ISOPeriod.of(3, -2, 3, 4, 5, 6).normalizedWith24HourDays(), 2, 10, 3, 4, 5, 6, 0);
-    }
-
-    public void test_normalizedWith24HourDays_months() {
-        assertPeriod(ISOPeriod.of(1, 11, 3, 4, 5, 6).normalizedWith24HourDays(), 1, 11, 3, 4, 5, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 12, 3, 4, 5, 6).normalizedWith24HourDays(), 2, 0, 3, 4, 5, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 23, 3, 4, 5, 6).normalizedWith24HourDays(), 2, 11, 3, 4, 5, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 24, 3, 4, 5, 6).normalizedWith24HourDays(), 3, 0, 3, 4, 5, 6, 0);
-    }
-
-    public void test_normalizedWith24HourDays_nanos() {
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 6, 999999999).normalizedWith24HourDays(), 1, 2, 3, 4, 5, 6, 999999999);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 6, 1000000000).normalizedWith24HourDays(), 1, 2, 3, 4, 5, 7, 0);
-        
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 59, 999999999).normalizedWith24HourDays(), 1, 2, 3, 4, 5, 59, 999999999);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 59, 1000000000).normalizedWith24HourDays(), 1, 2, 3, 4, 6, 0, 0);
-        
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 59, 59, 999999999).normalizedWith24HourDays(), 1, 2, 3, 4, 59, 59, 999999999);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 59, 59, 1000000000).normalizedWith24HourDays(), 1, 2, 3, 5, 0, 0, 0);
-        
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 59, 999999999).normalizedWith24HourDays(), 1, 2, 3, 23, 59, 59, 999999999);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 59, 1000000000).normalizedWith24HourDays(), 1, 2, 4, 0, 0, 0, 0);
-    }
-
-    public void test_normalizedWith24HourDays_seconds() {
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 59).normalizedWith24HourDays(), 1, 2, 3, 4, 5, 59, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 60).normalizedWith24HourDays(), 1, 2, 3, 4, 6, 0, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 119).normalizedWith24HourDays(), 1, 2, 3, 4, 6, 59, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 5, 120).normalizedWith24HourDays(), 1, 2, 3, 4, 7, 0, 0);
-        
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 59, 59).normalizedWith24HourDays(), 1, 2, 3, 4, 59, 59, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 59, 60).normalizedWith24HourDays(), 1, 2, 3, 5, 0, 0, 0);
-        
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 59).normalizedWith24HourDays(), 1, 2, 3, 23, 59, 59, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 60).normalizedWith24HourDays(), 1, 2, 4, 0, 0, 0, 0);
-        
-        assertPeriod(ISOPeriod.of(1, 2, 3, 0, 0, -1).normalizedWith24HourDays(), 1, 2, 2, 23, 59, 59, 0);
-    }
-
-    public void test_normalizedWith24HourDays_minutes() {
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 59, 6).normalizedWith24HourDays(), 1, 2, 3, 4, 59, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 60, 6).normalizedWith24HourDays(), 1, 2, 3, 5, 0, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 119, 6).normalizedWith24HourDays(), 1, 2, 3, 5, 59, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 4, 120, 6).normalizedWith24HourDays(), 1, 2, 3, 6, 0, 6, 0);
-        
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 59, 6).normalizedWith24HourDays(), 1, 2, 3, 23, 59, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 60, 6).normalizedWith24HourDays(), 1, 2, 4, 0, 0, 6, 0);
-        
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, -1, 0).normalizedWith24HourDays(), 1, 2, 3, 22, 59, 0, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, -1, 60).normalizedWith24HourDays(), 1, 2, 3, 23, 0, 0, 0);
-    }
-
-    public void test_normalizedWith24HourDays_hours() {
-        assertPeriod(ISOPeriod.of(1, 2, 3, 23, 5, 6).normalizedWith24HourDays(), 1, 2, 3, 23, 5, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 24, 5, 6).normalizedWith24HourDays(), 1, 2, 4, 0, 5, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 47, 5, 6).normalizedWith24HourDays(), 1, 2, 4, 23, 5, 6, 0);
-        assertPeriod(ISOPeriod.of(1, 2, 3, 48, 5, 6).normalizedWith24HourDays(), 1, 2, 5, 0, 5, 6, 0);
-    }
-
-    public void test_normalizedWith24HourDays_zero() {
-        assertSame(ISOPeriod.ZERO.normalizedWith24HourDays(), ISOPeriod.ZERO);
-    }
-
-    public void test_normalizedWith24HourDays_bigNanos() {
-        ISOPeriod big = ISOPeriod.of(1, 2, 3, 4, 5, 6, Long.MAX_VALUE);
-        long total = Long.MAX_VALUE;
-        long nanos = total % 1000000000L;
-        total = total / 1000000000L + 6;
-        int secs = (int) (total % 60);
-        total = total / 60 + 5;
-        int mins = (int) (total % 60);
-        total = total / 60 + 4;
-        int hours = (int) (total % 24);
-        total = total / 24 + 3;
-        if (total > Integer.MAX_VALUE) {
-            throw new AssertionError("Bad test");
-        }
-        int days = (int) total;
-        assertPeriod(big.normalizedWith24HourDays(), 1, 2, days, hours, mins, secs, nanos);
-    }
-
-    @Test(expectedExceptions=ArithmeticException.class)
-    public void test_normalizedWith24HourDays_max() {
-        ISOPeriod base = ISOPeriod.of(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE,
-                Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Long.MAX_VALUE);
-        base.normalizedWith24HourDays();
-    }
-
-    @Test(expectedExceptions=ArithmeticException.class)
-    public void test_normalizedWith24HourDays_maxTime() {
-        ISOPeriod base = ISOPeriod.of(0, 0, Integer.MAX_VALUE,
-                Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Long.MAX_VALUE);
-        base.normalizedWith24HourDays();
     }
 
 
