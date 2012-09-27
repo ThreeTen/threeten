@@ -254,8 +254,7 @@ public final class ISOPeriod
      * and the units for decades, centuries, and millennia are converted to
      * equivalent years.
      *
-     * @param amount  the amount of the period, measured in terms of the unit, positive or negative
-     * @param unit  the unit that the period is measured in, not null
+     * @param period  the amount of the period, measured in terms of the unit, positive or negative
      * @return the period, not null
      * @throws DateTimeException if the unit is not supported
      */
@@ -383,8 +382,8 @@ public final class ISOPeriod
      * <p>
      * Adding the result of this method to the start time will always yield the end time.
      *
-     * @param startDate  the start date, inclusive, not null
-     * @param endDate  the end date, exclusive, not null
+     * @param startTime  the start date, inclusive, not null
+     * @param endTime  the end date, exclusive, not null
      * @return the period in days, not null
      * @throws ArithmeticException if the period exceeds the supported range
      */

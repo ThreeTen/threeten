@@ -134,7 +134,7 @@ public abstract class Chronology {
      * If the locale does not contain calendar system information, the standard
      * ISO calendar system is used.
      * 
-     * @param name  the calendar system name, not null
+     * @param locale  the Locale, not null
      * @return the calendar system associated with the locale, not null
      * @throws DateTimeException if the locale-specified calendar cannot be found
      */
@@ -304,7 +304,7 @@ public abstract class Chronology {
     /**
      * Creates the current date in this calendar system from the system clock in the specified time-zone.
      * <p>
-     * This will query the {@link Clock#system(ZoneId)) system clock} to obtain the current date.
+     * This will query the {@link Clock#system(ZoneId) system clock} to obtain the current date.
      * Specifying the time-zone avoids dependence on the default time-zone.
      * <p>
      * Using this method will prevent the ability to use an alternate clock for testing
