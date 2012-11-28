@@ -33,8 +33,6 @@ package javax.time.format;
 
 import static org.testng.Assert.assertEquals;
 
-import javax.time.format.DateTimeFormatterBuilder.CharLiteralPrinterParser;
-
 import org.testng.annotations.Test;
 
 /**
@@ -46,34 +44,29 @@ public class TestCharLiteralPrinter extends AbstractTestPrinterParser {
     //-----------------------------------------------------------------------
     public void test_print_emptyCalendrical() throws Exception {
         buf.append("EXISTING");
-        CharLiteralPrinterParser pp = new CharLiteralPrinterParser('a');
-        pp.print(printEmptyContext, buf);
+        getFormatter('a').printTo(EMPTY_DTA, buf);
         assertEquals(buf.toString(), "EXISTINGa");
     }
 
     public void test_print_dateTime() throws Exception {
         buf.append("EXISTING");
-        CharLiteralPrinterParser pp = new CharLiteralPrinterParser('a');
-        pp.print(printContext, buf);
+        getFormatter('a').printTo(dta, buf);
         assertEquals(buf.toString(), "EXISTINGa");
     }
 
     public void test_print_emptyAppendable() throws Exception {
-        CharLiteralPrinterParser pp = new CharLiteralPrinterParser('a');
-        pp.print(printContext, buf);
+        getFormatter('a').printTo(dta, buf);
         assertEquals(buf.toString(), "a");
     }
 
     //-----------------------------------------------------------------------
     public void test_toString() throws Exception {
-        CharLiteralPrinterParser pp = new CharLiteralPrinterParser('a');
-        assertEquals(pp.toString(), "'a'");
+        assertEquals(getFormatter('a').toString(), "'a'");
     }
 
     //-----------------------------------------------------------------------
     public void test_toString_apos() throws Exception {
-        CharLiteralPrinterParser pp = new CharLiteralPrinterParser('\'');
-        assertEquals(pp.toString(), "''");
+        assertEquals(getFormatter('\'').toString(), "''");
     }
 
 }

@@ -39,7 +39,6 @@ import static org.testng.Assert.fail;
 import javax.time.DateTimeException;
 import javax.time.LocalDate;
 import javax.time.calendrical.MockFieldValue;
-import javax.time.format.DateTimeFormatterBuilder.NumberPrinterParser;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -53,15 +52,12 @@ public class TestNumberPrinter extends AbstractTestPrinterParser {
     //-----------------------------------------------------------------------
     @Test(expectedExceptions=DateTimeException.class)
     public void test_print_emptyCalendrical() throws Exception {
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NEVER);
-        pp.print(printEmptyContext, buf);
+        getFormatter(DAY_OF_MONTH, 1, 2, SignStyle.NEVER).printTo(EMPTY_DTA, buf);
     }
 
     public void test_print_append() throws Exception {
-        printContext.setDateTime(LocalDate.of(2012, 1, 3));
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NEVER);
         buf.append("EXISTING");
-        pp.print(printContext, buf);
+        getFormatter(DAY_OF_MONTH, 1, 2, SignStyle.NEVER).printTo(LocalDate.of(2012, 1, 3), buf);
         assertEquals(buf.toString(), "EXISTING3");
     }
 
@@ -158,10 +154,8 @@ public class TestNumberPrinter extends AbstractTestPrinterParser {
 
     @Test(dataProvider="Pad")
     public void test_pad_NOT_NEGATIVE(int minPad, int maxPad, long value, String result) throws Exception {
-        printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value));
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, minPad, maxPad, SignStyle.NOT_NEGATIVE);
         try {
-            pp.print(printContext, buf);
+            getFormatter(DAY_OF_MONTH, minPad, maxPad, SignStyle.NOT_NEGATIVE).printTo(new MockFieldValue(DAY_OF_MONTH, value), buf);
             if (result == null || value < 0) {
                 fail("Expected exception");
             }
@@ -177,10 +171,8 @@ public class TestNumberPrinter extends AbstractTestPrinterParser {
 
     @Test(dataProvider="Pad")
     public void test_pad_NEVER(int minPad, int maxPad, long value, String result) throws Exception {
-        printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value));
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, minPad, maxPad, SignStyle.NEVER);
         try {
-            pp.print(printContext, buf);
+            getFormatter(DAY_OF_MONTH, minPad, maxPad, SignStyle.NEVER).printTo(new MockFieldValue(DAY_OF_MONTH, value), buf);
             if (result == null) {
                 fail("Expected exception");
             }
@@ -195,10 +187,8 @@ public class TestNumberPrinter extends AbstractTestPrinterParser {
 
     @Test(dataProvider="Pad")
     public void test_pad_NORMAL(int minPad, int maxPad, long value, String result) throws Exception {
-        printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value));
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, minPad, maxPad, SignStyle.NORMAL);
         try {
-            pp.print(printContext, buf);
+            getFormatter(DAY_OF_MONTH, minPad, maxPad, SignStyle.NORMAL).printTo(new MockFieldValue(DAY_OF_MONTH, value), buf);
             if (result == null) {
                 fail("Expected exception");
             }
@@ -213,10 +203,8 @@ public class TestNumberPrinter extends AbstractTestPrinterParser {
 
     @Test(dataProvider="Pad")
     public void test_pad_ALWAYS(int minPad, int maxPad, long value, String result) throws Exception {
-        printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value));
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, minPad, maxPad, SignStyle.ALWAYS);
         try {
-            pp.print(printContext, buf);
+            getFormatter(DAY_OF_MONTH, minPad, maxPad, SignStyle.ALWAYS).printTo(new MockFieldValue(DAY_OF_MONTH, value), buf);
             if (result == null) {
                 fail("Expected exception");
             }
@@ -231,10 +219,8 @@ public class TestNumberPrinter extends AbstractTestPrinterParser {
 
     @Test(dataProvider="Pad")
     public void test_pad_EXCEEDS_PAD(int minPad, int maxPad, long value, String result) throws Exception {
-        printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value));
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, minPad, maxPad, SignStyle.EXCEEDS_PAD);
         try {
-            pp.print(printContext, buf);
+            getFormatter(DAY_OF_MONTH, minPad, maxPad, SignStyle.EXCEEDS_PAD).printTo(new MockFieldValue(DAY_OF_MONTH, value), buf);
             if (result == null) {
                 fail("Expected exception");
                 return;  // unreachable
@@ -253,18 +239,15 @@ public class TestNumberPrinter extends AbstractTestPrinterParser {
 
     //-----------------------------------------------------------------------
     public void test_toString1() throws Exception {
-        NumberPrinterParser pp = new NumberPrinterParser(HOUR_OF_DAY, 1, 19, SignStyle.NORMAL);
-        assertEquals(pp.toString(), "Value(HourOfDay)");
+        assertEquals(getFormatter(HOUR_OF_DAY, 1, 19, SignStyle.NORMAL).toString(), "Value(HourOfDay)");
     }
 
     public void test_toString2() throws Exception {
-        NumberPrinterParser pp = new NumberPrinterParser(HOUR_OF_DAY, 2, 2, SignStyle.NOT_NEGATIVE);
-        assertEquals(pp.toString(), "Value(HourOfDay,2)");
+        assertEquals(getFormatter(HOUR_OF_DAY, 2, 2, SignStyle.NOT_NEGATIVE).toString(), "Value(HourOfDay,2)");
     }
 
     public void test_toString3() throws Exception {
-        NumberPrinterParser pp = new NumberPrinterParser(HOUR_OF_DAY, 1, 2, SignStyle.NOT_NEGATIVE);
-        assertEquals(pp.toString(), "Value(HourOfDay,1,2,NOT_NEGATIVE)");
+        assertEquals(getFormatter(HOUR_OF_DAY, 1, 2, SignStyle.NOT_NEGATIVE).toString(), "Value(HourOfDay,1,2,NOT_NEGATIVE)");
     }
 
 }

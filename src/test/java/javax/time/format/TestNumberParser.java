@@ -33,11 +33,14 @@ package javax.time.format;
 
 import static javax.time.calendrical.ChronoField.DAY_OF_MONTH;
 import static javax.time.calendrical.ChronoField.DAY_OF_WEEK;
+import static javax.time.calendrical.ChronoField.DAY_OF_YEAR;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.text.ParsePosition;
+
+import javax.time.calendrical.DateTimeBuilder;
 import javax.time.calendrical.DateTimeField;
-import javax.time.format.DateTimeFormatterBuilder.NumberPrinterParser;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -52,18 +55,18 @@ public class TestNumberParser extends AbstractTestPrinterParser {
     @DataProvider(name="error")
     Object[][] data_error() {
         return new Object[][] {
-            {new NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NEVER), "12", -1, IndexOutOfBoundsException.class},
-            {new NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NEVER), "12", 3, IndexOutOfBoundsException.class},
+            {DAY_OF_MONTH, 1, 2, SignStyle.NEVER, "12", -1, IndexOutOfBoundsException.class},
+            {DAY_OF_MONTH, 1, 2, SignStyle.NEVER, "12", 3, IndexOutOfBoundsException.class},
         };
     }
 
     @Test(dataProvider="error")
-    public void test_parse_error(NumberPrinterParser pp, String text, int pos, Class<?> expected) {
+    public void test_parse_error(DateTimeField field, int min, int max, SignStyle style, String text, int pos, Class<?> expected) {
         try {
-            pp.parse(parseContext, text, pos);
+            getFormatter(field, min, max, style).parseToBuilder(text, new ParsePosition(pos));
+            assertTrue(false);
         } catch (RuntimeException ex) {
             assertTrue(expected.isInstance(ex));
-            assertEquals(parseContext.getParsed().size(), 0);
         }
     }
 
@@ -94,16 +97,16 @@ public class TestNumberParser extends AbstractTestPrinterParser {
             {1, 19, SignStyle.NORMAL, 0, "9223372036854775808", 0, 18, 922337203685477580L},  // last digit not parsed
             {1, 19, SignStyle.NORMAL, 0, "-9223372036854775809", 0, 19, -922337203685477580L}, // last digit not parsed
             // no match
-            {1, 2, SignStyle.NEVER, 1, "A1", 0, ~0, 0},
-            {1, 2, SignStyle.NEVER, 1, " 1", 0, ~0, 0},
-            {1, 2, SignStyle.NEVER, 1, "  1", 1, ~1, 0},
-            {2, 2, SignStyle.NEVER, 1, "1", 0, ~0, 0},
-            {2, 2, SignStyle.NEVER, 1, "Xxx1", 0, ~0, 0},
-            {2, 2, SignStyle.NEVER, 1, "1", 1, ~1, 0},
-            {2, 2, SignStyle.NEVER, 1, "Xxx1", 4, ~4, 0},
-            {2, 2, SignStyle.NEVER, 1, "1-2", 0, ~0, 0},
-            {1, 19, SignStyle.NORMAL, 0, "-000000000000000000", 0, ~0, 0},
-            {1, 19, SignStyle.NORMAL, 0, "-0000000000000000000", 0, ~0, 0},
+            {1, 2, SignStyle.NEVER, 1, "A1", 0, 0, 0},
+            {1, 2, SignStyle.NEVER, 1, " 1", 0, 0, 0},
+            {1, 2, SignStyle.NEVER, 1, "  1", 1, 1, 0},
+            {2, 2, SignStyle.NEVER, 1, "1", 0, 0, 0},
+            {2, 2, SignStyle.NEVER, 1, "Xxx1", 0, 0, 0},
+            {2, 2, SignStyle.NEVER, 1, "1", 1, 1, 0},
+            {2, 2, SignStyle.NEVER, 1, "Xxx1", 4, 4, 0},
+            {2, 2, SignStyle.NEVER, 1, "1-2", 0, 0, 0},
+            {1, 19, SignStyle.NORMAL, 0, "-000000000000000000", 0, 0, 0},
+            {1, 19, SignStyle.NORMAL, 0, "-0000000000000000000", 0, 0, 0},
             // parse reserving space 1 (adjacent-parsing)
             {1, 1, SignStyle.NEVER, 1, "12", 0, 1, 1L},
             {1, 19, SignStyle.NEVER, 1, "12", 0, 1, 1L},
@@ -112,7 +115,7 @@ public class TestNumberParser extends AbstractTestPrinterParser {
             {1, 19, SignStyle.NEVER, 1, "123456789012345678901234567890", 0, 19, 1234567890123456789L},
             {1, 19, SignStyle.NEVER, 1, "1", 0, 1, 1L},  // error from next field
             {2, 2, SignStyle.NEVER, 1, "12", 0, 2, 12L},  // error from next field
-            {2, 19, SignStyle.NEVER, 1, "1", 0, ~0, 0},
+            {2, 19, SignStyle.NEVER, 1, "1", 0, 0, 0},
             // parse reserving space 2 (adjacent-parsing)
             {1, 1, SignStyle.NEVER, 2, "123", 0, 1, 1L},
             {1, 19, SignStyle.NEVER, 2, "123", 0, 1, 1L},
@@ -122,37 +125,45 @@ public class TestNumberParser extends AbstractTestPrinterParser {
             {1, 19, SignStyle.NEVER, 2, "1", 0, 1, 1L},  // error from next field
             {1, 19, SignStyle.NEVER, 2, "12", 0, 1, 1L},  // error from next field
             {2, 2, SignStyle.NEVER, 2, "12", 0, 2, 12L},  // error from next field
-            {2, 19, SignStyle.NEVER, 2, "1", 0, ~0, 0},
-            {2, 19, SignStyle.NEVER, 2, "1AAAAABBBBBCCCCC", 0, ~0, 0},
+            {2, 19, SignStyle.NEVER, 2, "1", 0, 0, 0},
+            {2, 19, SignStyle.NEVER, 2, "1AAAAABBBBBCCCCC", 0, 0, 0},
         };
     }
 
     //-----------------------------------------------------------------------
     @Test(dataProvider="parseData")
     public void test_parse_fresh(int minWidth, int maxWidth, SignStyle signStyle, int subsequentWidth, String text, int pos, int expectedPos, long expectedValue) {
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, minWidth, maxWidth, signStyle);
+        ParsePosition ppos = new ParsePosition(pos);
+        DateTimeFormatter dtf = getFormatter(DAY_OF_MONTH, minWidth, maxWidth, signStyle);
         if (subsequentWidth > 0) {
-            pp = pp.withSubsequentWidth(subsequentWidth);
+            // hacky, to reserve space
+            dtf = builder.appendValue(DAY_OF_YEAR, subsequentWidth).toFormatter(locale).withSymbols(symbols);
         }
-        int newPos = pp.parse(parseContext, text, pos);
-        assertEquals(newPos, expectedPos);
-        if (expectedPos > 0) {
-            assertParsed(parseContext, DAY_OF_MONTH, expectedValue);
+        DateTimeBuilder dtb = dtf.parseToBuilder(text, ppos);
+        if (ppos.getErrorIndex() != -1) {
+            assertEquals(ppos.getErrorIndex(), expectedPos);
         } else {
-            assertEquals(parseContext.getParsed().size(), 0);
+            assertTrue(subsequentWidth >= 0);
+            assertEquals(ppos.getIndex(), expectedPos + subsequentWidth);
+            assertEquals(dtb.getLong(DAY_OF_MONTH), expectedValue);
         }
     }
 
     @Test(dataProvider="parseData")
     public void test_parse_textField(int minWidth, int maxWidth, SignStyle signStyle, int subsequentWidth, String text, int pos, int expectedPos, long expectedValue) {
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_WEEK, minWidth, maxWidth, signStyle);
+        ParsePosition ppos = new ParsePosition(pos);
+        DateTimeFormatter dtf = getFormatter(DAY_OF_WEEK, minWidth, maxWidth, signStyle);
         if (subsequentWidth > 0) {
-            pp = pp.withSubsequentWidth(subsequentWidth);
+            // hacky, to reserve space
+            dtf = builder.appendValue(DAY_OF_YEAR, subsequentWidth).toFormatter(locale).withSymbols(symbols);
         }
-        int newPos = pp.parse(parseContext, text, pos);
-        assertEquals(newPos, expectedPos);
-        if (expectedPos > 0) {
-            assertParsed(parseContext, DAY_OF_WEEK, expectedValue);
+        DateTimeBuilder dtb = dtf.parseToBuilder(text, ppos);
+        if (ppos.getErrorIndex() != -1) {
+            assertEquals(ppos.getErrorIndex(), expectedPos);
+        } else {
+            assertTrue(subsequentWidth >= 0);
+            assertEquals(ppos.getIndex(), expectedPos + subsequentWidth);
+            assertEquals(dtb.getLong(DAY_OF_WEEK), expectedValue);
         }
     }
 
@@ -180,89 +191,93 @@ public class TestNumberParser extends AbstractTestPrinterParser {
             {"5", 1, 2, SignStyle.NEVER, 1, 5},
             {"50", 1, 2, SignStyle.NEVER, 2, 50},
             {"500", 1, 2, SignStyle.NEVER, 2, 50},
-            {"-0", 1, 2, SignStyle.NEVER, ~0, null},
-            {"-5", 1, 2, SignStyle.NEVER, ~0, null},
-            {"-50", 1, 2, SignStyle.NEVER, ~0, null},
-            {"-500", 1, 2, SignStyle.NEVER, ~0, null},
-            {"-AAA", 1, 2, SignStyle.NEVER, ~0, null},
-            {"+0", 1, 2, SignStyle.NEVER, ~0, null},
-            {"+5", 1, 2, SignStyle.NEVER, ~0, null},
-            {"+50", 1, 2, SignStyle.NEVER, ~0, null},
-            {"+500", 1, 2, SignStyle.NEVER, ~0, null},
-            {"+AAA", 1, 2, SignStyle.NEVER, ~0, null},
+            {"-0", 1, 2, SignStyle.NEVER, 0, null},
+            {"-5", 1, 2, SignStyle.NEVER, 0, null},
+            {"-50", 1, 2, SignStyle.NEVER, 0, null},
+            {"-500", 1, 2, SignStyle.NEVER, 0, null},
+            {"-AAA", 1, 2, SignStyle.NEVER, 0, null},
+            {"+0", 1, 2, SignStyle.NEVER, 0, null},
+            {"+5", 1, 2, SignStyle.NEVER, 0, null},
+            {"+50", 1, 2, SignStyle.NEVER, 0, null},
+            {"+500", 1, 2, SignStyle.NEVER, 0, null},
+            {"+AAA", 1, 2, SignStyle.NEVER, 0, null},
 
             // not negative
             {"0", 1, 2, SignStyle.NOT_NEGATIVE, 1, 0},
             {"5", 1, 2, SignStyle.NOT_NEGATIVE, 1, 5},
             {"50", 1, 2, SignStyle.NOT_NEGATIVE, 2, 50},
             {"500", 1, 2, SignStyle.NOT_NEGATIVE, 2, 50},
-            {"-0", 1, 2, SignStyle.NOT_NEGATIVE, ~0, null},
-            {"-5", 1, 2, SignStyle.NOT_NEGATIVE, ~0, null},
-            {"-50", 1, 2, SignStyle.NOT_NEGATIVE, ~0, null},
-            {"-500", 1, 2, SignStyle.NOT_NEGATIVE, ~0, null},
-            {"-AAA", 1, 2, SignStyle.NOT_NEGATIVE, ~0, null},
-            {"+0", 1, 2, SignStyle.NOT_NEGATIVE, ~0, null},
-            {"+5", 1, 2, SignStyle.NOT_NEGATIVE, ~0, null},
-            {"+50", 1, 2, SignStyle.NOT_NEGATIVE, ~0, null},
-            {"+500", 1, 2, SignStyle.NOT_NEGATIVE, ~0, null},
-            {"+AAA", 1, 2, SignStyle.NOT_NEGATIVE, ~0, null},
+            {"-0", 1, 2, SignStyle.NOT_NEGATIVE, 0, null},
+            {"-5", 1, 2, SignStyle.NOT_NEGATIVE, 0, null},
+            {"-50", 1, 2, SignStyle.NOT_NEGATIVE, 0, null},
+            {"-500", 1, 2, SignStyle.NOT_NEGATIVE, 0, null},
+            {"-AAA", 1, 2, SignStyle.NOT_NEGATIVE, 0, null},
+            {"+0", 1, 2, SignStyle.NOT_NEGATIVE, 0, null},
+            {"+5", 1, 2, SignStyle.NOT_NEGATIVE, 0, null},
+            {"+50", 1, 2, SignStyle.NOT_NEGATIVE, 0, null},
+            {"+500", 1, 2, SignStyle.NOT_NEGATIVE, 0, null},
+            {"+AAA", 1, 2, SignStyle.NOT_NEGATIVE, 0, null},
 
             // normal
             {"0", 1, 2, SignStyle.NORMAL, 1, 0},
             {"5", 1, 2, SignStyle.NORMAL, 1, 5},
             {"50", 1, 2, SignStyle.NORMAL, 2, 50},
             {"500", 1, 2, SignStyle.NORMAL, 2, 50},
-            {"-0", 1, 2, SignStyle.NORMAL, ~0, null},
+            {"-0", 1, 2, SignStyle.NORMAL, 0, null},
             {"-5", 1, 2, SignStyle.NORMAL, 2, -5},
             {"-50", 1, 2, SignStyle.NORMAL, 3, -50},
             {"-500", 1, 2, SignStyle.NORMAL, 3, -50},
-            {"-AAA", 1, 2, SignStyle.NORMAL, ~1, null},
-            {"+0", 1, 2, SignStyle.NORMAL, ~0, null},
-            {"+5", 1, 2, SignStyle.NORMAL, ~0, null},
-            {"+50", 1, 2, SignStyle.NORMAL, ~0, null},
-            {"+500", 1, 2, SignStyle.NORMAL, ~0, null},
-            {"+AAA", 1, 2, SignStyle.NORMAL, ~0, null},
+            {"-AAA", 1, 2, SignStyle.NORMAL, 1, null},
+            {"+0", 1, 2, SignStyle.NORMAL, 0, null},
+            {"+5", 1, 2, SignStyle.NORMAL, 0, null},
+            {"+50", 1, 2, SignStyle.NORMAL, 0, null},
+            {"+500", 1, 2, SignStyle.NORMAL, 0, null},
+            {"+AAA", 1, 2, SignStyle.NORMAL, 0, null},
 
             // always
-            {"0", 1, 2, SignStyle.ALWAYS, ~0, null},
-            {"5", 1, 2, SignStyle.ALWAYS, ~0, null},
-            {"50", 1, 2, SignStyle.ALWAYS, ~0, null},
-            {"500", 1, 2, SignStyle.ALWAYS, ~0, null},
-            {"-0", 1, 2, SignStyle.ALWAYS, ~0, null},
+            {"0", 1, 2, SignStyle.ALWAYS, 0, null},
+            {"5", 1, 2, SignStyle.ALWAYS, 0, null},
+            {"50", 1, 2, SignStyle.ALWAYS, 0, null},
+            {"500", 1, 2, SignStyle.ALWAYS, 0, null},
+            {"-0", 1, 2, SignStyle.ALWAYS, 0, null},
             {"-5", 1, 2, SignStyle.ALWAYS, 2, -5},
             {"-50", 1, 2, SignStyle.ALWAYS, 3, -50},
             {"-500", 1, 2, SignStyle.ALWAYS, 3, -50},
-            {"-AAA", 1, 2, SignStyle.ALWAYS, ~1, null},
+            {"-AAA", 1, 2, SignStyle.ALWAYS, 1, null},
             {"+0", 1, 2, SignStyle.ALWAYS, 2, 0},
             {"+5", 1, 2, SignStyle.ALWAYS, 2, 5},
             {"+50", 1, 2, SignStyle.ALWAYS, 3, 50},
             {"+500", 1, 2, SignStyle.ALWAYS, 3, 50},
-            {"+AAA", 1, 2, SignStyle.ALWAYS, ~1, null},
+            {"+AAA", 1, 2, SignStyle.ALWAYS, 1, null},
 
             // exceeds pad
             {"0", 1, 2, SignStyle.EXCEEDS_PAD, 1, 0},
             {"5", 1, 2, SignStyle.EXCEEDS_PAD, 1, 5},
-            {"50", 1, 2, SignStyle.EXCEEDS_PAD, ~0, null},
-            {"500", 1, 2, SignStyle.EXCEEDS_PAD, ~0, null},
-            {"-0", 1, 2, SignStyle.EXCEEDS_PAD, ~0, null},
+            {"50", 1, 2, SignStyle.EXCEEDS_PAD, 0, null},
+            {"500", 1, 2, SignStyle.EXCEEDS_PAD, 0, null},
+            {"-0", 1, 2, SignStyle.EXCEEDS_PAD, 0, null},
             {"-5", 1, 2, SignStyle.EXCEEDS_PAD, 2, -5},
             {"-50", 1, 2, SignStyle.EXCEEDS_PAD, 3, -50},
             {"-500", 1, 2, SignStyle.EXCEEDS_PAD, 3, -50},
-            {"-AAA", 1, 2, SignStyle.EXCEEDS_PAD, ~1, null},
-            {"+0", 1, 2, SignStyle.EXCEEDS_PAD, ~0, null},
-            {"+5", 1, 2, SignStyle.EXCEEDS_PAD, ~0, null},
+            {"-AAA", 1, 2, SignStyle.EXCEEDS_PAD, 1, null},
+            {"+0", 1, 2, SignStyle.EXCEEDS_PAD, 0, null},
+            {"+5", 1, 2, SignStyle.EXCEEDS_PAD, 0, null},
             {"+50", 1, 2, SignStyle.EXCEEDS_PAD, 3, 50},
             {"+500", 1, 2, SignStyle.EXCEEDS_PAD, 3, 50},
-            {"+AAA", 1, 2, SignStyle.EXCEEDS_PAD, ~1, null},
+            {"+AAA", 1, 2, SignStyle.EXCEEDS_PAD, 1, null},
        };
     }
 
     @Test(dataProvider="parseSignsStrict")
     public void test_parseSignsStrict(String input, int min, int max, SignStyle style, int parseLen, Integer parseVal) throws Exception {
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, min, max, style);
-        int newPos = pp.parse(parseContext, input, 0);
-        assertEquals(newPos, parseLen);
-        assertParsed(parseContext, DAY_OF_MONTH, (parseVal != null ? (long) parseVal : null));
+        ParsePosition pos = new ParsePosition(0);
+        DateTimeBuilder dtb = getFormatter(DAY_OF_MONTH, min, max, style).parseToBuilder(input, pos);
+        if (pos.getErrorIndex() != -1) {
+            assertEquals(pos.getErrorIndex(), parseLen);
+        } else {
+            assertEquals(pos.getIndex(), parseLen);
+            assertEquals(dtb.getLong(DAY_OF_MONTH), (long)parseVal);
+        }
     }
 
     //-----------------------------------------------------------------------
@@ -278,15 +293,15 @@ public class TestNumberParser extends AbstractTestPrinterParser {
             {"-5", 1, 2, SignStyle.NEVER, 2, -5},
             {"-50", 1, 2, SignStyle.NEVER, 3, -50},
             {"-500", 1, 2, SignStyle.NEVER, 3, -50},
-            {"-AAA", 1, 2, SignStyle.NEVER, ~1, null},
+            {"-AAA", 1, 2, SignStyle.NEVER, 1, null},
             {"+0", 1, 2, SignStyle.NEVER, 2, 0},
             {"+5", 1, 2, SignStyle.NEVER, 2, 5},
             {"+50", 1, 2, SignStyle.NEVER, 3, 50},
             {"+500", 1, 2, SignStyle.NEVER, 3, 50},
-            {"+AAA", 1, 2, SignStyle.NEVER, ~1, null},
+            {"+AAA", 1, 2, SignStyle.NEVER, 1, null},
             {"50", 2, 2, SignStyle.NEVER, 2, 50},
-            {"-50", 2, 2, SignStyle.NEVER, ~0, null},
-            {"+50", 2, 2, SignStyle.NEVER, ~0, null},
+            {"-50", 2, 2, SignStyle.NEVER, 0, null},
+            {"+50", 2, 2, SignStyle.NEVER, 0, null},
 
             // not negative
             {"0", 1, 2, SignStyle.NOT_NEGATIVE, 1, 0},
@@ -297,15 +312,15 @@ public class TestNumberParser extends AbstractTestPrinterParser {
             {"-5", 1, 2, SignStyle.NOT_NEGATIVE, 2, -5},
             {"-50", 1, 2, SignStyle.NOT_NEGATIVE, 3, -50},
             {"-500", 1, 2, SignStyle.NOT_NEGATIVE, 3, -50},
-            {"-AAA", 1, 2, SignStyle.NOT_NEGATIVE, ~1, null},
+            {"-AAA", 1, 2, SignStyle.NOT_NEGATIVE, 1, null},
             {"+0", 1, 2, SignStyle.NOT_NEGATIVE, 2, 0},
             {"+5", 1, 2, SignStyle.NOT_NEGATIVE, 2, 5},
             {"+50", 1, 2, SignStyle.NOT_NEGATIVE, 3, 50},
             {"+500", 1, 2, SignStyle.NOT_NEGATIVE, 3, 50},
-            {"+AAA", 1, 2, SignStyle.NOT_NEGATIVE, ~1, null},
+            {"+AAA", 1, 2, SignStyle.NOT_NEGATIVE, 1, null},
             {"50", 2, 2, SignStyle.NOT_NEGATIVE, 2, 50},
-            {"-50", 2, 2, SignStyle.NOT_NEGATIVE, ~0, null},
-            {"+50", 2, 2, SignStyle.NOT_NEGATIVE, ~0, null},
+            {"-50", 2, 2, SignStyle.NOT_NEGATIVE, 0, null},
+            {"+50", 2, 2, SignStyle.NOT_NEGATIVE, 0, null},
 
             // normal
             {"0", 1, 2, SignStyle.NORMAL, 1, 0},
@@ -316,12 +331,12 @@ public class TestNumberParser extends AbstractTestPrinterParser {
             {"-5", 1, 2, SignStyle.NORMAL, 2, -5},
             {"-50", 1, 2, SignStyle.NORMAL, 3, -50},
             {"-500", 1, 2, SignStyle.NORMAL, 3, -50},
-            {"-AAA", 1, 2, SignStyle.NORMAL, ~1, null},
+            {"-AAA", 1, 2, SignStyle.NORMAL, 1, null},
             {"+0", 1, 2, SignStyle.NORMAL, 2, 0},
             {"+5", 1, 2, SignStyle.NORMAL, 2, 5},
             {"+50", 1, 2, SignStyle.NORMAL, 3, 50},
             {"+500", 1, 2, SignStyle.NORMAL, 3, 50},
-            {"+AAA", 1, 2, SignStyle.NORMAL, ~1, null},
+            {"+AAA", 1, 2, SignStyle.NORMAL, 1, null},
             {"50", 2, 2, SignStyle.NORMAL, 2, 50},
             {"-50", 2, 2, SignStyle.NORMAL, 3, -50},
             {"+50", 2, 2, SignStyle.NORMAL, 3, 50},
@@ -335,12 +350,12 @@ public class TestNumberParser extends AbstractTestPrinterParser {
             {"-5", 1, 2, SignStyle.ALWAYS, 2, -5},
             {"-50", 1, 2, SignStyle.ALWAYS, 3, -50},
             {"-500", 1, 2, SignStyle.ALWAYS, 3, -50},
-            {"-AAA", 1, 2, SignStyle.ALWAYS, ~1, null},
+            {"-AAA", 1, 2, SignStyle.ALWAYS, 1, null},
             {"+0", 1, 2, SignStyle.ALWAYS, 2, 0},
             {"+5", 1, 2, SignStyle.ALWAYS, 2, 5},
             {"+50", 1, 2, SignStyle.ALWAYS, 3, 50},
             {"+500", 1, 2, SignStyle.ALWAYS, 3, 50},
-            {"+AAA", 1, 2, SignStyle.ALWAYS, ~1, null},
+            {"+AAA", 1, 2, SignStyle.ALWAYS, 1, null},
 
             // exceeds pad
             {"0", 1, 2, SignStyle.EXCEEDS_PAD, 1, 0},
@@ -351,29 +366,25 @@ public class TestNumberParser extends AbstractTestPrinterParser {
             {"-5", 1, 2, SignStyle.EXCEEDS_PAD, 2, -5},
             {"-50", 1, 2, SignStyle.EXCEEDS_PAD, 3, -50},
             {"-500", 1, 2, SignStyle.EXCEEDS_PAD, 3, -50},
-            {"-AAA", 1, 2, SignStyle.EXCEEDS_PAD, ~1, null},
+            {"-AAA", 1, 2, SignStyle.EXCEEDS_PAD, 1, null},
             {"+0", 1, 2, SignStyle.EXCEEDS_PAD, 2, 0},
             {"+5", 1, 2, SignStyle.EXCEEDS_PAD, 2, 5},
             {"+50", 1, 2, SignStyle.EXCEEDS_PAD, 3, 50},
             {"+500", 1, 2, SignStyle.EXCEEDS_PAD, 3, 50},
-            {"+AAA", 1, 2, SignStyle.EXCEEDS_PAD, ~1, null},
+            {"+AAA", 1, 2, SignStyle.EXCEEDS_PAD, 1, null},
        };
     }
 
     @Test(dataProvider="parseSignsLenient")
     public void test_parseSignsLenient(String input, int min, int max, SignStyle style, int parseLen, Integer parseVal) throws Exception {
-        parseContext.setStrict(false);
-        NumberPrinterParser pp = new NumberPrinterParser(DAY_OF_MONTH, min, max, style);
-        int newPos = pp.parse(parseContext, input, 0);
-        assertEquals(newPos, parseLen);
-        assertParsed(parseContext, DAY_OF_MONTH, (parseVal != null ? (long) parseVal : null));
-    }
-
-    private void assertParsed(DateTimeParseContext context, DateTimeField field, Long value) {
-        if (value == null) {
-            assertEquals(context.getParsed(field), null);
+        setStrict(false);
+        ParsePosition pos = new ParsePosition(0);
+        DateTimeBuilder dtb = getFormatter(DAY_OF_MONTH, min, max, style).parseToBuilder(input, pos);
+        if (pos.getErrorIndex() != -1) {
+            assertEquals(pos.getErrorIndex(), parseLen);
         } else {
-            assertEquals(context.getParsed(field), value);
+            assertEquals(pos.getIndex(), parseLen);
+            assertEquals(dtb.getLong(DAY_OF_MONTH), (long)parseVal);
         }
     }
 

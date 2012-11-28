@@ -37,8 +37,8 @@ import static org.testng.Assert.fail;
 
 import javax.time.DateTimeException;
 import javax.time.LocalDate;
+import javax.time.calendrical.DateTimeField;
 import javax.time.calendrical.MockFieldValue;
-import javax.time.format.DateTimeFormatterBuilder.ReducedPrinterParser;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -49,19 +49,20 @@ import org.testng.annotations.Test;
 @Test(groups={"implementation"})
 public class TestReducedPrinter extends AbstractTestPrinterParser {
 
+    private DateTimeFormatter getFormatter0(DateTimeField field, int width, int baseValue) {
+        return builder.appendValueReduced(field, width, baseValue).toFormatter(locale).withSymbols(symbols);
+    }
+
     //-----------------------------------------------------------------------
     @Test(expectedExceptions=DateTimeException.class)
     public void test_print_emptyCalendrical() throws Exception {
-        ReducedPrinterParser pp = new ReducedPrinterParser(YEAR, 2, 2010);
-        pp.print(printEmptyContext, buf);
+        getFormatter0(YEAR, 2, 2010).printTo(EMPTY_DTA, buf);
     }
 
     //-----------------------------------------------------------------------
     public void test_print_append() throws Exception {
-        printContext.setDateTime(LocalDate.of(2012, 1, 1));
-        ReducedPrinterParser pp = new ReducedPrinterParser(YEAR, 2, 2010);
         buf.append("EXISTING");
-        pp.print(printContext, buf);
+        getFormatter0(YEAR, 2, 2010).printTo(LocalDate.of(2012, 1, 1), buf);
         assertEquals(buf.toString(), "EXISTING12");
     }
 
@@ -127,10 +128,8 @@ public class TestReducedPrinter extends AbstractTestPrinterParser {
 
     @Test(dataProvider="Pivot")
     public void test_pivot(int width, int baseValue, int value, String result) throws Exception {
-        printContext.setDateTime(new MockFieldValue(YEAR, value));
-        ReducedPrinterParser pp = new ReducedPrinterParser(YEAR, width, baseValue);
         try {
-            pp.print(printContext, buf);
+            getFormatter0(YEAR, width, baseValue).printTo(new MockFieldValue(YEAR, value), buf);
             if (result == null) {
                 fail("Expected exception");
             }
@@ -146,8 +145,7 @@ public class TestReducedPrinter extends AbstractTestPrinterParser {
 
     //-----------------------------------------------------------------------
     public void test_toString() throws Exception {
-        ReducedPrinterParser pp = new ReducedPrinterParser(YEAR, 2, 2005);
-        assertEquals(pp.toString(), "ReducedValue(Year,2,2005)");
+        assertEquals(getFormatter0(YEAR, 2, 2005).toString(), "ReducedValue(Year,2,2005)");
     }
 
 }

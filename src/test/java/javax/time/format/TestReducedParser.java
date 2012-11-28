@@ -36,8 +36,10 @@ import static javax.time.calendrical.ChronoField.YEAR;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.text.ParsePosition;
+
+import javax.time.calendrical.DateTimeBuilder;
 import javax.time.calendrical.DateTimeField;
-import javax.time.format.DateTimeFormatterBuilder.ReducedPrinterParser;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -48,31 +50,34 @@ import org.testng.annotations.Test;
 @Test(groups={"implementation"})
 public class TestReducedParser extends AbstractTestPrinterParser {
 
+    private DateTimeFormatter getFormatter0(DateTimeField field, int width, int baseValue) {
+        return builder.appendValueReduced(field, width, baseValue).toFormatter(locale).withSymbols(symbols);
+    }
+
     //-----------------------------------------------------------------------
     @DataProvider(name="error")
     Object[][] data_error() {
         return new Object[][] {
-            {new ReducedPrinterParser(YEAR, 2, 2010), "12", -1, IndexOutOfBoundsException.class},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "12", 3, IndexOutOfBoundsException.class},
+            {YEAR, 2, 2010, "12", -1, IndexOutOfBoundsException.class},
+            {YEAR, 2, 2010, "12", 3, IndexOutOfBoundsException.class},
         };
     }
 
     @Test(dataProvider="error")
-    public void test_parse_error(ReducedPrinterParser pp, String text, int pos, Class<?> expected) {
+    public void test_parse_error(DateTimeField field, int width, int baseValue, String text, int pos, Class<?> expected) {
         try {
-            pp.parse(parseContext, text, pos);
+            getFormatter0(field, width, baseValue).parseToBuilder(text, new ParsePosition(pos));
         } catch (RuntimeException ex) {
             assertTrue(expected.isInstance(ex));
-            assertEquals(parseContext.getParsed().size(), 0);
         }
     }
 
     //-----------------------------------------------------------------------
     public void test_parse_fieldRangeIgnored() throws Exception {
-        ReducedPrinterParser pp = new ReducedPrinterParser(DAY_OF_YEAR, 3, 10);
-        int newPos = pp.parse(parseContext, "456", 0);
-        assertEquals(newPos, 3);
-        assertParsed(DAY_OF_YEAR, 456L);  // parsed dayOfYear=456
+        ParsePosition pos = new ParsePosition(0);
+        DateTimeBuilder dtb = getFormatter0(DAY_OF_YEAR, 3, 10).parseToBuilder("456", pos);
+        assertEquals(pos.getIndex(), 3);
+        assertParsed(dtb, DAY_OF_YEAR, 456L);  // parsed dayOfYear=456
     }
 
     //-----------------------------------------------------------------------
@@ -80,74 +85,84 @@ public class TestReducedParser extends AbstractTestPrinterParser {
     Object[][] provider_parse() {
         return new Object[][] {
              // negative zero
-            {new ReducedPrinterParser(YEAR, 1, 2010), "-0", 0, ~0, null},
+            {YEAR, 1, 2010, "-0", 0, 0, null},
 
             // general
-            {new ReducedPrinterParser(YEAR, 2, 2010), "Xxx12Xxx", 3, 5, 2012},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "12345", 0, 2, 2012},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "12-45", 0, 2, 2012},
+            {YEAR, 2, 2010, "Xxx12Xxx", 3, 5, 2012},
+            {YEAR, 2, 2010, "12345", 0, 2, 2012},
+            {YEAR, 2, 2010, "12-45", 0, 2, 2012},
 
             // insufficient digits
-            {new ReducedPrinterParser(YEAR, 2, 2010), "0", 0, ~0, null},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "1", 0, ~0, null},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "1", 1, ~1, null},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "1-2", 0, ~0, null},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "9", 0, ~0, null},
+            {YEAR, 2, 2010, "0", 0, 0, null},
+            {YEAR, 2, 2010, "1", 0, 0, null},
+            {YEAR, 2, 2010, "1", 1, 1, null},
+            {YEAR, 2, 2010, "1-2", 0, 0, null},
+            {YEAR, 2, 2010, "9", 0, 0, null},
 
             // other junk
-            {new ReducedPrinterParser(YEAR, 2, 2010), "A0", 0, ~0, null},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "0A", 0, ~0, null},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "  1", 0, ~0, null},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "-1", 0, ~0, null},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "-10", 0, ~0, null},
+            {YEAR, 2, 2010, "A0", 0, 0, null},
+            {YEAR, 2, 2010, "0A", 0, 0, null},
+            {YEAR, 2, 2010, "  1", 0, 0, null},
+            {YEAR, 2, 2010, "-1", 0, 0, null},
+            {YEAR, 2, 2010, "-10", 0, 0, null},
 
             // parse OK 1
-            {new ReducedPrinterParser(YEAR, 1, 2010), "0", 0, 1, 2010},
-            {new ReducedPrinterParser(YEAR, 1, 2010), "9", 0, 1, 2019},
-            {new ReducedPrinterParser(YEAR, 1, 2010), "10", 0, 1, 2011},
+            {YEAR, 1, 2010, "0", 0, 1, 2010},
+            {YEAR, 1, 2010, "9", 0, 1, 2019},
+            {YEAR, 1, 2010, "10", 0, 1, 2011},
 
-            {new ReducedPrinterParser(YEAR, 1, 2005), "0", 0, 1, 2010},
-            {new ReducedPrinterParser(YEAR, 1, 2005), "4", 0, 1, 2014},
-            {new ReducedPrinterParser(YEAR, 1, 2005), "5", 0, 1, 2005},
-            {new ReducedPrinterParser(YEAR, 1, 2005), "9", 0, 1, 2009},
-            {new ReducedPrinterParser(YEAR, 1, 2005), "10", 0, 1, 2011},
-
-            // parse OK 2
-            {new ReducedPrinterParser(YEAR, 2, 2010), "00", 0, 2, 2100},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "09", 0, 2, 2109},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "10", 0, 2, 2010},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "99", 0, 2, 2099},
-            {new ReducedPrinterParser(YEAR, 2, 2010), "100", 0, 2, 2010},
+            {YEAR, 1, 2005, "0", 0, 1, 2010},
+            {YEAR, 1, 2005, "4", 0, 1, 2014},
+            {YEAR, 1, 2005, "5", 0, 1, 2005},
+            {YEAR, 1, 2005, "9", 0, 1, 2009},
+            {YEAR, 1, 2005, "10", 0, 1, 2011},
 
             // parse OK 2
-            {new ReducedPrinterParser(YEAR, 2, -2005), "05", 0, 2, -2005},
-            {new ReducedPrinterParser(YEAR, 2, -2005), "00", 0, 2, -2000},
-            {new ReducedPrinterParser(YEAR, 2, -2005), "99", 0, 2, -1999},
-            {new ReducedPrinterParser(YEAR, 2, -2005), "06", 0, 2, -1906},
-            {new ReducedPrinterParser(YEAR, 2, -2005), "100", 0, 2, -1910},
+            {YEAR, 2, 2010, "00", 0, 2, 2100},
+            {YEAR, 2, 2010, "09", 0, 2, 2109},
+            {YEAR, 2, 2010, "10", 0, 2, 2010},
+            {YEAR, 2, 2010, "99", 0, 2, 2099},
+            {YEAR, 2, 2010, "100", 0, 2, 2010},
+
+            // parse OK 2
+            {YEAR, 2, -2005, "05", 0, 2, -2005},
+            {YEAR, 2, -2005, "00", 0, 2, -2000},
+            {YEAR, 2, -2005, "99", 0, 2, -1999},
+            {YEAR, 2, -2005, "06", 0, 2, -1906},
+            {YEAR, 2, -2005, "100", 0, 2, -1910},
        };
     }
 
     @Test(dataProvider="Parse")
-    public void test_parse(ReducedPrinterParser pp, String input, int pos, int parseLen, Integer parseVal) {
-        int newPos = pp.parse(parseContext, input, pos);
-        assertEquals(newPos, parseLen);
-        assertParsed(YEAR, parseVal != null ? (long) parseVal : null);
+    public void test_parse(DateTimeField field, int width, int baseValue, String input, int pos, int parseLen, Integer parseVal) {
+        ParsePosition ppos = new ParsePosition(pos);
+        DateTimeBuilder dtb = getFormatter0(field, width, baseValue).parseToBuilder(input, ppos);
+        if (ppos.getErrorIndex() != -1) {
+            assertEquals(ppos.getErrorIndex(), parseLen);
+        } else {
+            assertEquals(ppos.getIndex(), parseLen);
+            assertParsed(dtb, YEAR, parseVal != null ? (long) parseVal : null);
+        }
     }
 
     @Test(dataProvider="Parse")
-    public void test_parseLenient(ReducedPrinterParser pp, String input, int pos, int parseLen, Integer parseVal) {
-        parseContext.setStrict(false);
-        int newPos = pp.parse(parseContext, input, pos);
-        assertEquals(newPos, parseLen);
-        assertParsed(YEAR, parseVal != null ? (long) parseVal : null);
+    public void test_parseLenient(DateTimeField field, int width, int baseValue, String input, int pos, int parseLen, Integer parseVal) {
+        setStrict(false);
+        ParsePosition ppos = new ParsePosition(pos);
+        DateTimeBuilder dtb = getFormatter0(field, width, baseValue).parseToBuilder(input, ppos);
+        if (ppos.getErrorIndex() != -1) {
+            assertEquals(ppos.getErrorIndex(), parseLen);
+        } else {
+            assertEquals(ppos.getIndex(), parseLen);
+            assertParsed(dtb, YEAR, parseVal != null ? (long) parseVal : null);
+        }
     }
 
-    private void assertParsed(DateTimeField field, Long value) {
+    private void assertParsed(DateTimeBuilder dtb, DateTimeField field, Long value) {
         if (value == null) {
-            assertEquals(parseContext.getParsed(field), null);
+            assertEquals(dtb, null);
         } else {
-            assertEquals(parseContext.getParsed(field), value);
+            assertEquals(dtb.getLong(field), (long)value);
         }
     }
 

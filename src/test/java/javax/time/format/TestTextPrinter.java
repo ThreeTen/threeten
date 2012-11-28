@@ -42,7 +42,6 @@ import javax.time.DateTimeException;
 import javax.time.LocalDate;
 import javax.time.calendrical.DateTimeField;
 import javax.time.calendrical.MockFieldValue;
-import javax.time.format.DateTimeFormatterBuilder.TextPrinterParser;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -53,20 +52,15 @@ import org.testng.annotations.Test;
 @Test(groups={"implementation"})
 public class TestTextPrinter extends AbstractTestPrinterParser {
 
-    private static final DateTimeTextProvider PROVIDER = DateTimeFormatters.getTextProvider();
-
     //-----------------------------------------------------------------------
     @Test(expectedExceptions=DateTimeException.class)
     public void test_print_emptyCalendrical() throws Exception {
-        TextPrinterParser pp = new TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, PROVIDER);
-        pp.print(printEmptyContext, buf);
+        getFormatter(DAY_OF_WEEK, TextStyle.FULL).printTo(EMPTY_DTA, buf);
     }
 
     public void test_print_append() throws Exception {
-        printContext.setDateTime(LocalDate.of(2012, 4, 18));
-        TextPrinterParser pp = new TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, PROVIDER);
         buf.append("EXISTING");
-        pp.print(printContext, buf);
+        getFormatter(DAY_OF_WEEK, TextStyle.FULL).printTo(LocalDate.of(2012, 4, 18), buf);
         assertEquals(buf.toString(), "EXISTINGWednesday");
     }
 
@@ -116,38 +110,28 @@ public class TestTextPrinter extends AbstractTestPrinterParser {
 
     @Test(dataProvider="print")
     public void test_print(DateTimeField field, TextStyle style, int value, String expected) throws Exception {
-        printContext.setDateTime(new MockFieldValue(field, value));
-        TextPrinterParser pp = new TextPrinterParser(field, style, PROVIDER);
-        pp.print(printContext, buf);
+        getFormatter(field, style).printTo(new MockFieldValue(field, value), buf);
         assertEquals(buf.toString(), expected);
     }
 
     //-----------------------------------------------------------------------
     public void test_print_french_long() throws Exception {
-        printContext.setLocale(Locale.FRENCH);
-        printContext.setDateTime(LocalDate.of(2012, 1, 1));
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, PROVIDER);
-        pp.print(printContext, buf);
+        getFormatter(MONTH_OF_YEAR, TextStyle.FULL).withLocale(Locale.FRENCH).printTo(LocalDate.of(2012, 1, 1), buf);
         assertEquals(buf.toString(), "janvier");
     }
 
     public void test_print_french_short() throws Exception {
-        printContext.setLocale(Locale.FRENCH);
-        printContext.setDateTime(LocalDate.of(2012, 1, 1));
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, PROVIDER);
-        pp.print(printContext, buf);
+        getFormatter(MONTH_OF_YEAR, TextStyle.SHORT).withLocale(Locale.FRENCH).printTo(LocalDate.of(2012, 1, 1), buf);
         assertEquals(buf.toString(), "janv.");
     }
 
     //-----------------------------------------------------------------------
     public void test_toString1() throws Exception {
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, PROVIDER);
-        assertEquals(pp.toString(), "Text(MonthOfYear)");
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.FULL).toString(), "Text(MonthOfYear)");
     }
 
     public void test_toString2() throws Exception {
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, PROVIDER);
-        assertEquals(pp.toString(), "Text(MonthOfYear,SHORT)");
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.SHORT).toString(), "Text(MonthOfYear,SHORT)");
     }
 
 }

@@ -33,12 +33,11 @@ package javax.time.format;
 
 import static javax.time.calendrical.ChronoField.MONTH_OF_YEAR;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
-import javax.time.calendrical.DateTimeField;
-import javax.time.format.DateTimeFormatterBuilder.CharLiteralPrinterParser;
-import javax.time.format.DateTimeFormatterBuilder.NumberPrinterParser;
-import javax.time.format.DateTimeFormatterBuilder.PadPrinterParserDecorator;
-import javax.time.format.DateTimeFormatterBuilder.StringLiteralPrinterParser;
+import java.text.ParsePosition;
+
+import javax.time.calendrical.DateTimeBuilder;
 
 import org.testng.annotations.Test;
 
@@ -51,67 +50,66 @@ public class TestPadParserDecorator extends AbstractTestPrinterParser {
     //-----------------------------------------------------------------------
     @Test(expectedExceptions=IndexOutOfBoundsException.class)
     public void test_parse_negativePosition() throws Exception {
-        PadPrinterParserDecorator pp = new PadPrinterParserDecorator(new CharLiteralPrinterParser('Z'), 3, '-');
-        pp.parse(parseContext, "--Z", -1);
+        builder.padNext(3, '-').appendLiteral('Z');
+        getFormatter().parseToBuilder("--Z", new ParsePosition(-1));
     }
 
     @Test(expectedExceptions=IndexOutOfBoundsException.class)
     public void test_parse_offEndPosition() throws Exception {
-        PadPrinterParserDecorator pp = new PadPrinterParserDecorator(new CharLiteralPrinterParser('Z'), 3, '-');
-        pp.parse(parseContext, "--Z", 4);
+        builder.padNext(3, '-').appendLiteral('Z');
+        getFormatter().parseToBuilder("--Z", new ParsePosition(4));
     }
 
     //-----------------------------------------------------------------------
     public void test_parse() throws Exception {
-        PadPrinterParserDecorator pp = new PadPrinterParserDecorator(new NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER), 3, '-');
-        int result = pp.parse(parseContext, "--2", 0);
-        assertEquals(result, 3);
-        assertEquals(parseContext.getParsed().size(), 1);
-        assertParsed(MONTH_OF_YEAR, 2L);
+        ParsePosition pos = new ParsePosition(0);
+        builder.padNext(3, '-').appendValue(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER);
+        DateTimeBuilder dtb = getFormatter().parseToBuilder("--2", pos);
+        assertEquals(pos.getIndex(), 3);
+        assertEquals(dtb.getFieldValueMap().size(), 1);
+        assertEquals(dtb.getLong(MONTH_OF_YEAR), 2L);
     }
 
     public void test_parse_noReadBeyond() throws Exception {
-        PadPrinterParserDecorator pp = new PadPrinterParserDecorator(new NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER), 3, '-');
-        int result = pp.parse(parseContext, "--22", 0);
-        assertEquals(result, 3);
-        assertEquals(parseContext.getParsed().size(), 1);
-        assertParsed(MONTH_OF_YEAR, 2L);
+        ParsePosition pos = new ParsePosition(0);
+        builder.padNext(3, '-').appendValue(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER);
+        DateTimeBuilder dtb = getFormatter().parseToBuilder("--22", pos);
+        assertEquals(pos.getIndex(), 3);
+        assertEquals(dtb.getFieldValueMap().size(), 1);
+        assertEquals(dtb.getLong(MONTH_OF_YEAR), 2L);
     }
 
     public void test_parse_textLessThanPadWidth() throws Exception {
-        PadPrinterParserDecorator pp = new PadPrinterParserDecorator(new NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER), 3, '-');
-        int result = pp.parse(parseContext, "-1", 0);
-        assertEquals(result, ~0);
-        assertEquals(parseContext.getParsed().size(), 0);
+        ParsePosition pos = new ParsePosition(0);
+        builder.padNext(3, '-').appendValue(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER);
+        DateTimeBuilder dtb = getFormatter().parseToBuilder("-1", pos);
+        assertNull(dtb);
+        assertEquals(pos.getErrorIndex(), 0);
     }
 
     public void test_parse_decoratedErrorPassedBack() throws Exception {
-        PadPrinterParserDecorator pp = new PadPrinterParserDecorator(new NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER), 3, '-');
-        int result = pp.parse(parseContext, "--A", 0);
-        assertEquals(result, ~2);
-        assertEquals(parseContext.getParsed().size(), 0);
+        ParsePosition pos = new ParsePosition(0);
+        builder.padNext(3, '-').appendValue(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER);
+        DateTimeBuilder dtb = getFormatter().parseToBuilder("--A", pos);
+        assertNull(dtb);
+        assertEquals(pos.getErrorIndex(), 2);
     }
 
     public void test_parse_decoratedDidNotParseToPadWidth() throws Exception {
-        PadPrinterParserDecorator pp = new PadPrinterParserDecorator(new NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER), 3, '-');
-        int result = pp.parse(parseContext, "-1X", 0);
-        assertEquals(result, ~0);
+        ParsePosition pos = new ParsePosition(0);
+        builder.padNext(3, '-').appendValue(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER);
+        DateTimeBuilder dtb = getFormatter().parseToBuilder("-1X", pos);
+        assertNull(dtb);
+        assertEquals(pos.getErrorIndex(), 0);
     }
 
     //-----------------------------------------------------------------------
     public void test_parse_decoratedStartsWithPad() throws Exception {
-        PadPrinterParserDecorator pp = new PadPrinterParserDecorator(new StringLiteralPrinterParser("-HELLO-"), 8, '-');
-        int result = pp.parse(parseContext, "--HELLO-", 0);
-        assertEquals(result, 8);
-        assertEquals(parseContext.getParsed().size(), 0);
-    }
-
-    private void assertParsed(DateTimeField field, Long value) {
-        if (value == null) {
-            assertEquals(parseContext.getParsed(field), null);
-        } else {
-            assertEquals(parseContext.getParsed(field), value);
-        }
+        ParsePosition pos = new ParsePosition(0);
+        builder.padNext(8, '-').appendLiteral("-HELLO-");
+        DateTimeBuilder dtb = getFormatter().parseToBuilder("--HELLO-", pos);
+        assertEquals(pos.getIndex(), 8);
+        assertEquals(dtb.getFieldValueMap().size(), 0);
     }
 
 }

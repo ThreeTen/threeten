@@ -33,8 +33,11 @@ package javax.time.format;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
-import javax.time.format.DateTimeFormatterBuilder.CharLiteralPrinterParser;
+import java.text.ParsePosition;
+
+import javax.time.calendrical.DateTimeBuilder;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -49,49 +52,56 @@ public class TestCharLiteralParser extends AbstractTestPrinterParser {
     Object[][] data_success() {
         return new Object[][] {
             // match
-            {new CharLiteralPrinterParser('a'), true, "a", 0, 1},
-            {new CharLiteralPrinterParser('a'), true, "aOTHER", 0, 1},
-            {new CharLiteralPrinterParser('a'), true, "OTHERaOTHER", 5, 6},
-            {new CharLiteralPrinterParser('a'), true, "OTHERa", 5, 6},
+            {'a', true, "a", 0, 1},
+            {'a', true, "aOTHER", 0, 1},
+            {'a', true, "OTHERaOTHER", 5, 6},
+            {'a', true, "OTHERa", 5, 6},
 
             // no match
-            {new CharLiteralPrinterParser('a'), true, "", 0, ~0},
-            {new CharLiteralPrinterParser('a'), true, "a", 1, ~1},
-            {new CharLiteralPrinterParser('a'), true, "A", 0, ~0},
-            {new CharLiteralPrinterParser('a'), true, "b", 0, ~0},
-            {new CharLiteralPrinterParser('a'), true, "OTHERbOTHER", 5, ~5},
-            {new CharLiteralPrinterParser('a'), true, "OTHERb", 5, ~5},
+            {'a', true, "", 0, 0},
+            {'a', true, "a", 1, 1},
+            {'a', true, "A", 0, 0},
+            {'a', true, "b", 0, 0},
+            {'a', true, "OTHERbOTHER", 5, 5},
+            {'a', true, "OTHERb", 5, 5},
 
             // case insensitive
-            {new CharLiteralPrinterParser('a'), false, "a", 0, 1},
-            {new CharLiteralPrinterParser('a'), false, "A", 0, 1},
+            {'a', false, "a", 0, 1},
+            {'a', false, "A", 0, 1},
         };
     }
 
     @Test(dataProvider="success")
-    public void test_parse_success(CharLiteralPrinterParser pp, boolean caseSensitive, String text, int pos, int expectedPos) {
-        parseContext.setCaseSensitive(caseSensitive);
-        int result = pp.parse(parseContext, text, pos);
-        assertEquals(result, expectedPos);
-        assertEquals(parseContext.getParsed().size(), 0);
+    public void test_parse_success(char c, boolean caseSensitive,
+                                   String text, int pos, int expectedPos) {
+        setCaseSensitive(caseSensitive);
+        ParsePosition ppos = new ParsePosition(pos);
+        DateTimeBuilder result =
+               getFormatter(c).parseToBuilder(text, ppos);
+        if (ppos.getErrorIndex() != -1) {
+            assertEquals(ppos.getIndex(), expectedPos);
+        } else {
+            assertEquals(ppos.getIndex(), expectedPos);
+            assertEquals(result.getCalendricalList().size(), 0);
+        }
     }
 
     //-----------------------------------------------------------------------
     @DataProvider(name="error")
     Object[][] data_error() {
         return new Object[][] {
-            {new CharLiteralPrinterParser('a'), "a", -1, IndexOutOfBoundsException.class},
-            {new CharLiteralPrinterParser('a'), "a", 2, IndexOutOfBoundsException.class},
+            {'a', "a", -1, IndexOutOfBoundsException.class},
+            {'a', "a", 2, IndexOutOfBoundsException.class},
         };
     }
 
     @Test(dataProvider="error")
-    public void test_parse_error(CharLiteralPrinterParser pp, String text, int pos, Class<?> expected) {
+    public void test_parse_error(char c, String text, int pos, Class<?> expected) {
         try {
-            pp.parse(parseContext, text, pos);
+            getFormatter(c).parseToBuilder(text, new ParsePosition(pos));
+            fail();
         } catch (RuntimeException ex) {
             assertTrue(expected.isInstance(ex));
-            assertEquals(parseContext.getParsed().size(), 0);
         }
     }
 

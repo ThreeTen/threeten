@@ -49,20 +49,61 @@ import org.testng.annotations.Test;
 @Test
 public class AbstractTestPrinterParser {
 
-    protected DateTimePrintContext printEmptyContext;
-    protected DateTimePrintContext printContext;
-    protected DateTimeParseContext parseContext;
     protected StringBuilder buf;
+    protected DateTimeFormatterBuilder builder;
+    protected DateTimeAccessor dta;
+    protected Locale locale;
+    protected DateTimeFormatSymbols symbols;
+
 
     @BeforeMethod(groups={"tck"})
     public void setUp() {
-        printEmptyContext = new DateTimePrintContext(EMPTY, Locale.ENGLISH, DateTimeFormatSymbols.STANDARD);
-        printContext = new DateTimePrintContext(ZonedDateTime.of(2011, 6, 30, 12, 30, 40, 0, ZoneId.of("Europe/Paris")), Locale.ENGLISH, DateTimeFormatSymbols.STANDARD);
-        parseContext = new DateTimeParseContext(Locale.ENGLISH, DateTimeFormatSymbols.STANDARD);
         buf = new StringBuilder();
+        builder = new DateTimeFormatterBuilder();
+        dta = ZonedDateTime.of(2011, 6, 30, 12, 30, 40, 0, ZoneId.of("Europe/Paris"));
+        locale = Locale.ENGLISH;
+        symbols = DateTimeFormatSymbols.STANDARD;
     }
 
-    private static final DateTimeAccessor EMPTY = new DefaultInterfaceDateTimeAccessor() {
+    protected void setCaseSensitive(boolean caseSensitive) {
+        if (caseSensitive)
+            builder.parseCaseSensitive();
+        else
+            builder.parseCaseInsensitive();
+    }
+
+    protected void setStrict(boolean strict) {
+        if (strict)
+            builder.parseStrict();
+        else
+            builder.parseLenient();
+    }
+
+    protected DateTimeFormatter getFormatter() {
+        return builder.toFormatter(locale).withSymbols(symbols);
+    }
+
+    protected DateTimeFormatter getFormatter(char c) {
+        return builder.appendLiteral(c).toFormatter(locale).withSymbols(symbols);
+    }
+
+    protected DateTimeFormatter getFormatter(String s) {
+        return builder.appendLiteral(s).toFormatter(locale).withSymbols(symbols);
+    }
+
+    protected DateTimeFormatter getFormatter(DateTimeField field, TextStyle style) {
+        return builder.appendText(field, style).toFormatter(locale).withSymbols(symbols);
+    }
+
+    protected DateTimeFormatter getFormatter(DateTimeField field, int minWidth, int maxWidth, SignStyle signStyle) {
+        return builder.appendValue(field, minWidth, maxWidth, signStyle).toFormatter(locale).withSymbols(symbols);
+    }
+
+    protected DateTimeFormatter getFormatter(String noOffsetText, String pattern) {
+        return builder.appendOffset(noOffsetText, pattern).toFormatter(locale).withSymbols(symbols);
+    }
+
+    protected static final DateTimeAccessor EMPTY_DTA = new DefaultInterfaceDateTimeAccessor() {
         public boolean isSupported(DateTimeField field) {
             return true;
         }

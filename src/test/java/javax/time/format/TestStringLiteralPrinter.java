@@ -33,8 +33,6 @@ package javax.time.format;
 
 import static org.testng.Assert.assertEquals;
 
-import javax.time.format.DateTimeFormatterBuilder.StringLiteralPrinterParser;
-
 import org.testng.annotations.Test;
 
 /**
@@ -46,33 +44,31 @@ public class TestStringLiteralPrinter extends AbstractTestPrinterParser {
     //-----------------------------------------------------------------------
     public void test_print_emptyCalendrical() throws Exception {
         buf.append("EXISTING");
-        StringLiteralPrinterParser pp = new StringLiteralPrinterParser("hello");
-        pp.print(printEmptyContext, buf);
+        getFormatter("hello").printTo(EMPTY_DTA, buf);
         assertEquals(buf.toString(), "EXISTINGhello");
     }
 
     public void test_print_dateTime() throws Exception {
         buf.append("EXISTING");
-        StringLiteralPrinterParser pp = new StringLiteralPrinterParser("hello");
-        pp.print(printContext, buf);
+        getFormatter("hello").printTo(dta, buf);
         assertEquals(buf.toString(), "EXISTINGhello");
     }
 
+
+
+
     public void test_print_emptyAppendable() throws Exception {
-        StringLiteralPrinterParser pp = new StringLiteralPrinterParser("hello");
-        pp.print(printContext, buf);
+        getFormatter("hello").printTo(dta, buf);
         assertEquals(buf.toString(), "hello");
     }
 
     //-----------------------------------------------------------------------
     public void test_toString() throws Exception {
-        StringLiteralPrinterParser pp = new StringLiteralPrinterParser("hello");
-        assertEquals(pp.toString(), "'hello'");
+        assertEquals(getFormatter("hello").toString(), "'hello'");
     }
 
     public void test_toString_apos() throws Exception {
-        StringLiteralPrinterParser pp = new StringLiteralPrinterParser("o'clock");
-        assertEquals(pp.toString(), "'o''clock'");
+        assertEquals(getFormatter("o'clock").toString(), "'o''clock'");
     }
 
 }

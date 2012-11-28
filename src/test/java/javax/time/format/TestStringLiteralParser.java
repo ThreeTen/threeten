@@ -33,8 +33,11 @@ package javax.time.format;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
-import javax.time.format.DateTimeFormatterBuilder.StringLiteralPrinterParser;
+import java.text.ParsePosition;
+
+import javax.time.calendrical.DateTimeBuilder;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -49,54 +52,59 @@ public class TestStringLiteralParser extends AbstractTestPrinterParser {
     Object[][] data_success() {
         return new Object[][] {
             // match
-            {new StringLiteralPrinterParser("hello"), true, "hello", 0, 5},
-            {new StringLiteralPrinterParser("hello"), true, "helloOTHER", 0, 5},
-            {new StringLiteralPrinterParser("hello"), true, "OTHERhelloOTHER", 5, 10},
-            {new StringLiteralPrinterParser("hello"), true, "OTHERhello", 5, 10},
+            {"hello", true, "hello", 0, 5},
+            {"hello", true, "helloOTHER", 0, 5},
+            {"hello", true, "OTHERhelloOTHER", 5, 10},
+            {"hello", true, "OTHERhello", 5, 10},
 
             // no match
-            {new StringLiteralPrinterParser("hello"), true, "", 0, ~0},
-            {new StringLiteralPrinterParser("hello"), true, "a", 1, ~1},
-            {new StringLiteralPrinterParser("hello"), true, "HELLO", 0, ~0},
-            {new StringLiteralPrinterParser("hello"), true, "hlloo", 0, ~0},
-            {new StringLiteralPrinterParser("hello"), true, "OTHERhllooOTHER", 5, ~5},
-            {new StringLiteralPrinterParser("hello"), true, "OTHERhlloo", 5, ~5},
-            {new StringLiteralPrinterParser("hello"), true, "h", 0, ~0},
-            {new StringLiteralPrinterParser("hello"), true, "OTHERh", 5, ~5},
+            {"hello", true, "", 0, 0},
+            {"hello", true, "a", 1, 1},
+            {"hello", true, "HELLO", 0, 0},
+            {"hello", true, "hlloo", 0, 0},
+            {"hello", true, "OTHERhllooOTHER", 5, 5},
+            {"hello", true, "OTHERhlloo", 5, 5},
+            {"hello", true, "h", 0, 0},
+            {"hello", true, "OTHERh", 5, 5},
 
             // case insensitive
-            {new StringLiteralPrinterParser("hello"), false, "hello", 0, 5},
-            {new StringLiteralPrinterParser("hello"), false, "HELLO", 0, 5},
-            {new StringLiteralPrinterParser("hello"), false, "HelLo", 0, 5},
-            {new StringLiteralPrinterParser("hello"), false, "HelLO", 0, 5},
+            {"hello", false, "hello", 0, 5},
+            {"hello", false, "HELLO", 0, 5},
+            {"hello", false, "HelLo", 0, 5},
+            {"hello", false, "HelLO", 0, 5},
         };
     }
 
     @Test(dataProvider="success")
-    public void test_parse_success(StringLiteralPrinterParser pp, boolean caseSensitive, String text, int pos, int expectedPos) {
-        parseContext.setCaseSensitive(caseSensitive);
-        int result = pp.parse(parseContext, text, pos);
-        assertEquals(result, expectedPos);
-        assertEquals(parseContext.getParsed().size(), 0);
+    public void test_parse_success(String s, boolean caseSensitive, String text, int pos, int expectedPos) {
+        setCaseSensitive(caseSensitive);
+        ParsePosition ppos = new ParsePosition(pos);
+        DateTimeBuilder result =
+               getFormatter(s).parseToBuilder(text, ppos);
+        if (ppos.getErrorIndex() != -1) {
+            assertEquals(ppos.getIndex(), expectedPos);
+        } else {
+            assertEquals(ppos.getIndex(), expectedPos);
+            assertEquals(result.getCalendricalList().size(), 0);
+        }
     }
 
     //-----------------------------------------------------------------------
     @DataProvider(name="error")
     Object[][] data_error() {
         return new Object[][] {
-            {new StringLiteralPrinterParser("hello"), "hello", -1, IndexOutOfBoundsException.class},
-            {new StringLiteralPrinterParser("hello"), "hello", 6, IndexOutOfBoundsException.class},
+            {"hello", "hello", -1, IndexOutOfBoundsException.class},
+            {"hello", "hello", 6, IndexOutOfBoundsException.class},
         };
     }
 
     @Test(dataProvider="error")
-    public void test_parse_error(StringLiteralPrinterParser pp, String text, int pos, Class<?> expected) {
+    public void test_parse_error(String s, String text, int pos, Class<?> expected) {
         try {
-            pp.parse(parseContext, text, pos);
+            getFormatter(s).parseToBuilder(text, new ParsePosition(pos));
+            fail();
         } catch (RuntimeException ex) {
             assertTrue(expected.isInstance(ex));
-            assertEquals(parseContext.getParsed().size(), 0);
         }
     }
-
 }

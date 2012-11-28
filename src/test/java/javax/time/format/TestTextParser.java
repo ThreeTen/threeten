@@ -37,10 +37,10 @@ import static javax.time.calendrical.ChronoField.MONTH_OF_YEAR;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.text.ParsePosition;
 import java.util.Locale;
 
 import javax.time.calendrical.DateTimeField;
-import javax.time.format.DateTimeFormatterBuilder.TextPrinterParser;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -51,62 +51,58 @@ import org.testng.annotations.Test;
 @Test(groups={"implementation"})
 public class TestTextParser extends AbstractTestPrinterParser {
 
-    private static final DateTimeTextProvider PROVIDER = DateTimeFormatters.getTextProvider();
-
     //-----------------------------------------------------------------------
     @DataProvider(name="error")
     Object[][] data_error() {
         return new Object[][] {
-            {new TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, PROVIDER), "Monday", -1, IndexOutOfBoundsException.class},
-            {new TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, PROVIDER), "Monday", 7, IndexOutOfBoundsException.class},
+            {DAY_OF_WEEK, TextStyle.FULL, "Monday", -1, IndexOutOfBoundsException.class},
+            {DAY_OF_WEEK, TextStyle.FULL, "Monday", 7, IndexOutOfBoundsException.class},
         };
     }
 
     @Test(dataProvider="error")
-    public void test_parse_error(TextPrinterParser pp, String text, int pos, Class<?> expected) {
+    public void test_parse_error(DateTimeField field, TextStyle style, String text, int pos, Class<?> expected) {
         try {
-            pp.parse(parseContext, text, pos);
+            getFormatter(field, style).parseToBuilder(text, new ParsePosition(pos));
         } catch (RuntimeException ex) {
             assertTrue(expected.isInstance(ex));
-            assertEquals(parseContext.getParsed().size(), 0);
         }
     }
 
     //-----------------------------------------------------------------------
     public void test_parse_midStr() throws Exception {
-        TextPrinterParser pp = new TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, PROVIDER);
-        int newPos = pp.parse(parseContext, "XxxMondayXxx", 3);
-        assertEquals(newPos, 9);
-        assertParsed(parseContext, DAY_OF_WEEK, 1L);
+        ParsePosition pos = new ParsePosition(3);
+        assertEquals(getFormatter(DAY_OF_WEEK, TextStyle.FULL)
+                     .parseToBuilder("XxxMondayXxx", pos)
+                     .getLong(DAY_OF_WEEK), 1L);
+        assertEquals(pos.getIndex(), 9);
     }
 
     public void test_parse_remainderIgnored() throws Exception {
-        TextPrinterParser pp = new TextPrinterParser(DAY_OF_WEEK, TextStyle.SHORT, PROVIDER);
-        int newPos = pp.parse(parseContext, "Wednesday", 0);
-        assertEquals(newPos, 3);
-        assertParsed(parseContext, DAY_OF_WEEK, 3L);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(DAY_OF_WEEK, TextStyle.SHORT)
+                     .parseToBuilder("Wednesday", pos)
+                     .getLong(DAY_OF_WEEK), 3L);
+        assertEquals(pos.getIndex(), 3);
     }
 
     //-----------------------------------------------------------------------
     public void test_parse_noMatch1() throws Exception {
-        TextPrinterParser pp = new TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, PROVIDER);
-        int newPos = pp.parse(parseContext, "Munday", 0);
-        assertEquals(newPos, ~0);
-        assertEquals(parseContext.getParsed().size(), 0);
+        ParsePosition pos = new ParsePosition(0);
+        getFormatter(DAY_OF_WEEK, TextStyle.FULL).parseToBuilder("Munday", pos);
+        assertEquals(pos.getErrorIndex(), 0);
     }
 
     public void test_parse_noMatch2() throws Exception {
-        TextPrinterParser pp = new TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, PROVIDER);
-        int newPos = pp.parse(parseContext, "Monday", 3);
-        assertEquals(newPos, ~3);
-        assertEquals(parseContext.getParsed().size(), 0);
+        ParsePosition pos = new ParsePosition(3);
+        getFormatter(DAY_OF_WEEK, TextStyle.FULL).parseToBuilder("Monday", pos);
+        assertEquals(pos.getErrorIndex(), 3);
     }
 
     public void test_parse_noMatch_atEnd() throws Exception {
-        TextPrinterParser pp = new TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, PROVIDER);
-        int newPos = pp.parse(parseContext, "Monday", 6);
-        assertEquals(newPos, ~6);
-        assertEquals(parseContext.getParsed().size(), 0);
+        ParsePosition pos = new ParsePosition(6);
+        getFormatter(DAY_OF_WEEK, TextStyle.FULL).parseToBuilder("Monday", pos);
+        assertEquals(pos.getErrorIndex(), 6);
     }
 
     //-----------------------------------------------------------------------
@@ -154,185 +150,159 @@ public class TestTextParser extends AbstractTestPrinterParser {
 
     @Test(dataProvider="parseText")
     public void test_parseText(DateTimeField field, TextStyle style, int value, String input) throws Exception {
-        TextPrinterParser pp = new TextPrinterParser(field, style, PROVIDER);
-        int newPos = pp.parse(parseContext, input, 0);
-        assertEquals(newPos, input.length());
-        assertParsed(parseContext, field, (long) value);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(field, style).parseToBuilder(input, pos).getLong(field), (long) value);
+        assertEquals(pos.getIndex(), input.length());
     }
 
     @Test(dataProvider="parseNumber")
     public void test_parseNumber(DateTimeField field, TextStyle style, int value, String input) throws Exception {
-        TextPrinterParser pp = new TextPrinterParser(field, style, PROVIDER);
-        int newPos = pp.parse(parseContext, input, 0);
-        assertEquals(newPos, input.length());
-        assertParsed(parseContext, field, (long) value);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(field, style).parseToBuilder(input, pos).getLong(field), (long) value);
+        assertEquals(pos.getIndex(), input.length());
     }
 
     //-----------------------------------------------------------------------
     @Test(dataProvider="parseText")
     public void test_parse_strict_caseSensitive_parseUpper(DateTimeField field, TextStyle style, int value, String input) throws Exception {
-        parseContext.setCaseSensitive(true);
-        TextPrinterParser pp = new TextPrinterParser(field, style, PROVIDER);
-        int newPos = pp.parse(parseContext, input.toUpperCase(), 0);
-        assertEquals(newPos, ~0);
-        assertEquals(parseContext.getParsed().size(), 0);
+        setCaseSensitive(true);
+        ParsePosition pos = new ParsePosition(0);
+        getFormatter(field, style).parseToBuilder(input.toUpperCase(), pos);
+        assertEquals(pos.getErrorIndex(), 0);
     }
 
     @Test(dataProvider="parseText")
     public void test_parse_strict_caseInsensitive_parseUpper(DateTimeField field, TextStyle style, int value, String input) throws Exception {
-        parseContext.setCaseSensitive(false);
-        TextPrinterParser pp = new TextPrinterParser(field, style, PROVIDER);
-        int newPos = pp.parse(parseContext, input.toUpperCase(), 0);
-        assertEquals(newPos, input.length());
-        assertParsed(parseContext, field, (long) value);
+        setCaseSensitive(false);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(field, style).parseToBuilder(input.toUpperCase(), pos).getLong(field), (long) value);
+        assertEquals(pos.getIndex(), input.length());
     }
 
     //-----------------------------------------------------------------------
     @Test(dataProvider="parseText")
     public void test_parse_strict_caseSensitive_parseLower(DateTimeField field, TextStyle style, int value, String input) throws Exception {
-        parseContext.setCaseSensitive(true);
-        TextPrinterParser pp = new TextPrinterParser(field, style, PROVIDER);
-        int newPos = pp.parse(parseContext, input.toLowerCase(), 0);
-        assertEquals(newPos, ~0);
-        assertEquals(parseContext.getParsed().size(), 0);
+        setCaseSensitive(true);
+        ParsePosition pos = new ParsePosition(0);
+        getFormatter(field, style).parseToBuilder(input.toLowerCase(), pos);
+        assertEquals(pos.getErrorIndex(), 0);
     }
 
     @Test(dataProvider="parseText")
     public void test_parse_strict_caseInsensitive_parseLower(DateTimeField field, TextStyle style, int value, String input) throws Exception {
-        parseContext.setCaseSensitive(false);
-        TextPrinterParser pp = new TextPrinterParser(field, style, PROVIDER);
-        int newPos = pp.parse(parseContext, input.toLowerCase(), 0);
-        assertEquals(newPos, input.length());
-        assertParsed(parseContext, field, (long) value);
+        setCaseSensitive(false);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(field, style).parseToBuilder(input.toLowerCase(), pos).getLong(field), (long) value);
+        assertEquals(pos.getIndex(), input.length());
     }
 
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     public void test_parse_full_strict_full_match() throws Exception {
-        parseContext.setStrict(true);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, PROVIDER);
-        int newPos = pp.parse(parseContext, "January", 0);
-        assertEquals(newPos, 7);
-        assertParsed(parseContext, MONTH_OF_YEAR, 1L);
+        setStrict(true);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.FULL).parseToBuilder("January", pos).getLong(MONTH_OF_YEAR), 1L);
+        assertEquals(pos.getIndex(), 7);
     }
 
     public void test_parse_full_strict_short_noMatch() throws Exception {
-        parseContext.setStrict(true);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, PROVIDER);
-        int newPos = pp.parse(parseContext, "Janua", 0);
-        assertEquals(newPos, ~0);
-        assertEquals(parseContext.getParsed().size(), 0);
+        setStrict(true);
+        ParsePosition pos = new ParsePosition(0);
+        getFormatter(MONTH_OF_YEAR, TextStyle.FULL).parseToBuilder("Janua", pos);
+        assertEquals(pos.getErrorIndex(), 0);
     }
 
     public void test_parse_full_strict_number_noMatch() throws Exception {
-        parseContext.setStrict(true);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, PROVIDER);
-        int newPos = pp.parse(parseContext, "1", 0);
-        assertEquals(newPos, ~0);
-        assertEquals(parseContext.getParsed().size(), 0);
+        setStrict(true);
+        ParsePosition pos = new ParsePosition(0);
+        getFormatter(MONTH_OF_YEAR, TextStyle.FULL).parseToBuilder("1", pos);
+        assertEquals(pos.getErrorIndex(), 0);
     }
 
     //-----------------------------------------------------------------------
     public void test_parse_short_strict_full_match() throws Exception {
-        parseContext.setStrict(true);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, PROVIDER);
-        int newPos = pp.parse(parseContext, "January", 0);
-        assertEquals(newPos, 3);
-        assertParsed(parseContext, MONTH_OF_YEAR, 1L);
+        setStrict(true);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.SHORT).parseToBuilder("January", pos).getLong(MONTH_OF_YEAR), 1L);
+        assertEquals(pos.getIndex(), 3);
     }
 
     public void test_parse_short_strict_short_match() throws Exception {
-        parseContext.setStrict(true);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, PROVIDER);
-        int newPos = pp.parse(parseContext, "Janua", 0);
-        assertEquals(newPos, 3);
-        assertParsed(parseContext, MONTH_OF_YEAR, 1L);
+        setStrict(true);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.SHORT).parseToBuilder("Janua", pos).getLong(MONTH_OF_YEAR), 1L);
+        assertEquals(pos.getIndex(), 3);
     }
 
     public void test_parse_short_strict_number_noMatch() throws Exception {
-        parseContext.setStrict(true);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, PROVIDER);
-        int newPos = pp.parse(parseContext, "1", 0);
-        assertEquals(newPos, ~0);
-        assertEquals(parseContext.getParsed().size(), 0);
+        setStrict(true);
+        ParsePosition pos = new ParsePosition(0);
+        getFormatter(MONTH_OF_YEAR, TextStyle.SHORT).parseToBuilder("1", pos);
+        assertEquals(pos.getErrorIndex(), 0);
     }
 
     //-----------------------------------------------------------------------
     public void test_parse_french_short_strict_full_noMatch() throws Exception {
-        parseContext.setLocale(Locale.FRENCH);
-        parseContext.setStrict(true);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, PROVIDER);
-        int newPos = pp.parse(parseContext, "janvier", 0);  // correct short form is 'janv.'
-        assertEquals(newPos, ~0);
-        assertEquals(parseContext.getParsed().size(), 0);
+        setStrict(true);
+        ParsePosition pos = new ParsePosition(0);
+        getFormatter(MONTH_OF_YEAR, TextStyle.SHORT).withLocale(Locale.FRENCH)
+                                                    .parseToBuilder("janvier", pos);
+        assertEquals(pos.getErrorIndex(), 0);
     }
 
     public void test_parse_french_short_strict_short_match() throws Exception {
-        parseContext.setLocale(Locale.FRENCH);
-        parseContext.setStrict(true);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, PROVIDER);
-        int newPos = pp.parse(parseContext, "janv.", 0);
-        assertEquals(newPos, 5);
-        assertParsed(parseContext, MONTH_OF_YEAR, 1L);
+        setStrict(true);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.SHORT).withLocale(Locale.FRENCH)
+                                                                 .parseToBuilder("janv.", pos)
+                                                                 .getLong(MONTH_OF_YEAR),
+                     1L);
+        assertEquals(pos.getIndex(), 5);
     }
 
     //-----------------------------------------------------------------------
     public void test_parse_full_lenient_full_match() throws Exception {
-        parseContext.setStrict(false);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, PROVIDER);
-        int newPos = pp.parse(parseContext, "January", 0);
-        assertEquals(newPos, 7);
-        assertParsed(parseContext, MONTH_OF_YEAR, 1L);
+        setStrict(false);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.FULL).parseToBuilder("January.", pos).getLong(MONTH_OF_YEAR), 1L);
+        assertEquals(pos.getIndex(), 7);
     }
 
     public void test_parse_full_lenient_short_match() throws Exception {
-        parseContext.setStrict(false);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, PROVIDER);
-        int newPos = pp.parse(parseContext, "Janua", 0);
-        assertEquals(newPos, 3);
-        assertParsed(parseContext, MONTH_OF_YEAR, 1L);
+        setStrict(false);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.FULL).parseToBuilder("Janua", pos).getLong(MONTH_OF_YEAR), 1L);
+        assertEquals(pos.getIndex(), 3);
     }
 
     public void test_parse_full_lenient_number_match() throws Exception {
-        parseContext.setStrict(false);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, PROVIDER);
-        int newPos = pp.parse(parseContext, "1", 0);
-        assertEquals(newPos, 1);
-        assertParsed(parseContext, MONTH_OF_YEAR, 1L);
+        setStrict(false);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.FULL).parseToBuilder("1", pos).getLong(MONTH_OF_YEAR), 1L);
+        assertEquals(pos.getIndex(), 1);
     }
 
     //-----------------------------------------------------------------------
     public void test_parse_short_lenient_full_match() throws Exception {
-        parseContext.setStrict(false);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, PROVIDER);
-        int newPos = pp.parse(parseContext, "January", 0);
-        assertEquals(newPos, 7);
-        assertParsed(parseContext, MONTH_OF_YEAR, 1L);
+        setStrict(false);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.SHORT).parseToBuilder("January", pos).getLong(MONTH_OF_YEAR), 1L);
+        assertEquals(pos.getIndex(), 7);
     }
 
     public void test_parse_short_lenient_short_match() throws Exception {
-        parseContext.setStrict(false);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, PROVIDER);
-        int newPos = pp.parse(parseContext, "Janua", 0);
-        assertEquals(newPos, 3);
-        assertParsed(parseContext, MONTH_OF_YEAR, 1L);
+        setStrict(false);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.SHORT).parseToBuilder("Janua", pos).getLong(MONTH_OF_YEAR), 1L);
+        assertEquals(pos.getIndex(), 3);
     }
 
     public void test_parse_short_lenient_number_match() throws Exception {
-        parseContext.setStrict(false);
-        TextPrinterParser pp = new TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, PROVIDER);
-        int newPos = pp.parse(parseContext, "1", 0);
-        assertEquals(newPos, 1);
-        assertParsed(parseContext, MONTH_OF_YEAR, 1L);
-    }
-
-    private void assertParsed(DateTimeParseContext context, DateTimeField field, Long value) {
-        if (value == null) {
-            assertEquals(context.getParsed(field), null);
-        } else {
-            assertEquals(context.getParsed(field), value);
-        }
+        setStrict(false);
+        ParsePosition pos = new ParsePosition(0);
+        assertEquals(getFormatter(MONTH_OF_YEAR, TextStyle.SHORT).parseToBuilder("1", pos).getLong(MONTH_OF_YEAR), 1L);
+        assertEquals(pos.getIndex(), 1);
     }
 
 }

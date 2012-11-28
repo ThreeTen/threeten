@@ -34,14 +34,7 @@ package javax.time.format;
 import static javax.time.calendrical.ChronoField.DAY_OF_MONTH;
 import static org.testng.Assert.assertSame;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-
-import javax.time.format.DateTimeFormatterBuilder.CompositePrinterParser;
-import javax.time.format.DateTimeFormatterBuilder.DateTimePrinterParser;
-import javax.time.format.DateTimeFormatterBuilder.NumberPrinterParser;
-import javax.time.format.DateTimeFormatterBuilder.StringLiteralPrinterParser;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -54,24 +47,17 @@ public class TestDateTimeFormatter {
     // TODO these tests are not tck, as they refer to a non-public class
     // rewrite whole test case to use BASIC_FORMATTER or similar
 
-    private List<DateTimePrinterParser> printerParsers;
-    private StringLiteralPrinterParser stringPP;
-    private NumberPrinterParser numberPP;
-    private CompositePrinterParser compPP;
-
     @BeforeMethod(groups={"tck"})
     public void setUp() {
-        printerParsers = new ArrayList<DateTimePrinterParser>();
-        stringPP = new StringLiteralPrinterParser("ONE");
-        numberPP = new NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NOT_NEGATIVE);
-        printerParsers.add(stringPP);
-        printerParsers.add(numberPP);
-        compPP = new CompositePrinterParser(printerParsers, false);
     }
 
     @Test(groups={"implementation"})
     public void test_withLocale_same() throws Exception {
-        DateTimeFormatter base = new DateTimeFormatter(compPP, Locale.ENGLISH, DateTimeFormatSymbols.STANDARD);
+        DateTimeFormatter base =
+            new DateTimeFormatterBuilder().appendLiteral("ONE")
+                                          .appendValue(DAY_OF_MONTH, 1, 2, SignStyle.NOT_NEGATIVE)
+                                          .toFormatter(Locale.ENGLISH)
+                                          .withSymbols(DateTimeFormatSymbols.STANDARD);
         DateTimeFormatter test = base.withLocale(Locale.ENGLISH);
         assertSame(test, base);
     }
